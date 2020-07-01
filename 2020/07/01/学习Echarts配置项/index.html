@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    NodeJs小问题：express不是内部或外部命令 |
+    学习Echarts配置项 |
     
     JL&#39;s Blog</title>
   
@@ -25,7 +25,7 @@
 <body>
 <main class="content">
   <section class="outer">
-  <article id="post-NodeJs小问题：express不是内部或外部命令" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  <article id="post-学习Echarts配置项" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
 
     <div class="article-inner">
         
@@ -33,7 +33,7 @@
                 
   
     <h1 class="article-title" itemprop="name">
-      NodeJs小问题：express不是内部或外部命令
+      学习Echarts配置项
     </h1>
   
   
@@ -46,14 +46,10 @@
 
                 
                     <div class="article-meta">
-                        <a href="/2017/01/20/NodeJs小问题：express不是内部或外部命令/" class="article-date">
-  <time datetime="2017-01-20T02:27:10.000Z" itemprop="datePublished">2017-01-20</time>
+                        <a href="/2020/07/01/学习Echarts配置项/" class="article-date">
+  <time datetime="2020-07-01T02:47:54.000Z" itemprop="datePublished">2020-07-01</time>
 </a>
                             
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>
-  </div>
-
                     </div>
                     
 
@@ -72,35 +68,92 @@
                                             
 
                                                 
-                                                                    <p>1.nodejs安装之后就需要安装express,使用熟悉的npm install -g express命令安装,但是,安装成功之后居然提示express不是内部或外部命令.<br><a id="more"></a></p>
-<p><img src="http://oj056g1gy.bkt.clouddn.com/024f78f0f736afc3137f86e1b119ebc4b64512c6.jpg" alt><br><img src="http://oj056g1gy.bkt.clouddn.com/express-v.jpg" alt></p>
-<ol start="2">
-<li><p>为什么会这样子呢?当我们找到安装后的express目录发现比之前熟悉的express少了很多东西,原来,最新express4.0版本中将命令工具分家出来了<a href="&quot;https://github.com/expressjs/generator&quot;">项目地址</a>,所以我们还需要安装一个命令工具,命令如下:</p>
-<p> npm install -g express-generator</p>
-</li>
-</ol>
-<p><img src="http://oj056g1gy.bkt.clouddn.com/express-generation.png" alt></p>
-<p>3.既然安装好了我们就要测试一下新安装的express到底可不可以使用<br>于是我使用express创建一个工程:</p>
-<pre><code>express helloworld
-</code></pre><p>新版本中命令发生了一些改变, 创建好project之后还需要用npm进行添加依赖和启动:</p>
-<pre><code>cd helloworld
-
-npm install
-
-npm start
-</code></pre><p>然后新创建的helloworld就已经运行在3000端口上.<br><img src="http://oj056g1gy.bkt.clouddn.com/express%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE.jpg" alt></p>
-<p>4.访问<a href="http://localhost:3000/就看到熟悉的页面了" target="_blank" rel="noopener">http://localhost:3000/就看到熟悉的页面了</a><br><img src="http://oj056g1gy.bkt.clouddn.com/express3000.png" alt></p>
-<p>5.以及创建出来的目录效果<br><img src="http://oj056g1gy.bkt.clouddn.com/express%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E6%95%88%E6%9E%9C.png" alt></p>
-<p>转载：<a href="&quot;http://www.cnblogs.com/wmkf/articles/3913215.html&quot;">http://www.cnblogs.com/wmkf/articles/3913215.html</a></p>
+                                                                    <p>color</p>
+<p>rgb</p>
+<p>rgba</p>
+<p>16进制</p>
+<p>渐变</p>
+<p>坐标系</p>
+<div id="echarts7341" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<script src="https://cdn.bootcss.com/echarts/3.8.0/echarts.common.min.js"></script>
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('echarts7341'));
+        // 指定图表的配置项和数据
+        var option = {
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    legend: {
+        data:['利润', '支出', '收入']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'value'
+        }
+    ],
+    yAxis : [
+        {
+            type : 'category',
+            axisTick : {show: false},
+            data : ['周一','周二','周三','周四','周五','周六','周日']
+        }
+    ],
+    series : [
+        {
+            name:'利润',
+            type:'bar',
+            itemStyle : {
+                normal: {
+                    label: {show: true, position: 'inside'}
+                }
+            },
+            data:[200, 170, 240, 244, 200, 220, 210]
+        },
+        {
+            name:'收入',
+            type:'bar',
+            stack: '总量',
+            itemStyle: {
+                normal: {
+                    label : {show: true}
+                }
+            },
+            data:[320, 302, 341, 374, 390, 450, 420]
+        },
+        {
+            name:'支出',
+            type:'bar',
+            stack: '总量',
+            itemStyle: {normal: {
+                label : {show: true, position: 'left'}
+            }},
+            data:[-120, -132, -101, -134, -190, -230, -210]
+        }
+    ]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+</script>
+<p>纹理</p>
 
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2017/01/20/NodeJs小问题：express不是内部或外部命令/" data-id="ckc33rvs30007de1zu63q54cb" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2020/07/01/学习Echarts配置项/" data-id="ckc33rvte002qde1zidlbr6e9" class="article-share-link">
                                             分享
                                         </a>
                                         
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/">Node</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Echarts/">Echarts</a></li></ul>
 
                                     </footer>
 
@@ -110,19 +163,10 @@ npm start
         
   <nav class="article-nav">
     
-      <a href="/2017/01/20/Sublime3-配置nodejs环境/" class="article-nav-link">
-        <strong class="article-nav-caption">前一篇</strong>
-        <div class="article-nav-title">
-          
-            Sublime Text3 手动配置Nodejs环境
-          
-        </div>
-      </a>
     
-    
-      <a href="/2017/01/01/NodeJs入门案例/" class="article-nav-link">
+      <a href="/2020/06/20/SVG基础/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">NodeJs入门案例</div>
+        <div class="article-nav-title">SVG基础</div>
       </a>
     
   </nav>

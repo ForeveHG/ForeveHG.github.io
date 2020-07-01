@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>学习Echarts配置项</title>
+      <link href="/2020/07/01/%E5%AD%A6%E4%B9%A0Echarts%E9%85%8D%E7%BD%AE%E9%A1%B9/"/>
+      <url>/2020/07/01/%E5%AD%A6%E4%B9%A0Echarts%E9%85%8D%E7%BD%AE%E9%A1%B9/</url>
+      
+        <content type="html"><![CDATA[<p>color</p><p>rgb</p><p>rgba</p><p>16进制</p><p>渐变</p><p>坐标系</p><div id="echarts7341" style="width: 85%;height: 400px;margin: 0 auto"></div><script src="https://cdn.bootcss.com/echarts/3.8.0/echarts.common.min.js"></script><script type="text/javascript">        // 基于准备好的dom，初始化echarts实例        var myChart = echarts.init(document.getElementById('echarts7341'));        // 指定图表的配置项和数据        var option = {    tooltip : {        trigger: 'axis',        axisPointer : {            // 坐标轴指示器，坐标轴触发有效            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'        }    },    legend: {        data:['利润', '支出', '收入']    },    grid: {        left: '3%',        right: '4%',        bottom: '3%',        containLabel: true    },    xAxis : [        {            type : 'value'        }    ],    yAxis : [        {            type : 'category',            axisTick : {show: false},            data : ['周一','周二','周三','周四','周五','周六','周日']        }    ],    series : [        {            name:'利润',            type:'bar',            itemStyle : {                normal: {                    label: {show: true, position: 'inside'}                }            },            data:[200, 170, 240, 244, 200, 220, 210]        },        {            name:'收入',            type:'bar',            stack: '总量',            itemStyle: {                normal: {                    label : {show: true}                }            },            data:[320, 302, 341, 374, 390, 450, 420]        },        {            name:'支出',            type:'bar',            stack: '总量',            itemStyle: {normal: {                label : {show: true, position: 'left'}            }},            data:[-120, -132, -101, -134, -190, -230, -210]        }    ]};        // 使用刚指定的配置项和数据显示图表。        myChart.setOption(option);</script><p>纹理</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Echarts </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>SVG基础</title>
       <link href="/2020/06/20/SVG%E5%9F%BA%E7%A1%80/"/>
       <url>/2020/06/20/SVG%E5%9F%BA%E7%A1%80/</url>
@@ -719,6 +738,17 @@
     
     
     <entry>
+      <title>about</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
+      
+        <content type="html"><![CDATA[<h1 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h1><ul><li>手机：18506576297</li><li>Email：<a href="mailto:1217304483@qq.com" target="_blank" rel="noopener">1217304483@qq.com</a></li></ul><hr><h1 id="个人信息"><a href="#个人信息" class="headerlink" title="个人信息"></a>个人信息</h1><ul><li>孙佳丽/女/1994 </li><li>学历：本科</li><li>教育经历：河南科技学院-计算机科学与技术(2013年~2017年)</li><li>工作年限：3年</li><li>技术博客：<a href="https://forevehg.github.io/">https://forevehg.github.io/</a> </li><li><p>Github：<a href="https://github.com/ForeveHG" target="_blank" rel="noopener">https://github.com/ForeveHG</a> </p></li><li><p>期望职位：Web前端开发</p></li><li>期望薪资：面议</li><li>期望城市：杭州/上海</li></ul><hr><h1 id="技能清单"><a href="#技能清单" class="headerlink" title="技能清单"></a>技能清单</h1><p>熟练使用的技能</p><ul><li>Web开发：Html/Css/Javascript</li><li>前端框架：Vue</li><li>前端UI库：Element-UI/iView/Ant-Design</li><li>前端工具：Webpack/Sass/Less/Stylus</li><li>版本管理：Git</li><li>其他：微信小程序原生，Photoshop</li></ul><p>了解的技能</p><ul><li>React/React Native/Mobx/Electronic/TypeScript/Node/Express</li></ul><h1 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h1><h2 id="杭州通明文化传媒有限公司"><a href="#杭州通明文化传媒有限公司" class="headerlink" title="杭州通明文化传媒有限公司"></a>杭州通明文化传媒有限公司</h2><p>职位名称： 前端开发工程师</p><p>在职时间： 2017年6月 ~ 2020年6月</p><p>主要工作： </p><ul><li>参与项目评审，配合产品、UI和后端人员，进行项目的开发和测试，最终部署上线</li><li>负责舆情监测产品线的后台系统、微信小程序以及一些活动页的前端开发、维护以及更新迭代的工作</li></ul><h1 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h1><h2 id="小V业务管理平台-辅助开发"><a href="#小V业务管理平台-辅助开发" class="headerlink" title="小V业务管理平台-辅助开发"></a>小V业务管理平台-辅助开发</h2><ul><li>项目背景：该项目是一个派单系统，配合接单APP，是支撑公司底层业务的主要项目</li><li>工作内容：我在此项目主要负责即时通讯模块，实现建群、群聊、单聊、群内派单、消息提醒等功能，在技术上我使用Vue搭建聊天窗口，Vuex做状态管理，聊天功能接入了融云im，这个项目中，最大的难点是如何在浏览器中存储聊天记录和会话信息，对比了目前浏览器本地存储的方式后我选择了indexDB，可以在本地存储大量的数据，我封装了增删改查的接口，配合云端记录，很好的实现了对聊天记录的存储、访问和清理。</li></ul><h2 id="舆情监测平台-主开发"><a href="#舆情监测平台-主开发" class="headerlink" title="舆情监测平台-主开发"></a>舆情监测平台-主开发</h2><ul><li>项目背景：该项目用于监测网络舆情信息，支持将近20个主流社交平台，每个平台提供特定的舆情分析，正负面判断，舆情维护,统计等功能</li><li>工作内容：我在此项目主要负责舆情监测、舆情维护、项目统计模块，使用Vue，Vuex，Vue-Router，Element-UI，Echarts等技术实现，在这个项目中，平台的展示页面或业务功能都大同小异，包括之后如果新增或删除社交平台，还要添加相应的页面和一套功能，了解需求后我决定采用JS的策略模式，将业务操作和展示差异按平台封装成策略类，这样以后新增或者删除平台也变得非常容易，项目上线后，后期的维护和新需求的处理都变得非常快速，获得了业务部门的好评。</li></ul><h2 id="舆情助手小程序-独立开发"><a href="#舆情助手小程序-独立开发" class="headerlink" title="舆情助手小程序-独立开发"></a>舆情助手小程序-独立开发</h2><ul><li>项目背景：该项目主要为客户提供热搜通知，历史热搜查询，分钟级热搜数据导出以及舆论方向统计等功能</li><li>工作内容：该项目由我独立开发和维护，使用微信小程序原生开发，图表展示使用了f2Chart，词云图使用wordcloud2.js封装了微信小程序内可用的词云组件，根据需求和UI设计，封装了Navigation导航栏，日期选择，Tab切换等组件，由于该小程序的需求是必须获取到用户手机号以及公司职位等个人信息，还涉及了引导用户关注公众号，IOS虚拟支付等微信不允许的问题，所以通过这个项目在小程序审核方面也获得了一些经验。</li></ul><h2 id="通明数据中心-ERP-主开发"><a href="#通明数据中心-ERP-主开发" class="headerlink" title="通明数据中心(ERP)-主开发"></a>通明数据中心(ERP)-主开发</h2><ul><li>项目背景：该项目是公司的OA系统和ERP系统的结合</li><li>工作内容：我在此项目主要负责组织架构，绩效考核，周报，媒介资源库等功能，使用Vue，Vuex，Vue-Router，iView等技术实现，<br>在该项目中，绩效考核模块主要是在操作表格，当时iView中的表格组件满足不了很多需求，所以我二次开发了iView的表格组件，实现了单元格的合并行，合并列，以及单元格中添加各种组件等项目中常用的操作；另外比较困难的是对考核状态的管理，每个考核阶段表格以及表格中的组件呈现的样式也不一样，最后采用的js状态管理模式，避免了代码中大量的判断，对于考核步骤的添加或者修改都更加简单，方便后期的项目维护。</li></ul><h3 id="其他项目"><a href="#其他项目" class="headerlink" title="其他项目"></a>其他项目</h3><p>小V平台移动端网页版，小V平台小程序版，爬虫预警系统，营销助手小程序以及一些节日活动所需的h5页面等。</p><hr><h1 id="开源项目和作品"><a href="#开源项目和作品" class="headerlink" title="开源项目和作品"></a>开源项目和作品</h1><h2 id="开源项目"><a href="#开源项目" class="headerlink" title="开源项目"></a>开源项目</h2><ul><li><a href="https://github.com/ForeveHG/XiaoShiTang" target="_blank" rel="noopener">小食堂</a>：使用React Native + Mobx实现的美食资讯类APP</li><li><a href="https://github.com/ForeveHG/vue-live2d-model" target="_blank" rel="noopener">vue-live2d-model</a>：实现在vue中添加live2d</li><li><a href="https://github.com/ForeveHG/wechat-applet-word-cloud" target="_blank" rel="noopener">wechat-applet-word-cloud</a>：在原生微信小程序中使用wordcloud2.js以及一些demo</li></ul><h2 id="技术文章"><a href="#技术文章" class="headerlink" title="技术文章"></a>技术文章</h2><ul><li><a href="http://get.jobdeer.com/706.get" target="_blank" rel="noopener">为了弄明白Promise的运行顺序，徒手写一个Promise</a></li><li><a href="http://get.jobdeer.com/343.get" target="_blank" rel="noopener">弹性盒模型之flex属性</a> </li></ul><hr><h1 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h1><p>最后要感谢您花时间阅读我的简历，期待能有机会和您共事。</p>]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title></title>
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
@@ -730,9 +760,9 @@
     
     
     <entry>
-      <title>categories</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
+      <title>Tags</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -752,20 +782,9 @@
     
     
     <entry>
-      <title>about</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[<h1 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h1><ul><li>手机：18506576297</li><li>Email：<a href="mailto:1217304483@qq.com" target="_blank" rel="noopener">1217304483@qq.com</a></li></ul><hr><h1 id="个人信息"><a href="#个人信息" class="headerlink" title="个人信息"></a>个人信息</h1><ul><li>孙佳丽/女/1994 </li><li>学历：本科</li><li>教育经历：河南科技学院-计算机科学与技术(2013年~2017年)</li><li>工作年限：3年</li><li>技术博客：<a href="https://forevehg.github.io/">https://forevehg.github.io/</a> </li><li><p>Github：<a href="https://github.com/ForeveHG" target="_blank" rel="noopener">https://github.com/ForeveHG</a> </p></li><li><p>期望职位：Web前端开发</p></li><li>期望薪资：面议</li><li>期望城市：杭州/上海</li></ul><hr><h1 id="技能清单"><a href="#技能清单" class="headerlink" title="技能清单"></a>技能清单</h1><p>熟练使用的技能</p><ul><li>Web开发：Html/Css/Javascript</li><li>前端框架：Vue</li><li>前端UI库：Element-UI/iView/Ant-Design</li><li>前端工具：Webpack/Sass/Less/Stylus</li><li>版本管理：Git</li><li>其他：微信小程序原生，Photoshop</li></ul><p>了解的技能</p><ul><li>React/React Native/Mobx/Electronic/TypeScript/Node/Express</li></ul><h1 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h1><h2 id="杭州通明文化传媒有限公司"><a href="#杭州通明文化传媒有限公司" class="headerlink" title="杭州通明文化传媒有限公司"></a>杭州通明文化传媒有限公司</h2><p>职位名称： 前端开发工程师</p><p>在职时间： 2017年6月 ~ 2020年6月</p><p>主要工作： </p><ul><li>参与项目评审，配合产品、UI和后端人员，进行项目的开发和测试，最终部署上线</li><li>负责舆情监测产品线的后台系统、微信小程序以及一些活动页的前端开发、维护以及更新迭代的工作</li></ul><h1 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h1><h2 id="小V业务管理平台-辅助开发"><a href="#小V业务管理平台-辅助开发" class="headerlink" title="小V业务管理平台-辅助开发"></a>小V业务管理平台-辅助开发</h2><ul><li>项目背景：该项目是一个派单系统，配合接单APP，是支撑公司底层业务的主要项目</li><li>工作内容：我在此项目主要负责即时通讯模块，实现建群、群聊、单聊、群内派单、消息提醒等功能，在技术上我使用Vue搭建聊天窗口，Vuex做状态管理，聊天功能接入了融云im，这个项目中，最大的难点是如何在浏览器中存储聊天记录和会话信息，对比了目前浏览器本地存储的方式后我选择了indexDB，可以在本地存储大量的数据，我封装了增删改查的接口，配合云端记录，很好的实现了对聊天记录的存储、访问和清理。</li></ul><h2 id="舆情监测平台-主开发"><a href="#舆情监测平台-主开发" class="headerlink" title="舆情监测平台-主开发"></a>舆情监测平台-主开发</h2><ul><li>项目背景：该项目用于监测网络舆情信息，支持将近20个主流社交平台，每个平台提供特定的舆情分析，正负面判断，舆情维护,统计等功能</li><li>工作内容：我在此项目主要负责舆情监测、舆情维护、项目统计模块，使用Vue，Vuex，Vue-Router，Element-UI，Echarts等技术实现，在这个项目中，平台的展示页面或业务功能都大同小异，包括之后如果新增或删除社交平台，还要添加相应的页面和一套功能，了解需求后我决定采用JS的策略模式，将业务操作和展示差异按平台封装成策略类，这样以后新增或者删除平台也变得非常容易，项目上线后，后期的维护和新需求的处理都变得非常快速，获得了业务部门的好评。</li></ul><h2 id="舆情助手小程序-独立开发"><a href="#舆情助手小程序-独立开发" class="headerlink" title="舆情助手小程序-独立开发"></a>舆情助手小程序-独立开发</h2><ul><li>项目背景：该项目主要为客户提供热搜通知，历史热搜查询，分钟级热搜数据导出以及舆论方向统计等功能</li><li>工作内容：该项目由我独立开发和维护，使用微信小程序原生开发，图表展示使用了f2Chart，词云图使用wordcloud2.js封装了微信小程序内可用的词云组件，根据需求和UI设计，封装了Navigation导航栏，日期选择，Tab切换等组件，由于该小程序的需求是必须获取到用户手机号以及公司职位等个人信息，还涉及了引导用户关注公众号，IOS虚拟支付等微信不允许的问题，所以通过这个项目在小程序审核方面也获得了一些经验。</li></ul><h2 id="通明数据中心-ERP-主开发"><a href="#通明数据中心-ERP-主开发" class="headerlink" title="通明数据中心(ERP)-主开发"></a>通明数据中心(ERP)-主开发</h2><ul><li>项目背景：该项目是公司的OA系统和ERP系统的结合</li><li>工作内容：我在此项目主要负责组织架构，绩效考核，周报，媒介资源库等功能，使用Vue，Vuex，Vue-Router，iView等技术实现，<br>在该项目中，绩效考核模块主要是在操作表格，当时iView中的表格组件满足不了很多需求，所以我二次开发了iView的表格组件，实现了单元格的合并行，合并列，以及单元格中添加各种组件等项目中常用的操作；另外比较困难的是对考核状态的管理，每个考核阶段表格以及表格中的组件呈现的样式也不一样，最后采用的js状态管理模式，避免了代码中大量的判断，对于考核步骤的添加或者修改都更加简单，方便后期的项目维护。</li></ul><h3 id="其他项目"><a href="#其他项目" class="headerlink" title="其他项目"></a>其他项目</h3><p>小V平台移动端网页版，小V平台小程序版，爬虫预警系统，营销助手小程序以及一些节日活动所需的h5页面等。</p><hr><h1 id="开源项目和作品"><a href="#开源项目和作品" class="headerlink" title="开源项目和作品"></a>开源项目和作品</h1><h2 id="开源项目"><a href="#开源项目" class="headerlink" title="开源项目"></a>开源项目</h2><ul><li><a href="https://github.com/ForeveHG/XiaoShiTang" target="_blank" rel="noopener">小食堂</a>：使用React Native + Mobx实现的美食资讯类APP</li><li><a href="https://github.com/ForeveHG/vue-live2d-model" target="_blank" rel="noopener">vue-live2d-model</a>：实现在vue中添加live2d</li><li><a href="https://github.com/ForeveHG/wechat-applet-word-cloud" target="_blank" rel="noopener">wechat-applet-word-cloud</a>：在原生微信小程序中使用wordcloud2.js以及一些demo</li></ul><h2 id="技术文章"><a href="#技术文章" class="headerlink" title="技术文章"></a>技术文章</h2><ul><li><a href="http://get.jobdeer.com/706.get" target="_blank" rel="noopener">为了弄明白Promise的运行顺序，徒手写一个Promise</a></li><li><a href="http://get.jobdeer.com/343.get" target="_blank" rel="noopener">弹性盒模型之flex属性</a> </li></ul><hr><h1 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h1><p>最后要感谢您花时间阅读我的简历，期待能有机会和您共事。</p>]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Tags</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>categories</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
