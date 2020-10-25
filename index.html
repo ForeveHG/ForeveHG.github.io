@@ -95,57 +95,16 @@
                                             
 
                                                 
-                                                                    <p>从对观察者模式和发布订阅模式有疑问开始，连续看了好几篇文章，最后疑惑依然存在，这到底哪里不一样？？进一步研究和思考后才搞明白，我决定用最大白话最直观的代码方式来记录下来，以便未来再次忘记时来翻阅。</p>
-<p>观察者模式和发布订阅模式最大的区别就是调度的方式不同，观察者模式是由目标直接调度，发布订阅模式由调度中心调度，这句话比较抽象，用最简单的代码表现一下大概是下面这样：</p>
-<ol>
-<li>纯享版观察者模式</li>
-</ol>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> Subject <span class="token operator">=</span> <span class="token punctuation">{</span>
-  observers<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//观察者列表</span>
-  <span class="token function">add</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">//添加观察者</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>observers<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//移除观察者</span>
-  <span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">//通知所有观察者</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>observers<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-</code></pre>
-<ol start="2">
-<li>纯享版发布订阅模式</li>
-</ol>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> Event <span class="token operator">=</span> <span class="token punctuation">{</span>
-  _listeners<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//订阅通道</span>
-  on<span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>eventName<span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>_listeners<span class="token punctuation">[</span>eventName<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">this</span><span class="token punctuation">.</span>_listeners<span class="token punctuation">[</span>eventName<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token keyword">this</span><span class="token punctuation">.</span>_listeners<span class="token punctuation">[</span>eventName<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  emit<span class="token punctuation">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>eventName<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>_listeners<span class="token punctuation">[</span>eventName<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-      <span class="token keyword">this</span><span class="token punctuation">.</span>_listeners<span class="token punctuation">[</span>eventName<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
-        <span class="token function">callback</span><span class="token punctuation">(</span><span class="token operator">...</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span>slice<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>arguments<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-
-<span class="token comment" spellcheck="true">//测试</span>
-Event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'test'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Event<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'test'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'test'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Event<span class="token punctuation">.</span><span class="token function">emit</span><span class="token punctuation">(</span><span class="token string">'test'</span><span class="token punctuation">,</span> <span class="token string">'hello world'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 输出 'hello world' 和 'test'</span>
-</code></pre>
-<p>从上面两个纯享版代码可以看出来，观察者模式就是维护一个观察者列表，当需要时，直接广播通知(遍历整个观察者列表)；发布订阅模式是维护一个订阅通道，所谓订阅通道就是一个按事件名称存储订阅列表的地方，当某个事件名称被触发时，会在订阅通道中查找对应的订阅者列表，所以说白了发布订阅模式就是若干个观察者模式的集合，这样够直白了吧。</p>
-
-                                                                        
+                                                    <p>从对观察者模式和发布订阅模式有疑问开始，连续看了好几篇文章，最后疑惑依然存在，这到底哪里不一样？？进一步研究和思考后才搞明白，我决定用最大白话最直观的代码方式来记录下来，以便未来再次忘记时来翻阅。<br>
+                                                        
+                                                            <a class="article-more-link" href="/2020/10/25/白话JS观察者模式和发布订阅模式/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2020/10/25/白话JS观察者模式和发布订阅模式/" data-id="ckgoysv5n002gak1z7b8v3fi8" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2020/10/25/白话JS观察者模式和发布订阅模式/" data-id="ckgoyuz46002nhf1zzjkty5u5" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -188,7 +147,7 @@ Event<span class="token punctuation">.</span><span class="token function">emit</
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2020/08/26/TS/" data-id="ckgoysv3f0000ak1z9epxrjhg" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2020/08/26/TS/" data-id="ckgoyuz280000hf1z13coxm6u" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -239,244 +198,16 @@ Event<span class="token punctuation">.</span><span class="token function">emit</
                                             
 
                                                 
-                                                                    <p>项目里 superset 版本是 0.36.0, python 版本是 3.6, 网上大部分资料都是后端开发人员贡献的，这篇文章我从一个前端的角度记录一下 superset 二次开发遇到的一些问题和解决方法。</p>
-<p>先讲一下项目的大概结构：</p>
-<ul>
-<li>整个项目的后台代码使用了 python，这部分放在项目根目录的 superset 目录下</li>
-<li>一整个后台的框架页面使用了 jinjia2，在项目根目录/superset/templates 下查看</li>
-<li>页面上图表相关的展示和操作使用了 react，在/superset-frontend 目录下查看</li>
-<li>前端打包后的页面放在/superset/static 目录下</li>
-</ul>
-<h4 id="1-修改-添加生成图表的表单项"><a href="#1-修改-添加生成图表的表单项" class="headerlink" title="1. 修改/添加生成图表的表单项"></a>1. 修改/添加生成图表的表单项</h4><p>src/explore目录中都是生成图表的表单项相关的代码，如果想添加一项只用在src/explore/controls.jsx文件中，模拟controls对象中的一项去添加一个属性，如添加一个’all_columns_x’</p>
-<pre class=" language-javascript"><code class="language-javascript">all_columns_x<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    type<span class="token punctuation">:</span> <span class="token string">'SelectControl'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//可以在explore/components/controls目录中找到对应的组件</span>
-    label<span class="token punctuation">:</span> <span class="token string">'X'</span><span class="token punctuation">,</span>
-    <span class="token keyword">default</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
-    description<span class="token punctuation">:</span> <span class="token function">t</span><span class="token punctuation">(</span><span class="token string">'Columns to display'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    mapStateToProps<span class="token punctuation">:</span> state <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
-      choices<span class="token punctuation">:</span> <span class="token function">columnChoices</span><span class="token punctuation">(</span>state<span class="token punctuation">.</span>datasource<span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-</code></pre>
-<h4 id="2-修改透视表-Pivot-Table-中的默认排序列"><a href="#2-修改透视表-Pivot-Table-中的默认排序列" class="headerlink" title="2. 修改透视表(Pivot Table)中的默认排序列"></a>2. 修改透视表(Pivot Table)中的默认排序列</h4><h4 id="3-透视表表头和表内容列错位"><a href="#3-透视表表头和表内容列错位" class="headerlink" title="3. 透视表表头和表内容列错位"></a>3. 透视表表头和表内容列错位</h4><h4 id="4-修改默认语言为中文"><a href="#4-修改默认语言为中文" class="headerlink" title="4. 修改默认语言为中文"></a>4. 修改默认语言为中文</h4><p>修改<code>superset/config.py</code>文件</p>
-<pre class=" language-python"><code class="language-python">BABEL_DEFAULT_LOCALE <span class="token operator">=</span> <span class="token string">"zh"</span>
-</code></pre>
-<h4 id="5-添加新菜单、菜单跳转到新页面"><a href="#5-添加新菜单、菜单跳转到新页面" class="headerlink" title="5. 添加新菜单、菜单跳转到新页面"></a>5. 添加新菜单、菜单跳转到新页面</h4><h5 id="找到-navbar-menu-html"><a href="#找到-navbar-menu-html" class="headerlink" title="找到 navbar_menu.html"></a>找到 navbar_menu.html</h5><p>添加菜单涉及到权限，需要后台开发人员配合，可以先避开权限问题，让添加的菜单显示出来，完成前端部分工作。</p>
-<p>打开 superset/templates/appbuilder/navbar_menu.html 文件，如果 appbuilder 下没有 navbar_menu.html，可以到本地安装的 superset 目录下找，比如我的 superset 装在/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/superset/下，那就可以到这个目录找 templates/appbuilder/navbar_menu.html，在修改过程中遇到项目中没有的 html 文件都是这样操作，找到后如果需要修改这个 html 文件，可以把它复制到自己项目的对应文件夹下。</p>
-<h5 id="修改-navbar-menu-html-文件"><a href="#修改-navbar-menu-html-文件" class="headerlink" title="修改 navbar_menu.html 文件"></a>修改 navbar_menu.html 文件</h5><p><code>is_menu_visible</code>是用来过滤菜单的，先把它注释掉</p>
-<pre class=" language-html"><code class="language-html">{% for item1 in menu.get_list() %}
-<span class="token comment" spellcheck="true">&lt;!-- is_menu_visible --></span>
-{% if item1 | is_menu_visible %} {% if item1.childs %}
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dropdown<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dropdown-toggle<span class="token punctuation">"</span></span> <span class="token attr-name">data-toggle</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dropdown<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>javascript:void(0)<span class="token punctuation">"</span></span> <span class="token attr-name">target</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>_blank<span class="token punctuation">"</span></span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>noopener<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    {% if item1.icon %}
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fa {{item1.icon}}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span><span class="token entity" title="&nbsp;">&amp;nbsp;</span> {% endif %} {{_(item1.label)}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>b</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>caret<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>b</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dropdown-menu<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    {% for item2 in item1.childs %} {% if item2 %} {% if item2.name == '-' %} {%
-    if not loop.last %}
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>divider<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-    {% endif %}
-    <span class="token comment" spellcheck="true">&lt;!-- | is_menu_visible  --></span>
-    {% elif item2 | is_menu_visible %}
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>{{ menu_item(item2) }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-    {% endif %} {% endif %} {% endfor %}
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-{% else %}
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>{{ menu_item(item1) }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-{% endif %} {% endif %} {% endfor %}
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span></code></pre>
-<h5 id="添加菜单"><a href="#添加菜单" class="headerlink" title="添加菜单"></a>添加菜单</h5><p>修改 superset/app.py 文件</p>
-<pre class=" language-python"><code class="language-python">appbuilder<span class="token punctuation">.</span>add_link<span class="token punctuation">(</span>
-    <span class="token string">"New Menu"</span><span class="token punctuation">,</span>
-    label<span class="token operator">=</span>__<span class="token punctuation">(</span><span class="token string">"New Menu"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    href<span class="token operator">=</span><span class="token string">"/superset/new"</span><span class="token punctuation">,</span>
-    icon<span class="token operator">=</span><span class="token string">"fa-cloud-upload"</span><span class="token punctuation">,</span>
-    category<span class="token operator">=</span><span class="token string">"New"</span><span class="token punctuation">,</span>
-    category_label<span class="token operator">=</span>__<span class="token punctuation">(</span><span class="token string">"New"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    category_icon<span class="token operator">=</span><span class="token string">"fa-wrench"</span><span class="token punctuation">,</span>
-<span class="token punctuation">)</span>
-</code></pre>
-<h5 id="添加处理函数"><a href="#添加处理函数" class="headerlink" title="添加处理函数"></a>添加处理函数</h5><p>修改 <code>superset/views/core.py</code> 文件， 在<code>class Superset</code>下添加</p>
-<pre class=" language-python"><code class="language-python">@has_access
-@expose<span class="token punctuation">(</span><span class="token string">"/new"</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">"GET"</span><span class="token punctuation">,</span> <span class="token string">"POST"</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token keyword">def</span> <span class="token function">doudizhu_events</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""SQL Editor"""</span>
-    bootstrap_data <span class="token operator">=</span> json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> self<span class="token punctuation">.</span>render_template<span class="token punctuation">(</span>
-        <span class="token string">"superset/basic.html"</span><span class="token punctuation">,</span> entry<span class="token operator">=</span><span class="token string">"new"</span><span class="token punctuation">,</span> bootstrap_data<span class="token operator">=</span>bootstrap_data
-    <span class="token punctuation">)</span>
-</code></pre>
-<p>在<code>class Superset</code>中定义的处理函数根路径都是<code>/superset</code>,所以现在就有了一个<code>/superset/new</code>的路径，与上面<code>add_link</code>的<code>href</code>属性对应，这里的<code>entry=&quot;new&quot;</code>指向的是 react 的入口文件</p>
-<h5 id="添加入口文件"><a href="#添加入口文件" class="headerlink" title="添加入口文件"></a>添加入口文件</h5><p>修改<code>/superset-frontend/webpack.config.js</code>文件，在 config.entry 下添加新的入口</p>
-<pre class=" language-javascript"><code class="language-javascript">entry<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-  theme<span class="token punctuation">:</span> path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>APP_DIR<span class="token punctuation">,</span> <span class="token string">"/src/new/index.jsx"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>在对应的<code>/src/new</code>下添加<code>index.jsx</code>文件，可以仿照<code>superset-frontend/src/addSlice</code>下的文件</p>
-<p>index.js</p>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> ReactDOM <span class="token keyword">from</span> <span class="token string">"react-dom"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> App <span class="token keyword">from</span> <span class="token string">"./App"</span><span class="token punctuation">;</span>
-
-ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token operator">&lt;</span>App <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">,</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"app"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<p>App.jsx</p>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> hot <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"react-hot-loader/root"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> setupApp <span class="token keyword">from</span> <span class="token string">"../../setup/setupApp"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> setupPlugins <span class="token keyword">from</span> <span class="token string">"../../setup/setupPlugins"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> New <span class="token class-name">from</span> <span class="token string">"./New"</span><span class="token punctuation">;</span>
-
-<span class="token function">setupApp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">setupPlugins</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">const</span> appContainer <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"app"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> bootstrapData <span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>appContainer<span class="token punctuation">.</span><span class="token function">getAttribute</span><span class="token punctuation">(</span><span class="token string">"data-bootstrap"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">const</span> App <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token operator">&lt;</span>New <span class="token class-name">datasources</span><span class="token operator">=</span><span class="token punctuation">{</span>bootstrapData<span class="token punctuation">.</span>datasources<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span><span class="token punctuation">;</span>
-
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">hot</span><span class="token punctuation">(</span>App<span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<h5 id="编写组件代码"><a href="#编写组件代码" class="headerlink" title="编写组件代码"></a>编写组件代码</h5><p>New.jsx 中就是正常的 react 组件代码</p>
-<h4 id="6-添加新图例，引入-echarts"><a href="#6-添加新图例，引入-echarts" class="headerlink" title="6. 添加新图例，引入 echarts"></a>6. 添加新图例，引入 echarts</h4><p><a href="https://blog.csdn.net/wenqiang1208/article/details/105362561/" target="_blank" rel="noopener">参考</a></p>
-<p>以添加一个简单的折线图为例</p>
-<ul>
-<li>在 superset-frontend/src/visualizations/ 目录下新建文件夹 SimpleLine，在 SimpleLine 文件夹下新建 images 文件夹,images 文件夹中放 SimpleLine 这个新图例的的缩略图，然后继续在 SimpleLine 文件夹下新建 SimpleLine.jsx,SimpleLinePlugin.js,transformProps.js，</li>
-</ul>
-<h5 id="新建-SimpleLinePlugin-js"><a href="#新建-SimpleLinePlugin-js" class="headerlink" title="新建 SimpleLinePlugin.js"></a>新建 SimpleLinePlugin.js</h5><pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> t <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@superset-ui/translation"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> ChartMetadata<span class="token punctuation">,</span> ChartPlugin <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@superset-ui/chart"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> transformProps <span class="token keyword">from</span> <span class="token string">"./transformProps"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> thumbnail <span class="token keyword">from</span> <span class="token string">"./images/thumbnail.png"</span><span class="token punctuation">;</span>
-
-<span class="token keyword">const</span> metadata <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ChartMetadata</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  name<span class="token punctuation">:</span> <span class="token function">t</span><span class="token punctuation">(</span><span class="token string">"Simple Line"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  description<span class="token punctuation">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
-  thumbnail<span class="token punctuation">,</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">SimpleLinePlugin</span> <span class="token keyword">extends</span> <span class="token class-name">ChartPlugin</span> <span class="token punctuation">{</span>
-  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-      metadata<span class="token punctuation">,</span>
-      transformProps<span class="token punctuation">,</span>
-      loadChart<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">"./SimpleLine.jsx"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<h5 id="新建-transformProps-js"><a href="#新建-transformProps-js" class="headerlink" title="新建 transformProps.js"></a>新建 transformProps.js</h5><p>这个文件单纯的用来转换数据，可以在这里把从后端接收到的数据处理成前端展示需要的格式</p>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">transformProps</span><span class="token punctuation">(</span>chartProps<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">const</span> <span class="token punctuation">{</span>
-    height<span class="token punctuation">,</span>
-    width<span class="token punctuation">,</span>
-    datasource<span class="token punctuation">,</span>
-    formData<span class="token punctuation">,</span>
-    queryData<span class="token punctuation">,</span>
-    rawFormData<span class="token punctuation">,</span>
-  <span class="token punctuation">}</span> <span class="token operator">=</span> chartProps<span class="token punctuation">;</span>
-  <span class="token keyword">const</span> <span class="token punctuation">{</span> records<span class="token punctuation">,</span> columns <span class="token punctuation">}</span> <span class="token operator">=</span> queryData<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
-
-  <span class="token keyword">return</span> <span class="token punctuation">{</span>
-    width<span class="token punctuation">,</span>
-    height<span class="token punctuation">,</span>
-    data<span class="token punctuation">:</span> records<span class="token punctuation">,</span>
-    columns<span class="token punctuation">:</span> columns<span class="token punctuation">,</span>
-    columns_x<span class="token punctuation">:</span> rawFormData<span class="token punctuation">.</span>all_columns_x<span class="token punctuation">,</span>
-    columns_y<span class="token punctuation">:</span> rawFormData<span class="token punctuation">.</span>all_columns_y<span class="token punctuation">,</span>
-  <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<h5 id="新建-SimpleLine-jsx"><a href="#新建-SimpleLine-jsx" class="headerlink" title="新建 SimpleLine.jsx"></a>新建 SimpleLine.jsx</h5><p>这部分代码我只放了个大概，主要做的工作就是通过 props 接收参数，然后导入<code>echarts-for-react</code>并使用，关于 echarts 的配置，直接参考 echarts 文档。</p>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> PropTypes <span class="token keyword">from</span> <span class="token string">"prop-types"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> ReactEcharts <span class="token keyword">from</span> <span class="token string">"echarts-for-react"</span><span class="token punctuation">;</span>
-
-<span class="token keyword">const</span> propTypes <span class="token operator">=</span> <span class="token punctuation">{</span>
-  data<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>array<span class="token punctuation">,</span>
-  columns<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>columns<span class="token punctuation">,</span>
-  width<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>number<span class="token punctuation">,</span>
-  height<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>number<span class="token punctuation">,</span>
-  columns_x<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
-  columns_y<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//检查类型，其中data包含viz.py中返回的数据，width和height为图表宽高</span>
-
-<span class="token keyword">class</span> <span class="token class-name">SimpleLine</span> <span class="token keyword">extends</span> <span class="token class-name">React<span class="token punctuation">.</span>PureComponent</span> <span class="token punctuation">{</span>
-  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">const</span> options <span class="token operator">=</span> <span class="token punctuation">{</span>
-      xAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-        type<span class="token punctuation">:</span> <span class="token string">"category"</span><span class="token punctuation">,</span>
-        data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      yAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-        type<span class="token punctuation">:</span> <span class="token string">"value"</span><span class="token punctuation">,</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      series<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span>
-          name<span class="token punctuation">:</span> yName<span class="token punctuation">,</span>
-          data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-          type<span class="token punctuation">:</span> <span class="token string">"line"</span><span class="token punctuation">,</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token punctuation">}</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token punctuation">(</span>
-      <span class="token operator">&lt;</span>ReactEcharts
-        option<span class="token operator">=</span><span class="token punctuation">{</span>options<span class="token punctuation">}</span>
-        style<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> height<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>height <span class="token punctuation">}</span><span class="token punctuation">}</span>
-      <span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>ReactEcharts<span class="token operator">></span>
-    <span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-SimpleLine<span class="token punctuation">.</span>displayName <span class="token operator">=</span> <span class="token string">"simple line"</span><span class="token punctuation">;</span>
-SimpleLine<span class="token punctuation">.</span>propTypes <span class="token operator">=</span> propTypes<span class="token punctuation">;</span>
-
-<span class="token keyword">export</span> <span class="token keyword">default</span> SimpleLine<span class="token punctuation">;</span>
-</code></pre>
-<h5 id="修改文件-superset-frontend-src-setup-setupPlugins-ts"><a href="#修改文件-superset-frontend-src-setup-setupPlugins-ts" class="headerlink" title="修改文件/superset-frontend/src/setup/setupPlugins.ts"></a>修改文件/superset-frontend/src/setup/setupPlugins.ts</h5><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 文件开头导入SimpleLine</span>
-<span class="token keyword">import</span> SimpleLine <span class="token keyword">from</span> <span class="token string">'../explore/controlPanels/SimpleLine'</span><span class="token punctuation">;</span>
-
-<span class="token comment" spellcheck="true">//注册SimpleLine,在getChartControlPanelRegistry()方法的链式调用后追加一句</span>
-<span class="token punctuation">.</span><span class="token function">registerValue</span><span class="token punctuation">(</span><span class="token string">'simple_line'</span><span class="token punctuation">,</span> SimpleLine<span class="token punctuation">)</span>
-</code></pre>
-<h5 id="修改文件-superset-frontend-src-visualizations-presets-MainPreset-js"><a href="#修改文件-superset-frontend-src-visualizations-presets-MainPreset-js" class="headerlink" title="修改文件/superset-frontend/src/visualizations/presets/MainPreset.js"></a>修改文件/superset-frontend/src/visualizations/presets/MainPreset.js</h5><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//导入</span>
-<span class="token keyword">import</span> SimpleLineChartPlugin <span class="token keyword">from</span> <span class="token string">"../SimpleLine/SimpleLinePlugin"</span><span class="token punctuation">;</span>
-
-<span class="token comment" spellcheck="true">//在plugins后添加</span>
-<span class="token keyword">new</span> <span class="token class-name">SimpleLineChartPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">configure</span><span class="token punctuation">(</span><span class="token punctuation">{</span> key<span class="token punctuation">:</span> <span class="token string">"simple_line"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<h4 id="后端代码添加-class-SimpleLine"><a href="#后端代码添加-class-SimpleLine" class="headerlink" title="后端代码添加 class SimpleLine"></a>后端代码添加 class SimpleLine</h4><p>修改<code>/superset/viz.py</code>文件,在<code>viz_types</code>的定义前添加<code>class SimpleLine</code>,下面这段代码根据你需要的数据自行进行处理，这里只做最简单的演示</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">SimpleLine</span><span class="token punctuation">(</span>BaseViz<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    viz_type <span class="token operator">=</span> <span class="token string">'simple_line'</span>
-    verbose_name <span class="token operator">=</span> <span class="token string">"simple line"</span>
-    sort_series <span class="token operator">=</span> <span class="token boolean">False</span>
-    is_timeseries <span class="token operator">=</span> <span class="token boolean">False</span>
-    <span class="token keyword">def</span> <span class="token function">query_obj</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        d <span class="token operator">=</span> super<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>query_obj<span class="token punctuation">(</span><span class="token punctuation">)</span>
-        fd <span class="token operator">=</span> self<span class="token punctuation">.</span>form_data <span class="token comment" spellcheck="true">#form_data中包含界面左侧组件内容</span>
-        columns <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
-        <span class="token keyword">if</span> <span class="token operator">not</span> fd<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'all_columns'</span><span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true">#这个字段对应×××组件，不为空</span>
-            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'Choose Columns'</span><span class="token punctuation">)</span>
-        <span class="token keyword">if</span> fd<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'all_columns'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-            d<span class="token punctuation">[</span><span class="token string">'columns'</span><span class="token punctuation">]</span> <span class="token operator">=</span> columns <span class="token comment" spellcheck="true"># all_columns是左侧组件名，后面会提到</span>
-        <span class="token keyword">return</span> d
-
-    <span class="token keyword">def</span> <span class="token function">get_data</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> df<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token comment" spellcheck="true"># df是pandas的DataFrame类型</span>
-        data <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>df<span class="token punctuation">)</span><span class="token punctuation">.</span>tolist<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#假设数据很简单，不需要做别的处理</span>
-        <span class="token comment" spellcheck="true"># 如果除了绘图用的数据还有别的信息，可以构造一个字典来返回</span>
-        <span class="token comment" spellcheck="true"># data = {'plot_data':plot_data,'other_info':other_info}</span>
-
-        <span class="token keyword">return</span> self<span class="token punctuation">.</span>handle_js_int_overflow<span class="token punctuation">(</span>
-            dict<span class="token punctuation">(</span>records<span class="token operator">=</span>df<span class="token punctuation">.</span>to_dict<span class="token punctuation">(</span>orient<span class="token operator">=</span><span class="token string">"records"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> columns<span class="token operator">=</span>list<span class="token punctuation">(</span>df<span class="token punctuation">.</span>columns<span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token punctuation">)</span>
-</code></pre>
-<p>这样就大功告成了。</p>
-
-                                                                        
+                                                    <p>项目里 superset 版本是 0.36.0, python 版本是 3.6, 网上大部分资料都是后端开发人员贡献的，这篇文章我从一个前端的角度记录一下 superset 二次开发遇到的一些问题和解决方法。<br>
+                                                        
+                                                            <a class="article-more-link" href="/2020/08/07/superset二次开发/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2020/08/07/superset二次开发/" data-id="ckgoysv5p002mak1znpk5bqzu" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2020/08/07/superset二次开发/" data-id="ckgoyuz3l0017hf1z0muxeb3d" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -539,7 +270,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2020/07/01/学习Echarts配置项/" data-id="ckgoysv5j0024ak1ztrt4pszr" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2020/07/01/学习Echarts配置项/" data-id="ckgoyuz410028hf1z5p0h66g9" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -601,7 +332,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2020/06/20/SVG基础/" data-id="ckgoysv540010ak1zl1j2c2op" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2020/06/20/SVG基础/" data-id="ckgoyuz3i0011hf1z8jksi1lg" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -667,7 +398,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2019/11/27/弹性盒模型之flex属性/" data-id="ckgoysv5l0029ak1zboxayi2v" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2019/11/27/弹性盒模型之flex属性/" data-id="ckgoyuz43002ehf1zhaytrgyb" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -733,7 +464,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/" data-id="ckgoysv58001bak1zmv84miak" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/" data-id="ckgoyuz3t001ohf1z8nee4ave" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -799,7 +530,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2018/05/09/山与山从不相见，人与人总会重逢/" data-id="ckgoysv5g001xak1zgbgpqziy" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2018/05/09/山与山从不相见，人与人总会重逢/" data-id="ckgoyuz44002hhf1zimskvhhq" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -865,7 +596,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2018/05/08/HTMLCollection和NodeList/" data-id="ckgoysv4j0008ak1zm30jbgmk" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2018/05/08/HTMLCollection和NodeList/" data-id="ckgoyuz2c0001hf1zcqvlvwwj" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -931,7 +662,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2018/03/18/第一次自己住的心情/" data-id="ckgoysv5p002kak1zqw8r1s2g" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2018/03/18/第一次自己住的心情/" data-id="ckgoyuz48002rhf1zye49jiqf" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -997,7 +728,7 @@ SimpleLine<span class="token punctuation">.</span>propTypes <span class="token o
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2017/12/30/孜孜不倦必能求索风尘仆仆终有归途/" data-id="ckgoysv5f001uak1zpjqg6gnu" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2017/12/30/孜孜不倦必能求索风尘仆仆终有归途/" data-id="ckgoyuz3z0025hf1ztfpgf9ok" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -1077,7 +808,7 @@ array.toString().split(&#39;,&#39;)
                                                                 
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2017/11/07/前端常见面试题/" data-id="ckgoysv5d001oak1zg8mrv92d" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2017/11/07/前端常见面试题/" data-id="ckgoyuz45002khf1znxle9chu" class="article-share-link">
                                             分享
                                         </a>
                                         
