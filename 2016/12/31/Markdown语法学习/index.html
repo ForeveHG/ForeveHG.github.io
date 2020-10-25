@@ -269,11 +269,15 @@ __me to__
 [id]: /images/avatar.gif  &quot;Optional title attribute&quot;
 </code></pre><h5 id="效果-13"><a href="#效果-13" class="headerlink" title="效果"></a>效果</h5><p>![头像][id]<br>[id]: /images/avatar.gif  “Optional title attribute”<br>到目前为止， Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <img> 标签。</p>
 <h4 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h4><p>1.标题后面必须加一个空格。<br>2.必须按照标题大小的顺序写才能正确的生成目录，如果大标题用<code>#</code>,小标题直接用<code>###</code>目录会混乱，用<code>#</code>后接下来应该用<code>##</code>才会准确的生成文章目录。<br>3.生成表格前要加一个空行</p>
-
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><h5 id="markdown中使用echarts"><a href="#markdown中使用echarts" class="headerlink" title="markdown中使用echarts"></a>markdown中使用echarts</h5><p>在markdown中使用echarts，有已经写好的hexo插件，直接拿来用</p>
+<pre class=" language-javascript"><code class="language-javascript">npm install hexo<span class="token operator">-</span>tag<span class="token operator">-</span>charts3 <span class="token operator">--</span>save
+</code></pre>
+<p>这个插件似乎已经很久不更新了，插件中的echarts版本比较旧，下载到项目之后，可以手动的进行echarts版本更新，进入项目的node_modules/hexo-tag-echarts3/template.html中，将echarts的引用版本替换成新版echarts即可，我用的bootstrap的cdn，<a href="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js" target="_blank" rel="noopener">https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js</a></p>
+<h5 id="markdown中引用变量"><a href="#markdown中引用变量" class="headerlink" title="markdown中引用变量"></a>markdown中引用变量</h5>
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2016/12/31/Markdown语法学习/" data-id="ckc33rvs40008de1zuwi8d37x" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2016/12/31/Markdown语法学习/" data-id="ckgoysv4s000gak1zcaws2qih" class="article-share-link">
                                             分享
                                         </a>
                                         
