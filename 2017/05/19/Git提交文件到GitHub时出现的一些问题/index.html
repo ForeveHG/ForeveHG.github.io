@@ -116,11 +116,17 @@ nothing added to commit but untracked files present
 CONFLICT (content): Merge conflict in c/environ.c
 </code></pre><p>意思就是系统自动合并修改的内容，但是其中有冲突，需要解决其中的冲突。</p>
 <h5 id="4、解决文件中冲突的的部分"><a href="#4、解决文件中冲突的的部分" class="headerlink" title="4、解决文件中冲突的的部分"></a>4、解决文件中冲突的的部分</h5><p>打开冲突的文件，会看到类似如下的内容：<br>git冲突内容<br>其中Updated upstream 和=====之间的内容就是pull下来的内容，====和stashed changes之间的内容就是本地修改的内容。碰到这种情况，git也不知道哪行内容是需要的，所以要自行确定需要的内容。<br>解决完成之后，就可以正常的提交了。</p>
+<h4 id="5-回复到merge前"><a href="#5-回复到merge前" class="headerlink" title="5. 回复到merge前"></a>5. 回复到merge前</h4><p>第一步：git checkout到你要恢复的那个分支上</p>
+<p><code>git checkout 分支名</code></p>
+<p>第二步：git reflog查出要回退到merge前的版本号</p>
+<p><code>git reflog</code></p>
+<p>第三步：<code>git reset --hard [版本号]</code>就回退到merge前的代码状态了</p>
+<p><code>git reset --hard f82cfd2</code></p>
 
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2017/05/19/Git提交文件到GitHub时出现的一些问题/" data-id="ckgoywtfb0002mm1zvucivyri" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2017/05/19/Git提交文件到GitHub时出现的一些问题/" data-id="ckqavlpcp000d8m1z3c8ib7le" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -173,7 +179,7 @@ CONFLICT (content): Merge conflict in c/environ.c
 </ul>
     </div>
     <ul class="list-inline">
-      <li>&copy; 2020 JL&#39;s Blog</li>
+      <li>&copy; 2021 JL&#39;s Blog</li>
       <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
       <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
     </ul>

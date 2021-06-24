@@ -151,12 +151,14 @@
 <p>首先看所有元素flex-basis的和是否超出盒子的总宽度200px</p>
 <p>auto和initial就是元素的width,也就是30px,所以</p>
 <p>flex-basis的和 = 30px + 30px + 80px + 40px = 180px, 180 &lt; 200可拉伸，不收缩</p>
+<blockquote>
 <p>flex-grow的和 = 2，因为box2的flex-basis值为initial,所以就把它的flex-grow算成是0</p>
+</blockquote>
 <p>box1的宽度 = 30 + 1 * ((200 - 180) / 2) = 40</p>
 <p>box2的宽度 = 30</p>
 <p>box3的宽度 = 80 + 1 * ((200 - 180) / 2) = 90</p>
 <p>box3的宽度 = 40</p>
-<p>第二个例子，计算各自的宽度</p>
+<p>第二个例子，计算各自的宽度<br>100 </p>
 <pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token id">#content</span> <span class="token class">.box1</span> </span><span class="token punctuation">{</span>
   <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">1</span> auto<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -176,7 +178,9 @@
 <p>首先看所有元素flex-basis的和是否超出盒子的总宽度200px</p>
 <p>auto和initial就是元素的width,也就是30px,所以</p>
 <p>flex-basis的和 = 30px + 30px + 120px + 120px = 300px, 300 &gt; 200不可拉伸，会收缩,</p>
+<blockquote>
 <p>flex-shrink省略时取默认值1，超出的宽度值为100</p>
+</blockquote>
 <p>box1的宽度 = 30 - 100 <em> 30 / (1 </em> 30 + 1 <em> 30 + 0 </em> 120 + 1 * 120) = 13.33</p>
 <p>box2的宽度 = 同上 = 13.33</p>
 <p>box3的宽度 = 不收缩 = 120</p>
@@ -185,7 +189,7 @@
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2019/11/27/弹性盒模型之flex属性/" data-id="ckgoywtge0021mm1zkjts60ez" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2019/11/27/弹性盒模型之flex属性/" data-id="ckqavlpdv002f8m1zuc6wr213" class="article-share-link">
                                             分享
                                         </a>
                                         
@@ -211,7 +215,7 @@
     
       <a href="/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/" class="article-nav-link">
         <strong class="article-nav-caption">后一篇</strong>
-        <div class="article-nav-title">为了弄明白Promise的运行顺序，徒手写一个Promise</div>
+        <div class="article-nav-title">为了弄明白Promise的运行顺序，手写一个Promise</div>
       </a>
     
   </nav>
@@ -238,7 +242,7 @@
 </ul>
     </div>
     <ul class="list-inline">
-      <li>&copy; 2020 JL&#39;s Blog</li>
+      <li>&copy; 2021 JL&#39;s Blog</li>
       <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
       <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
     </ul>
