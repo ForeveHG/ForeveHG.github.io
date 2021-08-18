@@ -86,7 +86,7 @@
 <span class="token punctuation">}</span>
 
 
-<span class="token comment" spellcheck="true">//第二种，直接拍平</span>
+<span class="token comment" spellcheck="true">//第二种</span>
 array<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">','</span><span class="token punctuation">)</span>
 </code></pre>
 <a id="more"></a>
@@ -105,12 +105,15 @@ newArr<span class="token punctuation">.</span><span class="token function">push<
 <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token keyword">in</span> arr<span class="token punctuation">)</span><span class="token punctuation">{</span>
     tempArr<span class="token punctuation">[</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span class="token keyword">let</span> newArr <span class="token operator">=</span> Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> newArr <span class="token operator">=</span> Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>tempArr<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token comment" spellcheck="true">//第三种方法</span>
 <span class="token keyword">let</span> newArr <span class="token operator">=</span> arr<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token punctuation">(</span>ele<span class="token punctuation">,</span>index<span class="token punctuation">,</span>array<span class="token punctuation">)</span><span class="token operator">=</span><span class="token operator">></span><span class="token punctuation">{</span>
     <span class="token keyword">return</span> index <span class="token operator">===</span> array<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>ele<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>//第四种</p>
+<pre class=" language-js"><code class="language-js">Array<span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Set</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">)</span>
 </code></pre>
 <h4 id="3-细节"><a href="#3-细节" class="headerlink" title="3.细节"></a>3.细节</h4><h5 id="3-1-toFixed"><a href="#3-1-toFixed" class="headerlink" title="3.1 toFixed"></a>3.1 toFixed</h5><p>42.toFixed(3)    //SyntaxError  .运算符会被优先识别为数字常量的一部分，42. == 42.0<br>42..toFixed(3)   //正确<br>42 .toFixed(3)   //正确</p>
 <h5 id="3-2-较小的数值"><a href="#3-2-较小的数值" class="headerlink" title="3.2 较小的数值"></a>3.2 较小的数值</h5><p>0.1+0.2 === 0.3  //false 0.1+0.2 = 0.300000000000000004</p>
@@ -234,7 +237,7 @@ personA<span class="token punctuation">.</span>show4<span class="token punctuati
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="https://forevehg.github.io/2017/11/07/前端常见面试题/" data-id="ckqawpdrb001way1zuzkl9ra1" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2017/11/07/前端常见面试题/" data-id="cksgu3j7y002l5os6t5beulsi" class="article-share-link">
                                             分享
                                         </a>
                                         

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+
+                
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <ol>
+<li><p>ajax,axios,fetch的区别</p>
+<ol>
+<li>ajax封装：<ol>
+<li>var xhr = new XMLRequestHttp()</li>
+<li>xhr.onreadystatechange</li>
+<li>xhr.open</li>
+<li>xhr.send</li>
+</ol>
+</li>
+<li>axios使用promise的方式封装ajax，避免回调地域</li>
+<li>fetch是js的原生api，兼容性</li>
+</ol>
+</li>
+<li><p>set,map,weakSet,weakMap<br>set 类数组结构，元素不重复，不重复的判断类似于===，api: add,delete,has,size<br>map 类对象结构，键名可以随时任务数据类型 api: set,get,size<br>weakSet 不重复值的合集，值只能是对象，弱引用，不可遍历<br>weakMap 键值对的集合，键名只能是对象，键名的引用不计入垃圾回收机制，防止内存泄露，不可遍历</p>
+</li>
+<li>说一下promise，promise解决什么问题，promise的缺点，怎么解决promise的缺点，async/await的原理，generation还有什么使用场景</li>
+<li>闭包，闭包有什么问题，怎么解决<br>函数内部定义函数，内部函数可以访问外部函数的作用域<br>闭包的问题：内存泄露<br>解决：变量置空</li>
+<li>常用的数组去重<ol>
+<li>利用es6的Set和结构赋值</li>
+<li>利用对象键名不重复的特点去重</li>
+<li>通过filter遍历对象，用indexOf判断，返回不重复的元素</li>
+</ol>
+</li>
+<li>数组扁平化<ol>
+<li>toString + split</li>
+<li>join(‘,’) + split</li>
+<li>reduce + 递归<pre class=" language-javascript"><code class="language-javascript">  <span class="token keyword">function</span> <span class="token function">flatten</span><span class="token punctuation">(</span>array<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> array<span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span>current<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+          <span class="token keyword">return</span> result<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token function">flatten</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span> <span class="token punctuation">:</span> current<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ol>
+</li>
+<li>两个变量没有第三个变量时如何交换<ol>
+<li>加法<pre><code>a = a + b;
+b = a - b;
+a = a - b;
+</code></pre></li>
+<li>es6解构赋值 <code>[a,b] = [b, a]</code></li>
+<li><code>b = [a,a=b][0]</code></li>
+</ol>
+</li>
+<li>跨域，怎么解决，小程序是否会发生跨域</li>
+<li>url中怎么提取请求参数,生成键值对</li>
+<li>webpack<ol>
+<li>css-loader，style-loader，less-loader, vue-loader</li>
+<li>loader的原理</li>
+<li>loader和plugin的区别</li>
+<li>常用插件</li>
+<li>HtmlWebpackPlugin 把编译后的css/js插入入口文件</li>
+<li>mini-css-extract-plugin 提取css，模块化css，异步按需加载css</li>
+<li>VueLoaderPlugin </li>
+<li>HotModuleReplacementPlugin 热更新替换，不刷新页面替换代码</li>
+<li>uglifyjs-webpack-plugin 压缩</li>
+<li>SplitChunksPlugin 提取公共模块</li>
+<li>常用配置项</li>
+<li>配置多页面</li>
+<li>代码分割<br> 异步加载组件<br> 多入口<br> 配置插件提取css，js，提取公共模块</li>
+<li>代码压缩</li>
+</ol>
+</li>
+<li>css<ol>
+<li>双飞翼布局</li>
+<li>水平垂直居中</li>
+<li>移动端1px边框问题，为什么会产生，怎么处理<br> CSS样式里面的px和物理像素并不是相等的。CSS中的像素只是一个抽象的单位，在不同的设备或不同的环境中，CSS中的1px所代表的物理像素是不同的。在PC端，CSS的1px一般对应着电脑屏幕的1个物理像素，但在移动端，CSS的1px等于几个物理像素<br> 处理方法：<ol>
+<li>构建1个伪元素, border为1px, 再以transform缩放到50%。<pre class=" language-javascript"><code class="language-javascript">     <span class="token comment" spellcheck="true">/* 设计稿是750,采用1：100的比例,font-size为100*(100vw/750) */</span>
+     <span class="token punctuation">.</span>border<span class="token operator">-</span>1px <span class="token punctuation">{</span>
+         position<span class="token punctuation">:</span> relative<span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+     @media screen and <span class="token punctuation">(</span><span class="token operator">-</span>webkit<span class="token operator">-</span>min<span class="token operator">-</span>device<span class="token operator">-</span>pixel<span class="token operator">-</span>ratio<span class="token punctuation">:</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token punctuation">.</span>border<span class="token operator">-</span>1px<span class="token punctuation">:</span>before <span class="token punctuation">{</span>
+             content<span class="token punctuation">:</span> <span class="token string">" "</span><span class="token punctuation">;</span>
+             position<span class="token punctuation">:</span> absolute<span class="token punctuation">;</span>
+             left<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+             top<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+             width<span class="token punctuation">:</span> <span class="token number">100</span><span class="token operator">%</span><span class="token punctuation">;</span>
+             height<span class="token punctuation">:</span> 1px<span class="token punctuation">;</span>
+             border<span class="token operator">-</span>top<span class="token punctuation">:</span> 1px solid #D9D9D9<span class="token punctuation">;</span>
+             color<span class="token punctuation">:</span> #D9D9D9<span class="token punctuation">;</span>
+             <span class="token operator">-</span>webkit<span class="token operator">-</span>transform<span class="token operator">-</span>origin<span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">0</span><span class="token punctuation">;</span>
+             transform<span class="token operator">-</span>origin<span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">0</span><span class="token punctuation">;</span>
+             <span class="token operator">-</span>webkit<span class="token operator">-</span>transform<span class="token punctuation">:</span> <span class="token function">scaleY</span><span class="token punctuation">(</span><span class="token number">0.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+             transform<span class="token punctuation">:</span> <span class="token function">scaleY</span><span class="token punctuation">(</span><span class="token number">0.5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ol>
+</li>
+<li>用css实现三角形</li>
+<li>bfc<br>BFC(Block formatting context)直译为”块级格式化上下文”。它是一个独立的渲染区域，只有Block-level box参与， 它规定了内部的Block-level Box如何布局，并且与这个区域外部毫不相干。<br>BFC布局规则：<br> 内部的Box会在垂直方向，一个接一个地放置。<br> Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生重叠<br> 每个元素的margin box的左边， 与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。<br> BFC的区域不会与float box重叠。<br> BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。<br> 计算BFC的高度时，浮动元素也参与计算<br>哪些元素会生成BFC?<br> 根元素<br> float属性不为none<br> position为absolute或fixed<br> display为inline-block, table-cell, table-caption, flex, inline-flex<br> block不行 </li>
+<li>弹性盒模型</li>
+<li>清除浮动</li>
+<li>子元素设置绝对定位，父元素如何解决高度塌陷</li>
+<li>子元素设置浮动，父元素如何解决高度塌陷</li>
+<li>css动画的实现方式，实现一个loading动画</li>
+</ol>
+</li>
+<li>react hooks原理(react)</li>
+<li>常见的hooks，useMemo和useCallback的区别(react)</li>
+<li>useRef和React.createRef区别(react)</li>
+<li>useMemo和React.memo使用场景(react)</li>
+<li>redux数据流(react)</li>
+<li>redux原理(react)</li>
+<li>vuex数据流</li>
+<li>vuex原理</li>
+<li>umi(react)</li>
+<li>dva数据流(react)</li>
+<li><p>vue3 proxy<br>Proxy可以直接监听数组的变化。<br>Proxy有13中拦截方法，如ownKeys、deleteProperty、has 等是 Object.defineProperty 不具备的。<br>Proxy返回的是一个新对象，我们可以只操作新的对象达到目的，而Object.defineProperty只能遍历对象属性直接修改;<br>Proxy做为新标准将受到浏览器产商重点持续的性能优化,也就是传说中的新标准的性能红利。<br>Object.defineProperty 的优势如下</p>
+<p>兼容性好，支持 IE9，而 Proxy 的存在浏览器兼容性问题,而且无法用 polyfill 磨平。<br>Object.defineProperty 不足在于：</p>
+<p>Object.defineProperty 只能劫持对象的属性,因此我们需要对每个对象的每个属性进行遍历。<br>Object.defineProperty不能监听数组。是通过重写数据的那7个可以改变数据的方法来对数组进行监听的。<br>Object.defineProperty 也不能对 es6 新产生的 Map,Set 这些数据结构做出监听。<br>Object.defineProperty也不能监听新增和删除操作，通过 Vue.set()和 Vue.delete来实现响应式的。</p>
+</li>
+<li>浏览器渲染原理</li>
+<li>v8垃圾回收机制</li>
+<li>js中常见的内存泄露的场景<ol>
+<li>意外的全局变量</li>
+<li>被遗忘的定时器或回调函数</li>
+<li>脱离dom的引用</li>
+<li>闭包</li>
+</ol>
+</li>
+<li>强缓存和协商缓存</li>
+<li>复杂请求和简单请求</li>
+<li>预检请求</li>
+<li>http2有哪些新特性？http2还有哪些缺陷？http3的一些了解？</li>
+<li>class常见类和构造函数创建类的区别，this指向</li>
+<li>实现一个Array.reverce</li>
+<li>js单例模式</li>
+<li>js继承</li>
+<li>为什么js是单线程</li>
+<li>线程和进程的区别</li>
+<li>实现一个instanceof</li>
+<li>css选择器，css选择器权重</li>
+<li>为什么vue里面有的事件不回传event对象？</li>
+<li>flex:1的含义<br>flex: 1 1 0; 可伸展，可收缩，基础宽度为0</li>
+<li>基本类型，引用类型<br>基本类型存放在栈内存，引用类型的引用值存放在栈内存，值存放在堆内存</li>
+<li>js为什么要分栈内存和堆内存<ol>
+<li>栈内存中存储的变量都是已知大小或者有范围上限的，并且不可变，堆内存中存储的数据本身的大小和属性可变</li>
+<li>内存分配：栈内存线性有序存储，容量小，效率高； 堆内存先要在堆内存中分配存储区域，之后还要把指针存在栈内存，相比栈内存来讲效率低</li>
+<li>垃圾回收：栈内存变量用完就回收；堆内存中的变量可能存在不确定的引用，只有当所有调用的变量全部销毁后才能回收</li>
+</ol>
+</li>
+<li>Object.freeze操作Vue中的data对象会发生什么</li>
+<li><p>为什么要用虚拟DOM?</p>
+<p>因为js引擎也不能直接操作真实dom，需要通过浏览器提供的接口来操作(这些接口挂载在js中window对象的document对象上)，浏览器操作dom后再将结果返回给js引擎，因此js操作真实dom的代价比较大，而且修改dom会引起页面重绘，而虚拟dom是使用js对象来描述dom树，它不能消除真实的dom操作，页面的修改最终还是需要操作真实dom，但是可以通过虚拟dom提前掌握dom结构，这样可以在操作真实dom前提前做优化，比如本来三次真实dom操作，通过框架的优化成一次操作，这就是虚拟dom的好处</p>
+</li>
+</ol>
+<p>参考： <a href="https://baijiahao.baidu.com/s?id=1676526364115609709&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener">https://baijiahao.baidu.com/s?id=1676526364115609709&amp;wfr=spider&amp;for=pc</a></p>
+<ol start="46">
+<li>SPA单页面的优缺点</li>
+</ol>
+<ul>
+<li><p>优点： </p>
+<ol>
+<li>不用频繁切换页面，用户体验好</li>
+<li>开发中可以前后端分离，提高开发效率</li>
+<li>减轻服务器压力，服务器只需要提供数据，不用关心页面合成和展示逻辑</li>
+<li>一套后端代码可以在多个客户端使用</li>
+</ol>
+</li>
+<li><p>缺点：</p>
+<ol>
+<li>首页白屏</li>
+<li>SEO</li>
+</ol>
+</li>
+</ul>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="https://forevehg.github.io/cache/Frontend-Daily-Interview-base.html" data-id="cksgu3j6z000v5os618tk30dl" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+                                    </footer>
+
+    </div>
+
+    
+        
+
+            
+
+                
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2021 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
