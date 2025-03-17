@@ -88,7 +88,7 @@
 <li><p>生成渲染层树(Layout): 构建布局树的同时会生成渲染层树，当DOM的LayoutObject在相同的坐标空间时(可以理解为Z轴)，将形成渲染层，渲染层树可以理解为<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context" target="_blank" rel="noopener">层叠上下文</a>，确保页面元素以正确的顺序显示</p>
 </li>
 <li><p>生成合成层树(Update Layer Tree)：为一些<strong>特殊的渲染层</strong>生成<strong>合成层</strong>，不是合成层的其他渲染层与拥有合成层的第一个父级共享合成层，每个合成层对应一个图层(GraphicsLayer)，可以在<code>Devtools-Layers</code>面板查看当前的所有图层</p>
-<p><img src="https://yqintl.alicdn.com/de1854a7a33b0453e7b73763d68617a3dc6215b2.jpeg" alt="2"></p>
+<p><img src="../imgs/浏览器渲染流程/de1854a7a33b0453e7b73763d68617a3dc6215b2.jpeg" alt="2"></p>
 </li>
 <li><p>绘制(Paint)：为每个图层(GraphicsLayer)生成绘制列表，用来记录绘制指令和绘制顺序，这些指令在分块光栅化的时候才会被执行</p>
 </li>
@@ -115,9 +115,9 @@
 <li><p>利用GPU高效实现滚动、3D变换等动画效果，这些动画的执行过程不需要主线程的参与，在纹理合成前，使用 3D API 对合成层进行变形</p>
 </li>
 </ol>
-<h4 id="在Chrome-DevTools查看合成层"><a href="#在Chrome-DevTools查看合成层" class="headerlink" title="在Chrome DevTools查看合成层"></a>在Chrome DevTools查看合成层</h4><h5 id="layer面板"><a href="#layer面板" class="headerlink" title="layer面板"></a>layer面板</h5><h5 id><a href="#" class="headerlink" title></a><img src="../imgs/Chrome优先级调度规则/截屏2022-03-01 上午8.24.43.png" alt="截屏2022-03-01 上午8.24.43"></h5><p><img src="../imgs/Chrome优先级调度规则/截屏2022-02-26 下午4.04.20.png" alt="截屏2022-02-26 下午4.04.20"></p>
-<h5 id="show-layer-border"><a href="#show-layer-border" class="headerlink" title="show layer border"></a>show layer border</h5><p><img src="../imgs/Chrome优先级调度规则/截屏2022-02-26 下午4.05.58.png" alt="截屏2022-02-26 下午4.05.58"></p>
-<h5 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h5><p><img src="../imgs/Chrome优先级调度规则/截屏2022-02-26 下午4.01.56.png" alt="截屏2022-02-26 下午4.01.56"></p>
+<h4 id="在Chrome-DevTools查看合成层"><a href="#在Chrome-DevTools查看合成层" class="headerlink" title="在Chrome DevTools查看合成层"></a>在Chrome DevTools查看合成层</h4><h5 id="layer面板"><a href="#layer面板" class="headerlink" title="layer面板"></a>layer面板</h5><h5 id><a href="#" class="headerlink" title></a><img src="../imgs/浏览器渲染流程/截屏2022-03-01 上午8.24.43.png" alt="截屏2022-03-01 上午8.24.43"></h5><p><img src="../imgs/浏览器渲染流程/截屏2022-02-26 下午4.04.20.png" alt="截屏2022-02-26 下午4.04.20"></p>
+<h5 id="show-layer-border"><a href="#show-layer-border" class="headerlink" title="show layer border"></a>show layer border</h5><p><img src="../imgs/浏览器渲染流程/截屏2022-02-26 下午4.05.58.png" alt="截屏2022-02-26 下午4.05.58"></p>
+<h5 id="Performance"><a href="#Performance" class="headerlink" title="Performance"></a>Performance</h5><p><img src="../imgs/浏览器渲染流程/截屏2022-02-26 下午4.01.56.png" alt="截屏2022-02-26 下午4.01.56"></p>
 <h4 id="生成合成层的原因-Compositing-Reason"><a href="#生成合成层的原因-Compositing-Reason" class="headerlink" title="生成合成层的原因(Compositing Reason)"></a>生成合成层的原因(Compositing Reason)</h4><p>生成合成层的原因有很多，如果想知道全部情况还是需要参考源码，或者参考这边文章<a href="https://blog.csdn.net/Luoshengyang/article/details/50661553?spm=1001.2014.3001.5502" target="_blank" rel="noopener">Chromium网页Graphics Layer Tree创建过程分析</a>，下面列出一些常见的从渲染层提升为合成层的原因：</p>
 <h5 id="直接提升"><a href="#直接提升" class="headerlink" title="直接提升"></a>直接提升</h5><ol>
 <li>硬件加速的iframe元素，<code>video</code>元素，3D <code>canvas</code>元素，2D加速的<code>canvas</code>元素，硬件加速插件(如<code>flash</code>)</li>
@@ -140,7 +140,7 @@
 <h5 id="隐式合成"><a href="#隐式合成" class="headerlink" title="隐式合成"></a>隐式合成</h5><ol>
 <li><p>层叠：从堆叠顺序上来看，为保持正确的渲染顺序，在合成层上一层的元素会被隐式提升为合成层。</p>
 <p>如下图所示，第一张图是正确的渲染结果，但如果蓝色块被提升为合成层，绿色不提升的话，绿色块将和它的父元素白色块渲染到图一图层上，导致渲染结果出错，这种情况下只能将绿色也提升合成层。</p>
-<p><img src="../imgs/Chrome优先级调度规则/overlay.png" alt="overlay"></p>
+<p><img src="../imgs/浏览器渲染流程/overlay.png" alt="overlay"></p>
 </li>
 </ol>
 <ol start="2">
@@ -183,7 +183,7 @@
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>111111111111<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
 </code></pre>
-<p><img src="../imgs/Chrome优先级调度规则/截屏2022-02-27 下午6.20.47.png" alt="截屏2022-02-27 下午6.20.47"></p>
+<p><img src="../imgs/浏览器渲染流程/截屏2022-02-27 下午6.20.47.png" alt="截屏2022-02-27 下午6.20.47"></p>
 </li>
 </ol>
 <h4 id="层压缩和层爆炸"><a href="#层压缩和层爆炸" class="headerlink" title="层压缩和层爆炸"></a>层压缩和层爆炸</h4><h5 id="层压缩"><a href="#层压缩" class="headerlink" title="层压缩"></a>层压缩</h5><p>前面介绍的隐式合成，都很有可能在不知不觉的情况下形成大量的合成层，消耗CPU和内存资源，影响页面性能，浏览器也考虑到了这个问题，会对一些非直接原因创建的合成层进行压缩，避免层爆炸。</p>
@@ -255,7 +255,7 @@
    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>box<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>111111111111<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
 </code></pre>
-<p><img src="../imgs/Chrome优先级调度规则/截屏2022-02-27 下午5.29.25.png" alt="截屏2022-02-27 下午5.29.25"></p>
+<p><img src="../imgs/浏览器渲染流程/截屏2022-02-27 下午5.29.25.png" alt="截屏2022-02-27 下午5.29.25"></p>
 <h4 id="使用建议"><a href="#使用建议" class="headerlink" title="使用建议"></a>使用建议</h4><h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h5><ol>
 <li>合成层的位图会交由 <code>GPU</code> 合成，相比 <code>CPU</code> 处理要快</li>
 <li>将动画效果提升到合成层</li>
@@ -279,7 +279,7 @@
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="http://sunjl729.cn/2023/04/07/浏览器合成层/" data-id="cm8cpkxjk002x7u1zkakr7q6m" class="article-share-link">
+                                        <a data-url="https://forevehg.github.io/2023/04/07/浏览器合成层/" data-id="cm8cq1yfm002r221zn7jhxtt3" class="article-share-link">
                                             分享
                                         </a>
                                         
