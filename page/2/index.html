@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="jumbotron">
+  <div class="video">
+    
+      <div class="video-frame">
+        <img src="/images/ocean/overlay-hero.png" alt="Decorative image frame">
+      </div>
+    
+    <div class="video-media">
+      <video playsinline="" autoplay="" loop="" muted="" data-autoplay=""
+             poster="/images/ocean/ocean.png" x5-video-player-type="h5">
+        <source src="/images/ocean/ocean.mp4" type="video/mp4">
+        <source src="/images/ocean/ocean.ogv" type="video/ogg">
+        <source src="/images/ocean/ocean.webm" type="video/webm">
+        <p>Your user agent does not support the HTML5 Video element.</p>
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+    <div class="video-inner text-center text-white">
+      <h1><a href="/">JL&#39;s Blog</a></h1>
+      <p>Never quit and never stop</p>
+      <div><img src="/images/hexo-inverted.svg" class="brand" alt="JL&#39;s Blog"></div>
+    </div>
+    <div class="video-learn-more">
+      <a class="anchor" href="#landingpage"><i class="fe fe-mouse"></i></a>
+    </div>
+  </div>
+</section>
+
+<div id="landingpage">
+  <section class="outer">
+    <article class="articles">
+      
+      <h1 class="page-type-title"></h1>
+      
+        
+          <article id="post-为了弄明白Promise的运行顺序，徒手写一个Promise" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/">为了弄明白Promise的运行顺序，手写一个Promise</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/" class="article-date">
+  <time datetime="2019-10-20T12:39:45.000Z" itemprop="datePublished">2019-10-20</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>最开始我没想去写Promise, 都是因为一道面试题，我开始怀疑自己对Promise有什么误解，或是根本不了解，这还是自己工作中用的挺多的一个东西，感到很惭愧，于是就想去认真了解一下，这道面试题放在下面：<br>
+                                                        
+                                                            <a class="article-more-link" href="/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/" data-id="cm8cpkxj2001x7u1ztflor6fl" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-HTMLCollection和NodeList" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2018/05/08/HTMLCollection和NodeList/">HTMLCollection和NodeList</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2018/05/08/HTMLCollection和NodeList/" class="article-date">
+  <time datetime="2018-05-08T12:21:02.000Z" itemprop="datePublished">2018-05-08</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="问题和解决过程"><a href="#问题和解决过程" class="headerlink" title="问题和解决过程"></a>问题和解决过程</h4><p>对这两个概念有疑惑的起因是我想在阿里图标库批量下载当前页面上的图标，但在页面上没找到如何批量加入购物车的功能，在查看了dom结构后我在控制台写了几句代码希望能批量选择这一页的图标，代码如下：<br>
+                                                        
+                                                            <a class="article-more-link" href="/2018/05/08/HTMLCollection和NodeList/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2018/05/08/HTMLCollection和NodeList/" data-id="cm8cpkxep00087u1z3q7wtsd0" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-孜孜不倦必能求索风尘仆仆终有归途" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/12/30/孜孜不倦必能求索风尘仆仆终有归途/">孜孜不倦,必能求索;风尘仆仆,终有归途.</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/12/30/孜孜不倦必能求索风尘仆仆终有归途/" class="article-date">
+  <time datetime="2017-12-30T11:45:34.000Z" itemprop="datePublished">2017-12-30</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/生活/">生活</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="1-关于题目"><a href="#1-关于题目" class="headerlink" title="1.关于题目"></a>1.关于题目</h4><p>题目是2017年一直激励我的一句话，第一次看到是在一个技术博客的签名里，内心因为某个问题无法解决而焦躁的心也安定下来，文字真的是奇妙的东西，它安慰人于无形，如果一直在思考，一直在往前走，那么总能到达一个地方吧，哪怕那个地方没有你想象中那么的好。<br>
+                                                        
+                                                            <a class="article-more-link" href="/2017/12/30/孜孜不倦必能求索风尘仆仆终有归途/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/12/30/孜孜不倦必能求索风尘仆仆终有归途/" data-id="cm8cpkxjd002h7u1zl8s2b68f" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/生活/">生活</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-前端常见面试题" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/11/07/前端常见面试题/">前端常见面试题</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/11/07/前端常见面试题/" class="article-date">
+  <time datetime="2017-11-07T13:09:14.000Z" itemprop="datePublished">2017-11-07</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/面试/">面试</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="1-数组扁平化"><a href="#1-数组扁平化" class="headerlink" title="1.数组扁平化"></a>1.数组扁平化</h4><pre><code class="javascript">//第一种方法
+function flattening(array) {
+    for (let i in array) {
+        if (array[i] instanceof Array) {
+            flattening(array[i])
+        } else {
+            newArr.push(array[i])
+        }
+    }
+}
+
+
+//第二种
+array.toString().split(&#39;,&#39;)
+</code></pre>
+                                                        
+                                                            <a class="article-more-link" href="/2017/11/07/前端常见面试题/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/11/07/前端常见面试题/" data-id="cm8cpkxj500267u1zhyddbclx" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/11/07/js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏/">js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏.md</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/11/07/js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏/" class="article-date">
+  <time datetime="2017-11-07T12:53:23.000Z" itemprop="datePublished">2017-11-07</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a> / <a class="article-category-link" href="/categories/技术/demo/">demo</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h4><p>这个效果是掘金的导航栏效果，在实现之前先来看一下实现后的样子，打开<a href="https://juejin.im/timeline" title="掘金" target="_blank" rel="noopener">掘金</a>后，上下滚动鼠标滚轮查看导航栏的表现。<br>
+                                                        
+                                                            <a class="article-more-link" href="/2017/11/07/js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/11/07/js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏/" data-id="cm8cpkxi3001a7u1z5b1jyne0" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-分析zepto-js源码" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/10/07/分析zepto-js源码/">分析zepto.js源码</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/10/07/分析zepto-js源码/" class="article-date">
+  <time datetime="2017-10-07T08:26:29.000Z" itemprop="datePublished">2017-10-07</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="1-zepto整体结构"><a href="#1-zepto整体结构" class="headerlink" title="1.zepto整体结构"></a>1.zepto整体结构</h4><p>zepto的整体结构比较简单，就是将一个立即执行函数表达式赋值给Zepto变量，然后在全局暴露这个Zepto变量，如果$符号没有被占用，$符号也被赋值为Zepto变量，代码结构如下：<br>
+                                                        
+                                                            <a class="article-more-link" href="/2017/10/07/分析zepto-js源码/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/10/07/分析zepto-js源码/" data-id="cm8cpkxj300207u1z3c4oktr6" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zepto/">zepto</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-vue中给列表的每一项设置定时器-倒计时" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/08/03/vue中给列表的每一项设置定时器-倒计时/">vue中给列表的每一项设置定时器(倒计时)</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/08/03/vue中给列表的每一项设置定时器-倒计时/" class="article-date">
+  <time datetime="2017-08-03T06:03:38.000Z" itemprop="datePublished">2017-08-03</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>目前做的项目相当于一个接任务平台，对时效性要求较高，我刚好负责任务模块，最近基本都在跟任务列表打交道，有一个需求，需要对列表中的每一项任务进行倒计时，刚开始想到的就是为每个任务都添加一个定时器来控制它的时间，<br>
+                                                        
+                                                            <a class="article-more-link" href="/2017/08/03/vue中给列表的每一项设置定时器-倒计时/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/08/03/vue中给列表的每一项设置定时器-倒计时/" data-id="cm8cpkxir001m7u1zroz9a855" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-vue使用时的小问题解决" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/07/20/vue使用时的小问题解决/">vue使用时遇到的小问题及解决</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/07/20/vue使用时的小问题解决/" class="article-date">
+  <time datetime="2017-07-20T13:30:15.000Z" itemprop="datePublished">2017-07-20</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>现在已经是2018年的1月20号了，从2017年7月20号左右开始用vue做东西，差不多半年的时间做了两个项目，一个移动端，一个PC端，第一个项目真的是文档大概浏览一下就直接上手干了，刚开始感觉有点儿艰难，不过熟悉之后觉得vue的开发体验简直太棒了，
+                                                        
+                                                            <a class="article-more-link" href="/2017/07/20/vue使用时的小问题解决/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/07/20/vue使用时的小问题解决/" data-id="cm8cpkxiv001q7u1zabdqewoi" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-项目中小知识点的积累" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/07/15/项目中小知识点的积累/">项目中小知识点的积累</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/07/15/项目中小知识点的积累/" class="article-date">
+  <time datetime="2017-07-15T14:30:15.000Z" itemprop="datePublished">2017-07-15</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>这一篇用来记录一下项目中遇见的小问题，以及解决方法<br>
+                                                        
+                                                            <a class="article-more-link" href="/2017/07/15/项目中小知识点的积累/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/07/15/项目中小知识点的积累/" data-id="cm8cpkxji002v7u1zc2xm3r52" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/总结/">总结</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-从头学习HTMl5-一" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/06/04/从头学习HTMl5-一/">从头学习HTMl5(一)</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/06/04/从头学习HTMl5-一/" class="article-date">
+  <time datetime="2017-06-04T09:54:59.000Z" itemprop="datePublished">2017-06-04</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="1-注释标签"><a href="#1-注释标签" class="headerlink" title="1.注释标签"></a>1.注释标签</h4><!--注释内容,不会显示在浏览器中-->
+<p>注释标签除了在代码中添加注释的功能外，还可以在不支持js的浏览器中隐藏js代码：<br>
+                                                        
+                                                            <a class="article-more-link" href="/2017/06/04/从头学习HTMl5-一/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/06/04/从头学习HTMl5-一/" data-id="cm8cpkxix001u7u1z1lah6a2s" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTML5/">HTML5</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-Git提交文件到GitHub时出现的一些问题" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/05/19/Git提交文件到GitHub时出现的一些问题/">Git提交文件到GitHub时出现的问题记录</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/05/19/Git提交文件到GitHub时出现的一些问题/" class="article-date">
+  <time datetime="2017-05-19T00:13:45.000Z" itemprop="datePublished">2017-05-19</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="1-输入命令-git-push-origin-master时，出现Everything-up-to-date"><a href="#1-输入命令-git-push-origin-master时，出现Everything-up-to-date" class="headerlink" title="1.输入命令$ git push origin master时，出现Everything up-to-date"></a>1.输入命令$ git push origin master时，出现Everything up-to-date</h4><p>我是在提交项目中新创建的文件时出现这个问题，是因为没有对新创建的文件执行<br>
+                                                        
+                                                            <a class="article-more-link" href="/2017/05/19/Git提交文件到GitHub时出现的一些问题/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/05/19/Git提交文件到GitHub时出现的一些问题/" data-id="cm8cpkxea00027u1zmsgmdd5f" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-常用JS代码片段" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2017/05/17/常用JS代码片段/">常用JS代码片段</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/05/17/常用JS代码片段/" class="article-date">
+  <time datetime="2017-05-17T00:39:45.000Z" itemprop="datePublished">2017-05-17</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="1-隐藏部分数字，如手机号码，身份证号码"><a href="#1-隐藏部分数字，如手机号码，身份证号码" class="headerlink" title="1.隐藏部分数字，如手机号码，身份证号码"></a>1.隐藏部分数字，如手机号码，身份证号码</h4><pre><code class="javascript">function mask(str,start,length,mask_char){
+    return str.replace(str.substr(start,length),Array(length+1).join(mask_char||&quot;*&quot;))
+}
+</code></pre>
+                                                        
+                                                            <a class="article-more-link" href="/2017/05/17/常用JS代码片段/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/05/17/常用JS代码片段/" data-id="cm8cpkxjp00337u1z1f2t90ee" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+    </article>
+    
+  
+    
+      <nav class="page-nav">
+        <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+      </nav>
+    
+  </section>
+</div>
+
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-bar-chart"></i> <span id="busuanzi_value_site_pv"></span></li>
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

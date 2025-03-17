@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Git提交文件到GitHub时出现的问题记录 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-Git提交文件到GitHub时出现的一些问题" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      Git提交文件到GitHub时出现的问题记录
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/05/19/Git提交文件到GitHub时出现的一些问题/" class="article-date">
+  <time datetime="2017-05-19T00:13:45.000Z" itemprop="datePublished">2017-05-19</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h4 id="1-输入命令-git-push-origin-master时，出现Everything-up-to-date"><a href="#1-输入命令-git-push-origin-master时，出现Everything-up-to-date" class="headerlink" title="1.输入命令$ git push origin master时，出现Everything up-to-date"></a>1.输入命令$ git push origin master时，出现Everything up-to-date</h4><p>我是在提交项目中新创建的文件时出现这个问题，是因为没有对新创建的文件执行<br><a id="more"></a></p>
+<pre class=" language-javascript"><code class="language-javascript">git add 新文件
+git commit <span class="token operator">-</span>m <span class="token string">'提交描述信息'</span>
+</code></pre>
+<p>这两个命令执行成功后再去执行</p>
+<pre class=" language-javascript"><code class="language-javascript">git push origin master
+</code></pre>
+<p>现在应该就没有问题了</p>
+<h4 id="2-Untracked-files"><a href="#2-Untracked-files" class="headerlink" title="2.Untracked files"></a>2.Untracked files</h4><pre class=" language-javascript"><code class="language-javascript"> git commit <span class="token operator">-</span>m <span class="token string">'内容提交'</span>
+On branch master
+Your branch is up<span class="token operator">-</span>to<span class="token operator">-</span>date <span class="token keyword">with</span> <span class="token string">'origin/master'</span><span class="token punctuation">.</span>
+Untracked files<span class="token punctuation">:</span>
+        <span class="token punctuation">.</span>gitignore
+        <span class="token punctuation">.</span>tmp<span class="token operator">/</span>
+        <span class="token punctuation">.</span>watchmanconfig
+        JsCode<span class="token operator">/</span>
+        Test<span class="token operator">/</span>
+        __tests__<span class="token operator">/</span>
+        android<span class="token operator">/</span>
+        app<span class="token punctuation">.</span>json
+        index<span class="token punctuation">.</span>android<span class="token punctuation">.</span>js
+        index<span class="token punctuation">.</span>ios<span class="token punctuation">.</span>js
+        ios<span class="token operator">/</span>
+        <span class="token keyword">package</span><span class="token punctuation">.</span>json
+        setup<span class="token punctuation">.</span>js
+        yarn<span class="token punctuation">.</span>lock
+nothing added to commit but untracked files present
+</code></pre>
+<h4 id="3-Your-local-changes-to-the-following-files-would-be-overwritten-by-merge"><a href="#3-Your-local-changes-to-the-following-files-would-be-overwritten-by-merge" class="headerlink" title="3.Your local changes to the following files would be overwritten by merge"></a>3.Your local changes to the following files would be overwritten by merge</h4><p>git stash<br>git pull<br>git stash pop</p>
+<h4 id="4-error-Pulling-is-not-possible-because-you-have-unmerged-files"><a href="#4-error-Pulling-is-not-possible-because-you-have-unmerged-files" class="headerlink" title="4 error: Pulling is not possible because you have unmerged files"></a>4 error: Pulling is not possible because you have unmerged files</h4><p>1.pull会使用git merge导致冲突，需要将冲突的文件resolve掉 git add -u, git commit之后才能成功pull.</p>
+<p>2.如果想放弃本地的文件修改，可以使用git reset –hard FETCH_HEAD，FETCH_HEAD表示上一次成功git pull之后形成的commit点。然后git pull.<br>注意：</p>
+<p>git merge会形成MERGE-HEAD(FETCH-HEAD) 。git push会形成HEAD这样的引用。HEAD代表本地最近成功push后形成的引用。</p>
+<h4 id="5-git-push时报错The-requested-URL-returned-error-403"><a href="#5-git-push时报错The-requested-URL-returned-error-403" class="headerlink" title="5.git push时报错The requested URL returned error: 403"></a>5.git push时报错The requested URL returned error: 403</h4><p>起因是在网上下载了后台代码，经过修改后想上传到github，git push时报错The requested URL returned error: 403，原因是这个代码中的.git文件夹是原代码的项目github仓库，这个网址我是提交不上的，那么，就要把原来的github地址改成自己的地址，修改 config 文件，找到 [remote “origin”] 节点下的 url 项，将这个url地址改为自己的github仓库地址，另一种方法是直接把项目中的.git文件夹删掉，再执行git init，然后进行提交。</p>
+<h4 id="6-github-Host-key-verification-failed"><a href="#6-github-Host-key-verification-failed" class="headerlink" title="6.github Host key verification failed"></a>6.github Host key verification failed</h4><p>主机密钥验证失败，其实这是缺少了 known_hosts 文件, 而且必须生成 github.com 的ip执行内容。<br>输入：ssh <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a><br>回车后出现下图的内容，输入yes，这时再提交，就没事了<br><img src="../imgs/QQ截图20180120225429.png" alt></p>
+<h4 id="7-git-pull报错：error-Your-local-changes-to-‘c-environ-c’-would-be-overwritten-by-merge-Aborting"><a href="#7-git-pull报错：error-Your-local-changes-to-‘c-environ-c’-would-be-overwritten-by-merge-Aborting" class="headerlink" title="7. git pull报错：error: Your local changes to ‘c/environ.c’ would be overwritten by merge.  Aborting."></a>7. git pull报错：error: Your local changes to ‘c/environ.c’ would be overwritten by merge.  Aborting.</h4><p>在使用git pull代码时，经常会碰到有冲突的情况，提示如下信息：<br>error: Your local changes to ‘c/environ.c’ would be overwritten by merge.  Aborting.<br>Please, commit your changes or stash them before you can merge.<br>这个意思是说更新下来的内容和本地修改的内容有冲突，先提交你的改变或者先将本地修改暂时存储起来。<br>处理的方式非常简单，主要是使用git stash命令进行处理，分成以下几个步骤进行处理。</p>
+<h5 id="1、先将本地修改存储起来"><a href="#1、先将本地修改存储起来" class="headerlink" title="1、先将本地修改存储起来"></a>1、先将本地修改存储起来</h5><p><code>$ git stash</code><br>这样本地的所有修改就都被暂时存储起来 。这时用git stash list可以看到保存的信息：<br>git stash暂存修改<br>其中stash@{0}就是刚才保存的标记。</p>
+<h5 id="2、pull内容"><a href="#2、pull内容" class="headerlink" title="2、pull内容"></a>2、pull内容</h5><p>暂存了本地修改之后，就可以pull了。<br><code>$ git pull</code></p>
+<h5 id="3、还原暂存的内容"><a href="#3、还原暂存的内容" class="headerlink" title="3、还原暂存的内容"></a>3、还原暂存的内容</h5><p><code>$ git stash pop stash@{0}</code><br>系统提示如下类似的信息：</p>
+<pre><code>Auto-merging c/environ.c
+CONFLICT (content): Merge conflict in c/environ.c
+</code></pre><p>意思就是系统自动合并修改的内容，但是其中有冲突，需要解决其中的冲突。</p>
+<h5 id="4、解决文件中冲突的的部分"><a href="#4、解决文件中冲突的的部分" class="headerlink" title="4、解决文件中冲突的的部分"></a>4、解决文件中冲突的的部分</h5><p>打开冲突的文件，会看到类似如下的内容：<br>git冲突内容<br>其中Updated upstream 和=====之间的内容就是pull下来的内容，====和stashed changes之间的内容就是本地修改的内容。碰到这种情况，git也不知道哪行内容是需要的，所以要自行确定需要的内容。<br>解决完成之后，就可以正常的提交了。</p>
+<h4 id="5-回复到merge前"><a href="#5-回复到merge前" class="headerlink" title="5. 回复到merge前"></a>5. 回复到merge前</h4><p>第一步：git checkout到你要恢复的那个分支上</p>
+<p><code>git checkout 分支名</code></p>
+<p>第二步：git reflog查出要回退到merge前的版本号</p>
+<p><code>git reflog</code></p>
+<p>第三步：<code>git reset --hard [版本号]</code>就回退到merge前的代码状态了</p>
+<p><code>git reset --hard f82cfd2</code></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/05/19/Git提交文件到GitHub时出现的一些问题/" data-id="cm8cpkxea00027u1zmsgmdd5f" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2017/06/04/从头学习HTMl5-一/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            从头学习HTMl5(一)
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/05/17/常用JS代码片段/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">常用JS代码片段</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

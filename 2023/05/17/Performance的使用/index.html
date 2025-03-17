@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Performance的使用 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-Performance的使用" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      Performance的使用
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2023/05/17/Performance的使用/" class="article-date">
+  <time datetime="2023-05-17T00:38:42.000Z" itemprop="datePublished">2023-05-17</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h3 id="Performance的使用"><a href="#Performance的使用" class="headerlink" title="Performance的使用"></a>Performance的使用</h3><h4 id="浏览器多进程架构"><a href="#浏览器多进程架构" class="headerlink" title="浏览器多进程架构"></a>浏览器多进程架构</h4><table>
+<thead>
+<tr>
+<th>进程</th>
+<th>负责的工作</th>
+<th>包含的线程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浏览器进程</td>
+<td>负责浏览器的导航栏、书签、前进、后退按钮等，还会控制我们看不见的部分，包括文件的读写等</td>
+<td>UI线程等</td>
+</tr>
+<tr>
+<td>渲染进程</td>
+<td>渲染进程负责网页展示相关的所有工作，主要任务是将HTML，CSS，以及JavaScript转变为我们可以进程交互的网页内容。每一个tab页、页面内的每一个iframe都会分配一个单独的渲染进程</td>
+<td>主线程:渲染主线程的任务执行过程; <br>Compositor: 合成线程，将绘制列表合成页面;<br>Chrome_ChildIOThread线程: IO线程；<br>Raster: 光栅化线程池等</td>
+</tr>
+<tr>
+<td>GPU进程</td>
+<td>负责独立于其他进程的GPU任务，处理来自不同tab的渲染请求，并把他们在界面上画出来</td>
+<td></td>
+</tr>
+<tr>
+<td>网络进程</td>
+<td>负责页面的网络资源加载</td>
+<td></td>
+</tr>
+<tr>
+<td>Plugin进程</td>
+<td>负责网页使用的所有插件</td>
+</tr>
+</tbody>
+</table>
+<a id="more"></a>
+<h5 id="多进程架构的优点"><a href="#多进程架构的优点" class="headerlink" title="多进程架构的优点"></a>多进程架构的优点</h5><ol>
+<li>容错性：每个tab都有独立的渲染进程，当一个tab也崩溃时，关闭这个tab，不影响其他tab页</li>
+<li>安全性和沙盒性：操作系统提供方法限制每个进程拥有的能力，所以浏览器可以让某些进程不具备某些特定的功能，比如tab渲染进程会处理来自用户的输入，所以chrome限制了他们对系统文件随机读写的能力</li>
+</ol>
+<h5 id="多进程架构的缺点"><a href="#多进程架构的缺点" class="headerlink" title="多进程架构的缺点"></a>多进程架构的缺点</h5><ol>
+<li><p>内存消耗：每个进程都有独立的内存空间，不像一个进程中的所有线程可以公用内存空间，这会造成一些基础架构会在不同进程的内存空间同时存在(比如V8 JavaScript引擎)，这些重复内容会消耗更多的内存。为了节省内存，chrome会限制启动的进程数目，当进程数达到一定的界限后，chrome会将访问同一个站点的tab都放在一个进程里面跑</p>
+<blockquote>
+<p>同一站点的定义为：根域名+协议</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="性能指标简介"><a href="#性能指标简介" class="headerlink" title="性能指标简介"></a>性能指标简介</h4><p>Performance面板中的各项指标就记录了浏览器多个进程之间配合完成页面渲染的流程，先简单介绍一下各个指标的基本内容。</p>
+<h5 id="Network指标"><a href="#Network指标" class="headerlink" title="Network指标"></a>Network指标</h5><p>Network指标主要是记录页面中每个网络请求在网络进程中所消耗的时长</p>
+<ul>
+<li>HTML: 蓝色</li>
+<li>CSS: 紫色</li>
+<li>JS: 黄色</li>
+<li>Images: 绿色</li>
+</ul>
+<p><img src="../imgs/Performance的使用/截屏2022-02-18 上午8.53.27.png" alt="截屏2022-02-18 上午8.53.27"></p>
+<p>上图每个请求的柱状图对应Network的Timing面板：</p>
+<p><img src="../imgs/Performance的使用/截屏2022-02-18 上午8.54.10.png" alt="截屏2022-02-18 上午8.54.10"></p>
+<p>左侧的灰线表示请求<code>排队时间(Queueing)</code>和<code>发起连接(Connection Start)</code>这一组操作共花费的时间。</p>
+<p><code>排队时间(Queueing)</code>请求正在排队指的是：</p>
+<ol>
+<li>请求被渲染引擎推迟，因为该请求的优先级低于其他关键资源的优先级</li>
+<li>请求被暂停，等待将要释放的TCP套接字</li>
+<li>请求被暂停，因为有“队头阻塞”, 浏览器仅允许每个域名同时最多发起6个请求(http1.0/http1.1)</li>
+<li>生成磁盘缓存条目所用的时间</li>
+</ol>
+<p><code>发起连接(Connection Start)</code>包括阻塞时间(Stalled)、DNS Lookup、建立TCP连接(TCP握手、协商SSL)等；</p>
+<p>浅色代表发送请求(Request sent)和等待首字节响应(TTFB)的时间，这部分包括服务器处理的时间，网络延迟时间等；</p>
+<p>深色代表下载内容，即从接收到第一个字节到最后一个字节接收完毕花费的时间；</p>
+<p>右侧的灰线表示等待渲染主线程响应的时间；</p>
+<h5 id="Timings指标"><a href="#Timings指标" class="headerlink" title="Timings指标"></a>Timings指标</h5><p>记录关键的时间节点产生的数据信息，FP，FCP，LCP等</p>
+<p><img src="../imgs/Performance的使用/截屏2022-02-03 下午2.09.28.png" alt="截屏2022-02-03 下午2.09.28"></p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>触发事件</th>
+<th>触发时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DCL</td>
+<td>DOMContentLoaded</td>
+<td>当初始的 <strong>HTML</strong> 文档被完全加载和解析完成之后，<strong><code>DOMContentLoaded</code></strong> 事件被触发，无需等待样式表、图像和子框架的完全加载。</td>
+</tr>
+<tr>
+<td>L</td>
+<td>load</td>
+<td>当整个页面及所有依赖资源如样式表和图片都已完成加载时，将触发<code>load</code>事件</td>
+</tr>
+<tr>
+<td>FP</td>
+<td>First Paint</td>
+<td>首次绘制（First Paint）渲染进程确认要渲染当前的请求后，渲染进程会创建一个空白页面，我们把创建空白页面的这个时间点称为FP</td>
+</tr>
+<tr>
+<td>FCP</td>
+<td><a href="https://web.dev/fcp/" target="_blank" rel="noopener"><strong>First Contentful Paint</strong></a></td>
+<td>首次有内容的绘制，第一个dom元素绘制完成的时间点</td>
+</tr>
+<tr>
+<td>LCP</td>
+<td><a href="https://web.dev/lcp/" target="_blank" rel="noopener"><strong>Largest Contentful Paint</strong></a></td>
+<td>最大内容绘制,报告从首次开始加载的时间开始，到可视区域内可见的最大<a href="https://web.dev/i18n/zh/lcp/#what-elements-are-considered" target="_blank" rel="noopener">图像或文本块</a>完成渲染的相对时间，最大元素完成渲染的时间点</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="Frame指标"><a href="#Frame指标" class="headerlink" title="Frame指标"></a>Frame指标</h5><p>记录浏览器生成每帧的记录</p>
+<p>鼠标移到某个帧上，会展示渲染当前帧花费的时间和fps(帧每秒)</p>
+<p><img src="/Users/sunjiali/Library/Application Support/typora-user-images/截屏2022-02-02 下午3.24.04.png" alt="截屏2022-02-02 下午3.24.04"></p>
+<p>60fps就是60帧每秒，屏幕每秒会展示60帧静态图像，1000ms / 60 ≈ 16.7ms，所以只有在16.7毫秒内完成一次帧绘制，页面看起来才会更流畅，一帧绘制的时间超过16.7ms，就会出现掉帧的情况，页面会表现出卡顿的现象</p>
+<p>Layout Shift由Layout Instability API定义，每当视口中两次渲染帧之间的可视元素改变了其起始位置时都会触发layout-shift entries，<strong>改变了起始位置的元素被认为是不稳定元素</strong>。由于LS只会发生在改变了初始位置的已有元素上，只要新加入的元素并不会造成其他可见元素改变位置，它将不会被当成是LS元素。</p>
+<h5 id="Main指标"><a href="#Main指标" class="headerlink" title="Main指标"></a>Main指标</h5><p>记录渲染进程中主线程的执行记录，渲染进程负责标签（tab）内发生的所有事情，在渲染进程里面，主线程（main thread）处理了绝大多数你发送给用户的代码。</p>
+<h6 id="Event-beforeunload"><a href="#Event-beforeunload" class="headerlink" title="Event: beforeunload"></a>Event: beforeunload</h6><p>当浏览器窗口关闭或者刷新时，会触发beforeunload事件。当前页面不会直接关闭，可以点击确定按钮关闭或刷新，也可以取消关闭或刷新。如果实现了beforeunload事件，就会在这一阶段被触发。</p>
+<p><img src="../imgs/Performance的使用/截屏2022-02-03 下午5.25.19.png" alt="截屏2022-02-03 下午5.25.19"></p>
+<h6 id="Event-pagehide"><a href="#Event-pagehide" class="headerlink" title="Event: pagehide"></a>Event: pagehide</h6><p>当浏览器在显示与会话历史记录不同的页面的过程中隐藏当前页面时, <strong><code>pagehide</code></strong>(页面隐藏)事件会被发送到一个<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window" target="_blank" rel="noopener"><code>Window</code></a> 。例如，当用户单击浏览器的“后退”按钮时，当前页面在显示上一页之前会收到一个<code>pagehide</code>(页面隐藏)事件。</p>
+<h6 id="Event-visibilitychange"><a href="#Event-visibilitychange" class="headerlink" title="Event: visibilitychange"></a>Event: visibilitychange</h6><p>当其选项卡的内容变得可见或被隐藏时，会在文档上触发 <code>visibilitychange</code> (能见度更改)事件</p>
+<h6 id="Event-webkitvisibilitychange"><a href="#Event-webkitvisibilitychange" class="headerlink" title="Event: webkitvisibilitychange"></a>Event: webkitvisibilitychange</h6><p>当前网页在可见和不可见之间变换的时候调用</p>
+<h6 id="Event-unload"><a href="#Event-unload" class="headerlink" title="Event: unload"></a>Event: unload</h6><p>当文档或一个子资源正在被卸载时, 触发 <strong>unload</strong>事件。</p>
+<h6 id="Send-Request"><a href="#Send-Request" class="headerlink" title="Send Request"></a>Send Request</h6><p>表示网络请求已发送</p>
+<h6 id="Receive-Response"><a href="#Receive-Response" class="headerlink" title="Receive Response"></a>Receive Response</h6><p>表示已经接收到HTTP响应头</p>
+<h6 id="commitNavigationEnd"><a href="#commitNavigationEnd" class="headerlink" title="commitNavigationEnd"></a>commitNavigationEnd</h6><p>导航结束</p>
+<h6 id="Receive-Data"><a href="#Receive-Data" class="headerlink" title="Receive Data"></a>Receive Data</h6><p>接收数据，如果数据量大会存在多个Recive Data过程</p>
+<h6 id="Finish-Loading"><a href="#Finish-Loading" class="headerlink" title="Finish Loading"></a>Finish Loading</h6><p>所有数据接收完成后执行，表示网络请求已经完成</p>
+<h6 id="Parse-HTML"><a href="#Parse-HTML" class="headerlink" title="Parse HTML"></a>Parse HTML</h6><p>构建DOM树，以内渲染引擎无法直接理解html内容，需要将其解析为DOM树结构，DOM树表示了页面上所有节点的内容和节点之间的关系。</p>
+<p><img src="../imgs/Performance的使用/full-process.png" alt="DOM construction process"></p>
+<p>如果遇到script标签，就暂停DOM树构建，如果是内联script，直接执行代码，如果是外部js文件，在过去会触发Send Request事件，网络进程开始请求外部js文件，请求完成后触发Finish Loading事件, 之后触发Evaluate Script事件，开始执行js代码，执行完成后再继续执行Parse HTML构建DOM树，如果遇到如.css等子资源，还是会触发Send Request事件，网络进程请求资源，但是不会阻塞DOM树的构建。</p>
+<blockquote>
+<p>现在chrome已做预解析优化，在渲染主线程接收到HTML的字节流后，会开启预解析线程，分析HTML中包含的JS、CSS等资源，解析到这些资源链接后，预解析线程会让网络进程提前下载这些文件，</p>
+</blockquote>
+<p>资源接收的流程：</p>
+<p>Send Request</p>
+<p>Receive Response</p>
+<p>Receive Data</p>
+<p>Receive Data</p>
+<p>….</p>
+<p>Receive Data</p>
+<p>Parse Stylesheet/Parse HTML</p>
+<p>Receive Data</p>
+<p>….</p>
+<p>Finish Loading</p>
+<p>js文件是先Finish Loading后再Evaluate Script。</p>
+<p>js下载：js下载会阻塞其他资源的下载，chrome做了预加载优化，会提前下载资源</p>
+<p>js执行：script标签会中断DOM树构建</p>
+<h6 id="Parse-Stylesheet"><a href="#Parse-Stylesheet" class="headerlink" title="Parse Stylesheet"></a>Parse Stylesheet</h6><p>构建CSSOM，跟html一样，渲染引擎也无法直接理解css内容，所以需要将 CSS 文本转换为渲染引擎可以理解的结构CSSOM，转换为CSSOM之后，js可以直接操作样式，也为下一步合成布局树提供样式信息。可以在控制台通过styleSheets查看：</p>
+<p><img src="../imgs/Performance的使用/8ec7d5ecfadcd05b3f1ec762223a9aab.png" alt="img"></p>
+<h6 id="Evaluate-Script"><a href="#Evaluate-Script" class="headerlink" title="Evaluate Script"></a>Evaluate Script</h6><p>执行js代码</p>
+<h6 id="Recalculate-Style"><a href="#Recalculate-Style" class="headerlink" title="Recalculate Style"></a>Recalculate Style</h6><p>计算 DOM 树中每个节点的样式，涉及css继承规则和层叠规则，这个阶段最终输出的内容是每个 DOM 节点的样式，可以在devtools的 ComputedStyle 内查看</p>
+<p><img src="../imgs/Performance的使用/cssom-tree.png" alt="CSSOM tree"></p>
+<h6 id="Layout"><a href="#Layout" class="headerlink" title="Layout"></a>Layout</h6><p>生成可见节点的布局树，这个布局树中只包含DOM树中的可见节点，并计算出每个DOM 元素的几何位置信息。</p>
+<p><img src="../imgs/Performance的使用/截屏2022-02-04 下午6.13.59.png" alt="截屏2022-02-04 下午6.13.59"></p>
+<h6 id="Update-Layer-Tree"><a href="#Update-Layer-Tree" class="headerlink" title="Update Layer Tree"></a>Update Layer Tree</h6><p>构建渲染图层树，什么情况下会为节点创建新图层：</p>
+<ol>
+<li><p>页面的根元素</p>
+</li>
+<li><p>拥有层叠上下文属性的元素会被提升为单独的一层。</p>
+<blockquote>
+<p>明确定位属性的元素、定义透明属性的元素、使用 CSS 滤镜的元素等，都拥有层叠上下文属性。</p>
+</blockquote>
+</li>
+<li><p>需要剪裁（clip）的地方也会被创建为图层</p>
+<blockquote>
+<p>剪裁区域占一层，内容占一层，如果有滚动条，滚动单独占一层</p>
+</blockquote>
+</li>
+</ol>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">position</span><span class="token punctuation">:</span>fixed<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>hello, <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>web performance<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span> students<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">100</span>px<span class="token punctuation">;</span><span class="token property">overflow</span><span class="token punctuation">:</span> scroll<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://cdn.ne-smalltown.com/453.jpg--ljg4NsMmh4S3skxKXaOaZsdjXjn0?imageView2/2/w/327/h/312/interlace/1<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+</code></pre>
+<p><img src="../imgs/Performance的使用/截屏2022-02-05 下午4.58.32.png" alt="截屏2022-02-05 下午4.58.32"></p>
+<h6 id="Paint"><a href="#Paint" class="headerlink" title="Paint"></a>Paint</h6><p>生成绘制列表，绘制列表用来记录绘制顺序和绘制指令，从下图可以看到图层p的绘制列表：</p>
+<p><img src="../imgs/Performance的使用/截屏2022-02-05 下午5.11.26.png" alt="截屏2022-02-05 下午5.11.26"></p>
+<h6 id="Composite-Layers"><a href="#Composite-Layers" class="headerlink" title="Composite Layers"></a>Composite Layers</h6><p>将绘制列表提交给渲染进程中的合成线程</p>
+<h5 id="Compositor指标"><a href="#Compositor指标" class="headerlink" title="Compositor指标"></a>Compositor指标</h5><p>记录渲染进程中合成线程的执行记录，合成线程主要负责将图层划分为图块，然后会向光栅化线程发送指令，由光栅化线程池来生成位图</p>
+<h5 id="Raster指标"><a href="#Raster指标" class="headerlink" title="Raster指标"></a>Raster指标</h5><p>记录渲染进程光栅化线程池中每个光栅化线程的执行记录，光栅化负责将图块转为位图，最小的执行单位是图块，光栅化线程回和GPU进程通信，利用GPU进程来实现快速栅格化。</p>
+<h5 id="GPU指标"><a href="#GPU指标" class="headerlink" title="GPU指标"></a>GPU指标</h5><p>执行raster指标中的快速光栅化任务生成位图，并保存在GPU内存中</p>
+<h5 id="Chrome-ChildIOThread指标"><a href="#Chrome-ChildIOThread指标" class="headerlink" title="Chrome_ChildIOThread指标"></a>Chrome_ChildIOThread指标</h5><p>记录用户输入事件、网络事件、设备相关等事件</p>
+<h5 id="Interactions指标"><a href="#Interactions指标" class="headerlink" title="Interactions指标"></a>Interactions指标</h5><p>记录用户的交互操作</p>
+<h4 id="一些例子"><a href="#一些例子" class="headerlink" title="一些例子"></a>一些例子</h4><h5 id="在Performance面板看css加载阻塞"><a href="#在Performance面板看css加载阻塞" class="headerlink" title="在Performance面板看css加载阻塞"></a>在Performance面板看css加载阻塞</h5><h6 id="script会阻塞DOM树构建，那css会阻塞DOM树构建吗？"><a href="#script会阻塞DOM树构建，那css会阻塞DOM树构建吗？" class="headerlink" title="script会阻塞DOM树构建，那css会阻塞DOM树构建吗？"></a>script会阻塞DOM树构建，那css会阻塞DOM树构建吗？</h6><p>因为js可以更改DOM，所以js代码一定会阻塞DOM树构建：</p>
+<ol>
+<li><p>内部script代码: </p>
+<p>Parse HTML时遇到内部script代码时，会暂停DOM树构建，先执行js代码，执行完成之后再继续进行DOM树构建</p>
+</li>
+<li><p>外部script代码<br>先通过网络进程下载script代码，下载后执行js代码，执行完成之后再继续进行DOM树构建</p>
+</li>
+</ol>
+<p>因为js也可以更改样式，所以css在某些情况下会阻塞js资源下载和执行，相当于阻塞了DOM树构建：</p>
+<ol>
+<li>通过外部引入css资源，后面跟有嵌入js代码时：等待css资源下载和Parse Stylesheet，然后才能执行嵌入的js代码</li>
+<li>通过外部引入css资源，后面根据有js外部引入资源时：因为css不会阻塞DOM树构建，所以会同时发起css和js资源请求，但无论请求完成的快慢，js资源请求都需要等待css资源下载并且在主线程完成Parse Stylesheet后，再执行js代码</li>
+</ol>
+<h5 id="帧优化"><a href="#帧优化" class="headerlink" title="帧优化"></a>帧优化</h5><p><a href="https://googlechrome.github.io/devtools-samples/jank/" target="_blank" rel="noopener">https://googlechrome.github.io/devtools-samples/jank/</a></p>
+<h5 id="层爆炸"><a href="#层爆炸" class="headerlink" title="层爆炸"></a>层爆炸</h5><h5 id="长任务优化"><a href="#长任务优化" class="headerlink" title="长任务优化"></a>长任务优化</h5><p>因为页面渲染和 JS的 执行都在主线程中执行，会相互阻塞，如果 JS 有长时间(超过50ms)执行的 Task，就会长期占据主线程，阻塞渲染，导致页面卡顿。可以通过Performance面板找出长任务，优化长任务。</p>
+<p>有两种常见的造成长任务的方式：</p>
+<ol>
+<li><p>一段同步代码被递归调用或者处理一段复杂的逻辑导致耗时较长</p>
+<p>long task:</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">let</span> total <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+<span class="token keyword">function</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> total<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> div <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> span <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'span'</span><span class="token punctuation">)</span>
+    div<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token string">`hello`</span></span><span class="token punctuation">;</span>
+    span<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> i
+    div<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>span<span class="token punctuation">)</span>
+    document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>div<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="../imgs/Performance的使用/截屏2022-02-07 下午5.04.18.png" alt="截屏2022-02-07 下午5.04.18"></p>
+<p>优化:</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">let</span> current <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> total <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> count <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">function</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> count<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> div <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> span <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'span'</span><span class="token punctuation">)</span>
+    div<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token string">`hello`</span></span><span class="token punctuation">;</span>
+    span<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> current<span class="token operator">++</span>
+    div<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>span<span class="token punctuation">)</span>
+    document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>div<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">let</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> total<span class="token punctuation">;</span> j<span class="token operator">+</span><span class="token operator">=</span>count<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><img src="../imgs/Performance的使用/截屏2022-02-07 下午5.01.48.png" alt="截屏2022-02-07 下午5.01.48"></p>
+</li>
+</ol>
+<ol start="2">
+<li><p>一个Promise具有多个<code>.then</code>处理程序，由于Promise的then处理程序是在MicroTask队列中排队，并且将MicroTask队列中的任务连续执行，直到队列为空，它可能会导致当前任务执行超过50ms:</p>
+<p>long task:</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">let</span> current <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> count <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">function</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> count<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> div <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> span <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'span'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    div<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token string">`hello`</span></span><span class="token punctuation">;</span>
+    span<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> current<span class="token operator">++</span><span class="token punctuation">;</span>
+    div<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>span<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>div<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="../imgs/Performance的使用/截屏2022-02-07 下午5.09.33.png" alt="截屏2022-02-07 下午5.09.33"></p>
+<p>优化：</p>
+<pre class=" language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> count<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> div <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> span <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'span'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    div<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token string">`hello`</span></span><span class="token punctuation">;</span>
+    span<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> current<span class="token operator">++</span><span class="token punctuation">;</span>
+    div<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>span<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>div<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+</li>
+</ol>
+<p>   <img src="/Users/sunjiali/Library/Application Support/typora-user-images/截屏2022-02-07 下午5.14.59.png" alt="截屏2022-02-07 下午5.14.59"></p>
+<blockquote>
+<p>使用webworker进行优化</p>
+</blockquote>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p>示例： <a href="https://googlechrome.github.io/devtools-samples/jank/" target="_blank" rel="noopener">https://googlechrome.github.io/devtools-samples/jank/</a></p>
+<p>示例2： <a href="https://www.ne-smalltown.com/" target="_blank" rel="noopener">https://www.ne-smalltown.com/</a></p>
+<ol>
+<li><p><a href="https://docs.google.com/document/d/1bCDuq9H1ih9iNjgzyAL0gpwNFiEP4TZS-YLRp_RuMlc/edit#" target="_blank" rel="noopener">https://docs.google.com/document/d/1bCDuq9H1ih9iNjgzyAL0gpwNFiEP4TZS-YLRp_RuMlc/edit#</a></p>
+</li>
+<li><p><a href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=en" target="_blank" rel="noopener">https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction?hl=en</a></p>
+</li>
+<li><p><a href="https://developer.chrome.com/docs/devtools/evaluate-performance/performance-reference/" target="_blank" rel="noopener">https://developer.chrome.com/docs/devtools/evaluate-performance/performance-reference/</a></p>
+</li>
+<li><p><a href="https://time.geekbang.org/column/article/118826" target="_blank" rel="noopener">https://time.geekbang.org/column/article/118826</a></p>
+</li>
+<li><p><a href="https://w3c.github.io/longtasks/" target="_blank" rel="noopener">https://w3c.github.io/longtasks/</a></p>
+</li>
+<li><p><a href="https://web.dev/rail/#response:-process-events-in-under-50ms" target="_blank" rel="noopener">https://web.dev/rail/#response:-process-events-in-under-50ms</a></p>
+</li>
+<li><p><a href="https://javascript.plainenglish.io/how-to-optimize-long-tasks-blocking-javascript-in-browsers-d49508f72c9" target="_blank" rel="noopener">https://javascript.plainenglish.io/how-to-optimize-long-tasks-blocking-javascript-in-browsers-d49508f72c9</a></p>
+</li>
+</ol>
+<p>父元素设置了filter，子元素设置定位属性，将根据父元素来定位</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token class">.container</span> </span><span class="token punctuation">{</span>
+  <span class="token property">display</span><span class="token punctuation">:</span> inline-block<span class="token punctuation">;</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> <span class="token number">200</span>px<span class="token punctuation">;</span>
+  <span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">200</span>vh<span class="token punctuation">;</span>
+  <span class="token property">border</span><span class="token punctuation">:</span> <span class="token number">1</span>px solid<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token class">.container</span>>div </span><span class="token punctuation">{</span>
+  <span class="token property">position</span><span class="token punctuation">:</span> fixed<span class="token punctuation">;</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> <span class="token number">100</span>px<span class="token punctuation">;</span>
+  <span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">100</span>px<span class="token punctuation">;</span>
+  <span class="token property">background</span><span class="token punctuation">:</span> red<span class="token punctuation">;</span>
+  <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#fff</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>I am fixed on scroll<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>container<span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">filter</span><span class="token punctuation">:</span><span class="token function">grayscale</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>I move with the scroll<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>下面属性都应用：</p>
+<ul>
+<li><code>filter</code></li>
+<li><code>transform</code> <a href="https://drafts.csswg.org/css-transforms-1/#containing-block-for-all-descendants" target="_blank" rel="noopener">ref</a></li>
+<li><code>backdrop-filter</code> <a href="https://drafts.fxtf.org/filter-effects-2/#BackdropFilterProperty" target="_blank" rel="noopener">ref</a></li>
+<li><code>perspective</code> <a href="https://drafts.csswg.org/css-transforms-2/#propdef-perspective" target="_blank" rel="noopener">ref</a></li>
+<li><code>contain</code> <a href="https://drafts.csswg.org/css-contain/" target="_blank" rel="noopener">ref</a></li>
+<li><code>transform-style</code> <a href="https://drafts.csswg.org/css-transforms-2/#transform-style-property" target="_blank" rel="noopener">ref</a></li>
+<li><code>content-visibility</code> <a href="https://drafts.csswg.org/css-contain/#containment-layout" target="_blank" rel="noopener">ref</a></li>
+<li><code>will-change</code> when used with one of the above values</li>
+</ul>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2023/05/17/Performance的使用/" data-id="cm8cpkxhj000n7u1zdwwokxq4" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Chrome/">Chrome</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+    
+      <a href="/2023/04/07/浏览器合成层/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">浏览器渲染流程</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

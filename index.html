@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="jumbotron">
+  <div class="video">
+    
+      <div class="video-frame">
+        <img src="/images/ocean/overlay-hero.png" alt="Decorative image frame">
+      </div>
+    
+    <div class="video-media">
+      <video playsinline="" autoplay="" loop="" muted="" data-autoplay=""
+             poster="/images/ocean/ocean.png" x5-video-player-type="h5">
+        <source src="/images/ocean/ocean.mp4" type="video/mp4">
+        <source src="/images/ocean/ocean.ogv" type="video/ogg">
+        <source src="/images/ocean/ocean.webm" type="video/webm">
+        <p>Your user agent does not support the HTML5 Video element.</p>
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+    <div class="video-inner text-center text-white">
+      <h1><a href="/">JL&#39;s Blog</a></h1>
+      <p>Never quit and never stop</p>
+      <div><img src="/images/hexo-inverted.svg" class="brand" alt="JL&#39;s Blog"></div>
+    </div>
+    <div class="video-learn-more">
+      <a class="anchor" href="#landingpage"><i class="fe fe-mouse"></i></a>
+    </div>
+  </div>
+</section>
+
+<div id="landingpage">
+  <section class="outer">
+    <article class="articles">
+      
+      <h1 class="page-type-title"></h1>
+      
+        
+          <article id="post-Performance的使用" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2023/05/17/Performance的使用/">Performance的使用</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2023/05/17/Performance的使用/" class="article-date">
+  <time datetime="2023-05-17T00:38:42.000Z" itemprop="datePublished">2023-05-17</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h3 id="Performance的使用"><a href="#Performance的使用" class="headerlink" title="Performance的使用"></a>Performance的使用</h3><h4 id="浏览器多进程架构"><a href="#浏览器多进程架构" class="headerlink" title="浏览器多进程架构"></a>浏览器多进程架构</h4><table>
+<thead>
+<tr>
+<th>进程</th>
+<th>负责的工作</th>
+<th>包含的线程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浏览器进程</td>
+<td>负责浏览器的导航栏、书签、前进、后退按钮等，还会控制我们看不见的部分，包括文件的读写等</td>
+<td>UI线程等</td>
+</tr>
+<tr>
+<td>渲染进程</td>
+<td>渲染进程负责网页展示相关的所有工作，主要任务是将HTML，CSS，以及JavaScript转变为我们可以进程交互的网页内容。每一个tab页、页面内的每一个iframe都会分配一个单独的渲染进程</td>
+<td>主线程:渲染主线程的任务执行过程; <br>Compositor: 合成线程，将绘制列表合成页面;<br>Chrome_ChildIOThread线程: IO线程；<br>Raster: 光栅化线程池等</td>
+</tr>
+<tr>
+<td>GPU进程</td>
+<td>负责独立于其他进程的GPU任务，处理来自不同tab的渲染请求，并把他们在界面上画出来</td>
+<td></td>
+</tr>
+<tr>
+<td>网络进程</td>
+<td>负责页面的网络资源加载</td>
+<td></td>
+</tr>
+<tr>
+<td>Plugin进程</td>
+<td>负责网页使用的所有插件</td>
+</tr>
+</tbody>
+</table>
+                                                        
+                                                            <a class="article-more-link" href="/2023/05/17/Performance的使用/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2023/05/17/Performance的使用/" data-id="cm8cpkxhj000n7u1zdwwokxq4" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Chrome/">Chrome</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-浏览器合成层" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2023/04/07/浏览器合成层/">浏览器渲染流程</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2023/04/07/浏览器合成层/" class="article-date">
+  <time datetime="2023-04-07T13:09:14.000Z" itemprop="datePublished">2023-04-07</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/浏览器/">浏览器</a> / <a class="article-category-link" href="/categories/浏览器/Chrome/">Chrome</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="浏览器渲染流程"><a href="#浏览器渲染流程" class="headerlink" title="浏览器渲染流程"></a>浏览器渲染流程</h4><ol>
+<li>构建DOM树(Parse HTML)：浏览器无法直接理解和使用HTML，需要通过html解析器，处理HTML标记并构造DOM树，可以通过document节点查看</li>
+</ol>
+                                                        
+                                                            <a class="article-more-link" href="/2023/04/07/浏览器合成层/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2023/04/07/浏览器合成层/" data-id="cm8cpkxjk002x7u1zkakr7q6m" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/浏览器/">浏览器</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Chrome/">Chrome</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-trilium notes基本使用" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2022/05/28/trilium notes基本使用/">trilium notes基本使用</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2022/05/28/trilium notes基本使用/" class="article-date">
+  <time datetime="2022-05-28T13:40:02.000Z" itemprop="datePublished">2022-05-28</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h4 id="汉化"><a href="#汉化" class="headerlink" title="汉化"></a>汉化</h4><p>社区有兄弟做了汉化，点这个 <a href="https://github.com/Nriver/trilium-translation/blob/main/README_CN.md" target="_blank" rel="noopener">汉化地址</a></p>
+                                                        
+                                                            <a class="article-more-link" href="/2022/05/28/trilium notes基本使用/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2022/05/28/trilium notes基本使用/" data-id="cm8cpkxig001h7u1z8acdmk6e" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue-loader/">vue-loader</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-vue-loader都做了些什么" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2021/05/28/vue-loader都做了些什么/">vue-loader都做了些什么</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2021/05/28/vue-loader都做了些什么/" class="article-date">
+  <time datetime="2021-05-27T22:45:26.000Z" itemprop="datePublished">2021-05-28</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <blockquote>
+<p>本文主要内容：</p>
+<ol>
+<li>vue-loader解析vue单文件组件的过程分析</li>
+<li>VueLoaderPlugin的作用</li>
+</ol>
+</blockquote>
+                                                        
+                                                            <a class="article-more-link" href="/2021/05/28/vue-loader都做了些什么/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2021/05/28/vue-loader都做了些什么/" data-id="cm8cpkxjn00307u1zw61gt8js" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue-loader/">vue-loader</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-Vue源码阅读——从单文件组件到dom渲染" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2021/05/03/Vue源码阅读——从单文件组件到dom渲染/">Vue源码阅读——从单文件组件到dom渲染</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2021/05/03/Vue源码阅读——从单文件组件到dom渲染/" class="article-date">
+  <time datetime="2021-05-03T02:30:01.000Z" itemprop="datePublished">2021-05-03</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>导入一个单文件组件并用 console.log 输出，可以看到就是导入了如下这样的对象：</p>
+                                                        
+                                                            <a class="article-more-link" href="/2021/05/03/Vue源码阅读——从单文件组件到dom渲染/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2021/05/03/Vue源码阅读——从单文件组件到dom渲染/" data-id="cm8cpkxi6001e7u1z830m82ci" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码/">源码</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-Vue源码阅读——从render到dom渲染" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2021/05/01/Vue源码阅读——从render到dom渲染/">Vue源码阅读——从render函数到dom渲染</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2021/05/01/Vue源码阅读——从render到dom渲染/" class="article-date">
+  <time datetime="2021-05-01T01:02:10.000Z" itemprop="datePublished">2021-05-01</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>大部分源码解析的文章都是从项目结构开始，然后再从入口处跟着它的执行流程一步步分析，但我发现那不适合我，很容易看着看着就不知道自己在看什么，我的方法是带着问题出发，先把自己想知道的点拆解成一个个问题，由浅入深，多次有选择的去看源码，每次只关注一个问题，解决一个问题后再继续下一个，最后再回过头来总结整体</p>
+                                                        
+                                                            <a class="article-more-link" href="/2021/05/01/Vue源码阅读——从render到dom渲染/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2021/05/01/Vue源码阅读——从render到dom渲染/" data-id="cm8cpkxjc002d7u1zcyxkq4cl" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码/">源码</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-HTML查漏补缺" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2020/11/04/HTML查漏补缺/">HTML查漏补缺</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/11/04/HTML查漏补缺/" class="article-date">
+  <time datetime="2020-11-04T13:02:10.000Z" itemprop="datePublished">2020-11-04</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h4 id="1-a标签"><a href="#1-a标签" class="headerlink" title="1. a标签"></a>1. a标签</h4><h5 id="a标签可以调起系统自带的电话和发送邮件功能"><a href="#a标签可以调起系统自带的电话和发送邮件功能" class="headerlink" title="a标签可以调起系统自带的电话和发送邮件功能"></a>a标签可以调起系统自带的电话和发送邮件功能</h5><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tel:+18500000000<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>mailto:123456@163.com<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+</code></pre>
+<h5 id="a标签不能嵌套a标签"><a href="#a标签不能嵌套a标签" class="headerlink" title="a标签不能嵌套a标签"></a>a标签不能嵌套a标签</h5><p>HTML规范中，<a>标签不能嵌套另一可交互元素，比如<code>&lt;a&gt;</code>,<code>&lt;button&gt;</code></a></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2020/11/04/HTML查漏补缺/" data-id="cm8cpkxef00067u1z7avqxq85" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/">html</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-白话JS观察者模式和发布订阅模式" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2020/10/25/白话JS观察者模式和发布订阅模式/">白话JS观察者模式和发布订阅模式</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/10/25/白话JS观察者模式和发布订阅模式/" class="article-date">
+  <time datetime="2020-10-25T10:12:51.000Z" itemprop="datePublished">2020-10-25</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>从对观察者模式和发布订阅模式有疑问开始，连续看了好几篇文章，最后疑惑依然存在，这到底哪里不一样？？进一步研究和思考后才搞明白，我决定用最大白话最直观的代码方式来记录下来，以便未来再次忘记时来翻阅。<br>
+                                                        
+                                                            <a class="article-more-link" href="/2020/10/25/白话JS观察者模式和发布订阅模式/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2020/10/25/白话JS观察者模式和发布订阅模式/" data-id="cm8cpkxjh002s7u1z6tppfnca" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-superset二次开发" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2020/08/07/superset二次开发/">从前端角度记录superset二次开发</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/08/07/superset二次开发/" class="article-date">
+  <time datetime="2020-08-07T03:26:12.000Z" itemprop="datePublished">2020-08-07</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>项目里 superset 版本是 0.36.0, python 版本是 3.6, 网上大部分资料都是后端开发人员贡献的，这篇文章我从一个前端的角度记录一下 superset 二次开发遇到的一些问题和解决方法。<br>
+                                                        
+                                                            <a class="article-more-link" href="/2020/08/07/superset二次开发/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2020/08/07/superset二次开发/" data-id="cm8cpkxii001k7u1z8x9vrk1n" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/superset/">superset</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react/">react</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-学习Echarts配置项" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2020/07/01/学习Echarts配置项/">理解Echarts配置项</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/07/01/学习Echarts配置项/" class="article-date">
+  <time datetime="2020-07-01T02:47:54.000Z" itemprop="datePublished">2020-07-01</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <h3 id="color"><a href="#color" class="headerlink" title="color"></a>color</h3><p>color是一个常用的属性，在很多配置项里用来设置填充颜色，color的值有rgb，rgba，16进制的颜色值，还支持渐变和纹理.</p>
+<h4 id="渐变"><a href="#渐变" class="headerlink" title="渐变"></a>渐变</h4><p>纯色很好理解，这里主要说一下渐变，以线性渐变为例<br>
+                                                        
+                                                            <a class="article-more-link" href="/2020/07/01/学习Echarts配置项/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2020/07/01/学习Echarts配置项/" data-id="cm8cpkxje002k7u1znokxnvoy" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Echarts/">Echarts</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-SVG基础" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2020/06/20/SVG基础/">SVG基础</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/06/20/SVG基础/" class="article-date">
+  <time datetime="2020-06-20T09:45:39.000Z" itemprop="datePublished">2020-06-20</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>SVG是可缩放矢量图形的缩写，它使用XML来定义图像，这篇文章记录我学习SVG的过程。<br>
+                                                        
+                                                            <a class="article-more-link" href="/2020/06/20/SVG基础/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2020/06/20/SVG基础/" data-id="cm8cpkxi100137u1zqu05x5mv" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SVG/">SVG</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+          <article id="post-弹性盒模型之flex属性" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/11/27/弹性盒模型之flex属性/">弹性盒模型之flex属性</a>
+    </h2>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/11/27/弹性盒模型之flex属性/" class="article-date">
+  <time datetime="2019-11-27T00:39:45.000Z" itemprop="datePublished">2019-11-27</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                    <p>flex属性用来设置弹性盒子项的拉伸，收缩和自身主大小，flex的属性值有多种形式，可以为一个值，两个值，或三个值<br>
+                                                        
+                                                            <a class="article-more-link" href="/2019/11/27/弹性盒模型之flex属性/">
+                                                                Read More...
+                                                            </a>
+                                                            
+                                                                
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2019/11/27/弹性盒模型之flex属性/" data-id="cm8cpkxjg002p7u1zpx3fbbhu" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+
+                
+
+</article>
+        
+    </article>
+    
+  
+    
+      <nav class="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+      </nav>
+    
+  </section>
+</div>
+
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-bar-chart"></i> <span id="busuanzi_value_site_pv"></span></li>
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

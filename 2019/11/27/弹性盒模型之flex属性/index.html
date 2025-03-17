@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    弹性盒模型之flex属性 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-弹性盒模型之flex属性" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      弹性盒模型之flex属性
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/11/27/弹性盒模型之flex属性/" class="article-date">
+  <time datetime="2019-11-27T00:39:45.000Z" itemprop="datePublished">2019-11-27</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>flex属性用来设置弹性盒子项的拉伸，收缩和自身主大小，flex的属性值有多种形式，可以为一个值，两个值，或三个值<br><a id="more"></a></p>
+<p>一个值</p>
+<blockquote>
+<p>initial | auto | none | flex-grow | flex-basis</p>
+</blockquote>
+<p>两个值</p>
+<blockquote>
+<p>flex-grow | (flex-shrink | flex-basis)</p>
+</blockquote>
+<p>三个值</p>
+<blockquote>
+<p>flex-grow flex-shrink flex-basis</p>
+</blockquote>
+<p>其中，flex为单数值，initial，auto，none时其实是特定三个值的简写</p>
+<blockquote>
+<p>flex:1 -&gt; flex: 1 1 0;</p>
+</blockquote>
+<blockquote>
+<p>flex:initial -&gt; flex:0 1 auto</p>
+</blockquote>
+<blockquote>
+<p>flex:auto -&gt; flex: 1 1 auto</p>
+</blockquote>
+<blockquote>
+<p>flex:none -&gt; flex: 0 0 auto</p>
+</blockquote>
+<p>flex-grow属性值是数值，默认值0，它定义弹性盒子项如何拉伸,当弹性项的flex-basis值相加小于盒子宽度时，弹性项的拉伸生效<br>单个弹性项宽度的计算方式为：</p>
+<blockquote>
+<p>该项basis值 + 该项grow值 * ((总宽度 - basis值总和) / 可拉伸项数量)</p>
+</blockquote>
+<p>flex-shrink属性值是数值，默认值1，它定义弹性盒子项如何收缩，当弹性项的flex-basis值相加大于盒子宽度时，弹性项的收缩生效，<br>单个弹性项宽度的计算方式为：</p>
+<blockquote>
+<p>flex-basis值 - (basis总和 - 总宽度) <em> 该项basis值 / (第一项shrink值 </em> 第一项宽度 + 第二项shrink值 * 第二项宽度….第n项..)</p>
+</blockquote>
+<p>flex-basis属性值是一个带宽度单位的数值或是auto,content,initial，默认值auto</p>
+<ul>
+<li>auto: 表示元素的basis值是自身的width值，在元素的宽度计算中，当弹性盒子有空间拉伸并且flex-grow不等0时，元素宽度等于自身width值加上拉伸值</li>
+<li>initial: 元素的basis值是自身的width值，在元素的宽度计算中，元素的宽度保持自身width值，并且flex-grow不算入计算内，也就是说，当flex-basis为initial时，flex-grow不管等于几都可以直接看成0</li>
+<li>content：不知道是测试的浏览器不支持还是怎样，在整个测试过程中congtent的表现跟initial的表现一致</li>
+</ul>
+<p>下面有几个例子，这些例子公用下面这一段html和css代码</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>content<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>box1<span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">background-color</span><span class="token punctuation">:</span>red<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>box2<span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">background-color</span><span class="token punctuation">:</span>lightblue<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>box3<span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">background-color</span><span class="token punctuation">:</span>yellow<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>box4<span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">background-color</span><span class="token punctuation">:</span>green<span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+</code></pre>
+<pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token id">#content</span> </span><span class="token punctuation">{</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> <span class="token number">200</span>px<span class="token punctuation">;</span>
+  <span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">100</span>px<span class="token punctuation">;</span>
+  <span class="token property">border</span><span class="token punctuation">:</span><span class="token number">1</span>px solid green<span class="token punctuation">;</span>
+  <span class="token property">display</span><span class="token punctuation">:</span> flex<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#content</span> div </span><span class="token punctuation">{</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> <span class="token number">30</span>px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>第一个例子，当4个div的flex设置为下面四个值时，计算各自的宽度</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token id">#content</span> <span class="token class">.box1</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">1</span> auto<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#content</span> <span class="token class">.box2</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">2</span> initial<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#content</span> <span class="token class">.box3</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">1</span> <span class="token number">0</span> <span class="token number">80</span>px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#content</span> <span class="token class">.box4</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">1</span> <span class="token number">40</span>px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>首先看所有元素flex-basis的和是否超出盒子的总宽度200px</p>
+<p>auto和initial就是元素的width,也就是30px,所以</p>
+<p>flex-basis的和 = 30px + 30px + 80px + 40px = 180px, 180 &lt; 200可拉伸，不收缩</p>
+<blockquote>
+<p>flex-grow的和 = 2，因为box2的flex-basis值为initial,所以就把它的flex-grow算成是0</p>
+</blockquote>
+<p>box1的宽度 = 30 + 1 * ((200 - 180) / 2) = 40</p>
+<p>box2的宽度 = 30</p>
+<p>box3的宽度 = 80 + 1 * ((200 - 180) / 2) = 90</p>
+<p>box3的宽度 = 40</p>
+<p>第二个例子，计算各自的宽度<br>100 </p>
+<pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token id">#content</span> <span class="token class">.box1</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">1</span> auto<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#content</span> <span class="token class">.box2</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">2</span> initial<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#content</span> <span class="token class">.box3</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">1</span> <span class="token number">0</span> <span class="token number">120</span>px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector"><span class="token id">#content</span> <span class="token class">.box4</span> </span><span class="token punctuation">{</span>
+  <span class="token property">flex</span><span class="token punctuation">:</span> <span class="token number">0</span> <span class="token number">1</span> <span class="token number">120</span>px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>首先看所有元素flex-basis的和是否超出盒子的总宽度200px</p>
+<p>auto和initial就是元素的width,也就是30px,所以</p>
+<p>flex-basis的和 = 30px + 30px + 120px + 120px = 300px, 300 &gt; 200不可拉伸，会收缩,</p>
+<blockquote>
+<p>flex-shrink省略时取默认值1，超出的宽度值为100</p>
+</blockquote>
+<p>box1的宽度 = 30 - 100 <em> 30 / (1 </em> 30 + 1 <em> 30 + 0 </em> 120 + 1 * 120) = 13.33</p>
+<p>box2的宽度 = 同上 = 13.33</p>
+<p>box3的宽度 = 不收缩 = 120</p>
+<p>box3的宽度 = 120 - 100 <em> 120 / (1 </em> 30 + 1 <em> 30 + 0 </em> 120 + 1 * 120) = 53.33</p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2019/11/27/弹性盒模型之flex属性/" data-id="cm8cpkxjg002p7u1zpx3fbbhu" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2020/06/20/SVG基础/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            SVG基础
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/10/20/为了弄明白Promise的运行顺序，徒手写一个Promise/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">为了弄明白Promise的运行顺序，手写一个Promise</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

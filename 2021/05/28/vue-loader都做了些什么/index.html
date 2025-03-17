@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    vue-loader都做了些什么 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-vue-loader都做了些什么" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      vue-loader都做了些什么
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2021/05/28/vue-loader都做了些什么/" class="article-date">
+  <time datetime="2021-05-27T22:45:26.000Z" itemprop="datePublished">2021-05-28</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <blockquote>
+<p>本文主要内容：</p>
+<ol>
+<li>vue-loader解析vue单文件组件的过程分析</li>
+<li>VueLoaderPlugin的作用</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<h4 id="1-import一个vue单文件组件时，实际引入是什么"><a href="#1-import一个vue单文件组件时，实际引入是什么" class="headerlink" title="1. import一个vue单文件组件时，实际引入是什么"></a>1. <code>import</code>一个<code>vue</code>单文件组件时，实际引入是什么</h4><p>新建一个<code>index.vue</code>文件，内容如下：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>template<span class="token operator">></span>
+  <span class="token operator">&lt;</span>ul @click<span class="token operator">=</span><span class="token string">"handleClick"</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span>li v<span class="token operator">-</span><span class="token keyword">for</span><span class="token operator">=</span><span class="token string">"item in list"</span> <span class="token punctuation">:</span>key<span class="token operator">=</span><span class="token string">"item"</span><span class="token operator">></span><span class="token punctuation">{</span><span class="token punctuation">{</span> item <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">></span>
+  <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>template<span class="token operator">></span>
+<span class="token operator">&lt;</span>script<span class="token operator">></span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      list<span class="token punctuation">:</span>  <span class="token punctuation">[</span><span class="token string">'a'</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">,</span> <span class="token string">'c'</span><span class="token punctuation">,</span> <span class="token string">'d'</span><span class="token punctuation">,</span> <span class="token string">'e'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  methods<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token function">handleClick</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>list <span class="token operator">=</span>  <span class="token punctuation">[</span><span class="token string">'h'</span><span class="token punctuation">,</span> <span class="token string">'i'</span><span class="token punctuation">,</span> <span class="token string">'a'</span><span class="token punctuation">,</span> <span class="token string">'j'</span><span class="token punctuation">,</span> <span class="token string">'k'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
+<span class="token operator">&lt;</span>style<span class="token operator">></span>
+  ul <span class="token punctuation">{</span>
+    color<span class="token punctuation">:</span> red<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>style<span class="token operator">></span>
+</code></pre>
+<p>在其他文件中导入 index.vue，并查看输出结果</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> app <span class="token keyword">from</span> <span class="token string">'./index.vue'</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>app<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><a href="https://imgtu.com/i/2i7PBj" target="_blank" rel="noopener"><img src="https://z3.ax1x.com/2021/05/28/2i7PBj.png" alt="2i7PBj.png"></a></p>
+<p>看图可以知道，import 一个单文件组件其实就是导入了这样一个对象。</p>
+<h4 id="2-webpack中的loader和plugin"><a href="#2-webpack中的loader和plugin" class="headerlink" title="2.  webpack中的loader和plugin"></a>2.  webpack中的loader和plugin</h4><blockquote>
+<p>webpack 中 loader 的作用是将匹配后缀名的文件从源文件导出为 js 模块，是源文件到 js 模块的转换。</p>
+</blockquote>
+<blockquote>
+<p>plugin 可以在 webpack 构建过程中插入自定义行为，插件的原型对象上都有一个 apply 方法，这个 apply 方法在安装插件时会被 webpack 编译器调用一次。</p>
+</blockquote>
+<p>众所周知，要想使用 vue 单文件组件，必须在 webpack 中配置 vue-loader 和 vueLoaderPlugin 插件</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span> VueLoaderPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'vue-loader/lib/plugin'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  rules<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      test<span class="token punctuation">:</span> <span class="token regex">/\.vue$/</span><span class="token punctuation">,</span>
+      loader<span class="token punctuation">:</span> <span class="token string">'vue-loader'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+plugins<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token keyword">new</span> <span class="token class-name">VueLoaderPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="3-vue-loader的解析流程"><a href="#3-vue-loader的解析流程" class="headerlink" title="3. vue-loader的解析流程"></a>3. vue-loader的解析流程</h4><h5 id="1-从字符串到AST抽象语法树"><a href="#1-从字符串到AST抽象语法树" class="headerlink" title="1. 从字符串到AST抽象语法树"></a>1. 从字符串到AST抽象语法树</h5><p>import .vue文件时，会命中vue-loader，第一次调用 vue-loader，原文件首先会被从字符串解析为 AST 抽象语法树，即用普通 js 对象来描述组件中的内容:</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token punctuation">{</span> parse <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'@vue/component-compiler-utils'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> descriptor <span class="token operator">=</span> <span class="token function">parse</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  source<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//source是loader接收到的源代码字符串</span>
+  compiler<span class="token punctuation">:</span> options<span class="token punctuation">.</span>compiler <span class="token operator">||</span> <span class="token function">loadTemplateCompiler</span><span class="token punctuation">(</span>loaderContext<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  filename<span class="token punctuation">,</span>
+  sourceRoot<span class="token punctuation">,</span>
+  needMap<span class="token punctuation">:</span> sourceMap<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>调用结果：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token punctuation">{</span>
+  template<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">'template'</span><span class="token punctuation">,</span>
+    content<span class="token punctuation">:</span> <span class="token string">'\n'</span> <span class="token operator">+</span>
+      <span class="token string">'&lt;ul @click="handleClick">\n'</span> <span class="token operator">+</span>
+      <span class="token string">'  &lt;li v-for="item in list" :key="item">{{ item }}&lt;/li>\n'</span> <span class="token operator">+</span>
+      <span class="token string">'&lt;/ul>\n'</span><span class="token punctuation">,</span>
+    start<span class="token punctuation">:</span> <span class="token number">54</span><span class="token punctuation">,</span>
+    attrs<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    end<span class="token punctuation">:</span> <span class="token number">148</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  script<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">'script'</span><span class="token punctuation">,</span>
+    content<span class="token punctuation">:</span> <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'//\n'</span> <span class="token operator">+</span>
+      <span class="token string">'\n'</span> <span class="token operator">+</span>
+      <span class="token string">'export default {\n'</span> <span class="token operator">+</span>
+      <span class="token string">'  data() {\n'</span> <span class="token operator">+</span>
+      <span class="token string">'    return {\n'</span> <span class="token operator">+</span>
+      <span class="token string">"      list:  ['a', 'b', 'c', 'd', 'e']\n"</span> <span class="token operator">+</span>
+      <span class="token string">'    };\n'</span> <span class="token operator">+</span>
+      <span class="token string">'  },\n'</span> <span class="token operator">+</span>
+      <span class="token string">'  methods: {\n'</span> <span class="token operator">+</span>
+      <span class="token string">'    handleClick() {\n'</span> <span class="token operator">+</span>
+      <span class="token string">"      this.list =  ['h', 'i', 'a', 'j', 'k']\n"</span> <span class="token operator">+</span>
+      <span class="token string">'    },\n'</span> <span class="token operator">+</span>
+      <span class="token string">'  }\n'</span> <span class="token operator">+</span>
+      <span class="token string">'};\n'</span><span class="token punctuation">,</span>
+    start<span class="token punctuation">:</span> <span class="token number">168</span><span class="token punctuation">,</span>
+    attrs<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    end<span class="token punctuation">:</span> <span class="token number">353</span><span class="token punctuation">,</span>
+    map<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      version<span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
+      sources<span class="token punctuation">:</span> <span class="token punctuation">[</span>Array<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      names<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      mappings<span class="token punctuation">:</span> <span class="token string">';;;;;;;;;;;AAWA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA'</span><span class="token punctuation">,</span>
+      file<span class="token punctuation">:</span> <span class="token string">'index.vue'</span><span class="token punctuation">,</span>
+      sourceRoot<span class="token punctuation">:</span> <span class="token string">'src/vue'</span><span class="token punctuation">,</span>
+      sourcesContent<span class="token punctuation">:</span> <span class="token punctuation">[</span>Array<span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  styles<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      type<span class="token punctuation">:</span> <span class="token string">'style'</span><span class="token punctuation">,</span>
+      content<span class="token punctuation">:</span> <span class="token string">'\nul {\n  color: red;\n}\n'</span><span class="token punctuation">,</span>
+      start<span class="token punctuation">:</span> <span class="token number">7</span><span class="token punctuation">,</span>
+      attrs<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+      end<span class="token punctuation">:</span> <span class="token number">35</span><span class="token punctuation">,</span>
+      map<span class="token punctuation">:</span> <span class="token punctuation">[</span>Object<span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  customBlocks<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  errors<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h5 id="2-将AST各部分转换为特殊的引用路径"><a href="#2-将AST各部分转换为特殊的引用路径" class="headerlink" title="2. 将AST各部分转换为特殊的引用路径"></a>2. 将AST各部分转换为特殊的引用路径</h5><p>对这个AST的每部分进行处理，.vue文件会被转换为下面这样的代码：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//代码1</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span>
+  render<span class="token punctuation">,</span>
+  staticRenderFns<span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./index.vue?vue&amp;type=template&amp;id=21fec300&amp;'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> script <span class="token keyword">from</span> <span class="token string">'./index.vue?vue&amp;type=script&amp;lang=js&amp;'</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token operator">*</span> <span class="token keyword">from</span> <span class="token string">'./index.vue?vue&amp;type=script&amp;lang=js&amp;'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> style0 <span class="token keyword">from</span> <span class="token string">'./index.vue?vue&amp;type=style&amp;index=0&amp;lang=css&amp;'</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/* normalize component */</span>
+<span class="token keyword">import</span> normalizer <span class="token keyword">from</span> <span class="token string">'!../../node_modules/vue-loader/lib/runtime/componentNormalizer.js'</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> component <span class="token operator">=</span> <span class="token function">normalizer</span><span class="token punctuation">(</span>
+  script<span class="token punctuation">,</span>
+  render<span class="token punctuation">,</span>
+  staticRenderFns<span class="token punctuation">,</span>
+  <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token keyword">null</span><span class="token punctuation">,</span>
+  <span class="token keyword">null</span><span class="token punctuation">,</span>
+  <span class="token keyword">null</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+component<span class="token punctuation">.</span>options<span class="token punctuation">.</span>__file <span class="token operator">=</span> <span class="token string">'src/vue/index.vue'</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span> component<span class="token punctuation">.</span>exports<span class="token punctuation">;</span>
+</code></pre>
+<p>关注最前面的import语句，在原本的index.vue后面加入了查询条件，包括vue,type,id,lang等，之后将通过不同的查询条件来处理不同部分的代码</p>
+<h5 id="3-VueLoaderPlugin插件处理rules"><a href="#3-VueLoaderPlugin插件处理rules" class="headerlink" title="3. VueLoaderPlugin插件处理rules"></a>3. VueLoaderPlugin插件处理rules</h5><p>VueLoaderPlugin的主要作用就是对vue不同模块配置不同的loader，在webpack安装插件时，也就是预处理阶段，VueLoaderPlugin的apply会被调用，该方法中拦截了用户自定义的rules属性，加入对 vue 单文件模块处理的规则后，返回调整后的<code>rules</code>列表，看下面的例子：</p>
+<p>自定义rules：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    test<span class="token punctuation">:</span> <span class="token regex">/\.vue$/</span><span class="token punctuation">,</span>
+    loader<span class="token punctuation">:</span> <span class="token string">'vue-loader'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    test<span class="token punctuation">:</span> <span class="token regex">/\.css$/</span><span class="token punctuation">,</span>
+    use<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'style-loader'</span><span class="token punctuation">,</span> <span class="token string">'css-loader'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+<p>VueLoaderPlugin处理后的rules：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+        loader<span class="token punctuation">:</span> <span class="token string">'xxx/xx/xx/pitcher.js'</span><span class="token punctuation">,</span>
+        resourceQuery<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> resourceQuery<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        options<span class="token punctuation">:</span> <span class="token punctuation">{</span> cacheDirectory<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span> cacheIdentifier<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        use<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span> loader<span class="token punctuation">:</span> <span class="token string">'style-loader'</span><span class="token punctuation">,</span> options<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span> ident<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span> loader<span class="token punctuation">:</span> <span class="token string">'css-loader'</span><span class="token punctuation">,</span> options<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span> ident<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        resource<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> resource<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        resourceQuery<span class="token punctuation">:</span> <span class="token punctuation">[</span>Function<span class="token punctuation">:</span> resourceQuery<span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        test<span class="token punctuation">:</span> <span class="token regex">/\.vue$/</span><span class="token punctuation">,</span>
+        use<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+                <span class="token punctuation">{</span> loader<span class="token punctuation">:</span> <span class="token string">'vue-loader'</span><span class="token punctuation">,</span> options<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> ident<span class="token punctuation">:</span> <span class="token string">'vue-loader-options'</span> <span class="token punctuation">}</span>
+            <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+        test<span class="token punctuation">:</span> <span class="token regex">/\.css$/</span><span class="token punctuation">,</span>
+        use<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span> loader<span class="token punctuation">:</span> <span class="token string">'style-loader'</span><span class="token punctuation">,</span> options<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span> ident<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token punctuation">{</span> loader<span class="token punctuation">:</span> <span class="token string">'css-loader'</span><span class="token punctuation">,</span> options<span class="token punctuation">:</span> undefined<span class="token punctuation">,</span> ident<span class="token punctuation">:</span> undefined <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</code></pre>
+<p>可以看出自定义的两个 rules 只是对格式进行统一，主要的修改是添加了 pitcher loader, 复用了处理 css 的 loader，重定义了 它们的resource 和 resourceQuery 属性，resourceQuery属性是通过匹配链接中的查询参数来判断链接是否命中。</p>
+<blockquote>
+<p>resourceQuery: 此选项用于测试请求字符串的查询部分（即从问号开始)<br>resource: 简单理解就是匹配到的资源文件的绝对路径</p>
+</blockquote>
+<p>挨个看一下新加的rule:</p>
+<p>pitcher loader的resourceQuery属性只是简单的匹配第一个查询条件是否是vue</p>
+<pre class=" language-javascript"><code class="language-javascript">resourceQuery<span class="token punctuation">:</span> query <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>query<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token boolean">false</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">const</span> parsed <span class="token operator">=</span> qs<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>query<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> parsed<span class="token punctuation">.</span>vue <span class="token operator">!=</span> <span class="token keyword">null</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>复用的rule，resource 和 resourceQuery具体内容如下</p>
+<pre class=" language-javascript"><code class="language-javascript">resource<span class="token punctuation">:</span> resources <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  currentResource <span class="token operator">=</span> resources
+  <span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span>
+resourceQuery<span class="token punctuation">:</span> query <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>query<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token boolean">false</span> <span class="token punctuation">}</span>
+  <span class="token keyword">const</span> parsed <span class="token operator">=</span> qs<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>query<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>parsed<span class="token punctuation">.</span>vue <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>conditions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">const</span> fakeResourcePath <span class="token operator">=</span> <span class="token template-string"><span class="token string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentResource<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">.</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>parsed<span class="token punctuation">.</span>lang<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">`</span></span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> condition <span class="token keyword">of</span> conditions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// add support for resourceQuery</span>
+    <span class="token keyword">const</span> request <span class="token operator">=</span> condition<span class="token punctuation">.</span>property <span class="token operator">===</span> <span class="token string">'resourceQuery'</span> <span class="token operator">?</span> query <span class="token punctuation">:</span>fakeResourcePath
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>condition <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>condition<span class="token punctuation">.</span><span class="token function">fn</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>resource只是为了获取当前资源文件的绝对路径，赋值给currentResource</p>
+<p>resourceQuery简单来说就是将<code>.</code>+查询条件中<code>lang</code>属性作为后缀名添加到当前请求的最末尾，判断这个后缀名是否在rules中配置了对应的loader，如果有loader返回true,否则返回false。</p>
+<h5 id="4-执行pitching-loader，生成内联loader"><a href="#4-执行pitching-loader，生成内联loader" class="headerlink" title="4. 执行pitching loader，生成内联loader"></a>4. 执行pitching loader，生成内联loader</h5><p>rules列表中目前配置了四个rule，正常情况下loader 总是 从右到左被调用，即import文件时，匹配的顺序是.css -&gt; .vue -&gt; resourceQuery -&gt; pitcher resourceQuery，但这组的第一个loader定义了pitch方法：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//pitcher.js</span>
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> code <span class="token operator">=</span><span class="token operator">></span> code 
+
+module<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>pitch <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>remainingRequest<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//code</span>
+<span class="token punctuation">}</span>
+
+</code></pre>
+<p>查看文档上关于<a href="https://webpack.docschina.org/api/loaders/#pitching-loader" target="_blank" rel="noopener">pitching loader的介绍</a></p>
+<blockquote>
+<p>loader 总是 从右到左被调用。有些情况下，loader 只关心 request 后面的 元数据(metadata)，并且忽略前一个 loader 的结果。在实际（从右到左）执行 loader 之前，会先 从左到右 调用 loader 上的 pitch 方法。</p>
+</blockquote>
+<p>重点是会先从左到右调用 loader 上的 pitch 方法，举个例子，当执行这句代码时，</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> render<span class="token punctuation">,</span> staticRenderFns<span class="token punctuation">,</span> <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./index.vue?vue&amp;type=template&amp;id=21fec300&amp;'</span><span class="token punctuation">;</span>
+</code></pre>
+<p>执行顺序可以看做是：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">|</span><span class="token operator">-</span> pitcher<span class="token operator">-</span>loader <span class="token template-string"><span class="token string">`pitch`</span></span>
+  <span class="token operator">|</span><span class="token operator">-</span> resourceQuery<span class="token operator">-</span>loader <span class="token template-string"><span class="token string">`pitch`</span></span> <span class="token comment" spellcheck="true">//匹配了resourceQuery</span>
+    <span class="token operator">|</span><span class="token operator">-</span> vue<span class="token operator">-</span>loader <span class="token template-string"><span class="token string">`pitch`</span></span>
+      <span class="token operator">|</span><span class="token operator">-</span> css<span class="token operator">-</span>loader <span class="token template-string"><span class="token string">`pitch`</span></span>
+        <span class="token operator">|</span><span class="token operator">-</span> requested module is picked up <span class="token keyword">as</span> a dependency
+      <span class="token operator">|</span><span class="token operator">-</span> css<span class="token operator">-</span>loader normal execution
+    <span class="token operator">|</span><span class="token operator">-</span> vue<span class="token operator">-</span>loader normal execution
+  <span class="token operator">|</span><span class="token operator">-</span> resourceQuery<span class="token operator">-</span>loader normal execution
+<span class="token operator">|</span><span class="token operator">-</span> pitcher<span class="token operator">-</span>loader normal execution
+</code></pre>
+<p>在这里参数?vue命中了pitcher loader的resourceQuery，执行pitcher loader的pitch方法，这个方法根据参数type来生成<a href="https://webpack.docschina.org/concepts/loaders/#inline" target="_blank" rel="noopener">内联lodaer</a>,如<code>type=template</code>执行完pitch会返回值：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token operator">*</span> <span class="token keyword">from</span> <span class="token string">"-!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib/index.js??vue-loader-options!./index.vue?vue&amp;type=template&amp;id=21fec300&amp;"</span>
+</code></pre>
+<p>这个阶段中，如果某个 loader 在 pitch 方法中返回一个结果，那么这个过程会回过身来，并跳过剩下的 loader。<br>也就是只会执行</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">|</span><span class="token operator">-</span> pitcher<span class="token operator">-</span>loader <span class="token template-string"><span class="token string">`pitch`</span></span>
+</code></pre>
+<p>其他import语句中带有<code>?vue&amp;type=xxx&amp;lang=xxx&amp;&#39;</code>的链接都是同理，最终都会被转换为如上所示的一段内联loader</p>
+<h5 id="5-执行内联loader"><a href="#5-执行内联loader" class="headerlink" title="5. 执行内联loader"></a>5. 执行内联loader</h5><p>内联loader按照从右到左的顺序执行，还看上面的例子,<code>export  &#39;./index.vue?vue&amp;type=template&amp;id=21fec300&amp;&#39;</code>的loader是<code>vue-loader/lib/index.js</code>,因为链接查询条件中带有type属性，直接命中下面这段代码</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// if the query has a type field, this is a language block request</span>
+  <span class="token comment" spellcheck="true">// e.g. foo.vue?type=template&amp;id=xxxxx</span>
+  <span class="token comment" spellcheck="true">// and we will return early</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>incomingQuery<span class="token punctuation">.</span>type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">selectBlock</span><span class="token punctuation">(</span>
+      descriptor<span class="token punctuation">,</span>
+      loaderContext<span class="token punctuation">,</span>
+      incomingQuery<span class="token punctuation">,</span>
+      <span class="token operator">!</span><span class="token operator">!</span>options<span class="token punctuation">.</span>appendExtension
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+<p>返回template部分的代码</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>handleClick<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>item in list<span class="token punctuation">"</span></span> <span class="token attr-name">:key</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>item<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>{{ item }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>这段代码会传入<code>loaders/templateLoader.js</code>被解析，<code>templateLoader</code>使用<code>vue-template-compiler</code>将<code>html</code>代码转换为<code>render</code>和<code>staticRenderFns</code>，最终用<code>exports</code> 导出，这也是为什么<code>vue-cli</code>文档上要求将<code>vue-loader</code>和<code>vue-template-compiler</code>一起安装的原因。</p>
+<blockquote>
+<p>你应该将 vue-loader 和 vue-template-compiler 一起安装——除非你是使用自行 fork 版本的 Vue 模板编译器的高阶用户</p>
+</blockquote>
+<p>vue单文件组件中的不同模块都是按照这种模式使用对应的loader来处理，回看<code>代码1</code>，<code>import</code>都导入完成之后，执行<code>normalizer</code>方法，将script标签中定义的data,methods等对象和render,staticRenderFns组装在同一个对象中返回，这就是导入一个单文件组件的大致流程。</p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2021/05/28/vue-loader都做了些什么/" data-id="cm8cpkxjn00307u1zw61gt8js" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue-loader/">vue-loader</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2022/05/28/trilium notes基本使用/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            trilium notes基本使用
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/05/03/Vue源码阅读——从单文件组件到dom渲染/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">Vue源码阅读——从单文件组件到dom渲染</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

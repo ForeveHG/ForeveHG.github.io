@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Markdown语法学习 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-Markdown语法学习" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      Markdown语法学习
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2016/12/31/Markdown语法学习/" class="article-date">
+  <time datetime="2016-12-31T07:08:53.000Z" itemprop="datePublished">2016-12-31</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/博客搭建/">博客搭建</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h3 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h3><h4 id="1-标题"><a href="#1-标题" class="headerlink" title="1 标题"></a>1 标题</h4><h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><pre><code>一级标题
+===
+二级标题
+---
+
+# 一级标题
+## 二级标题
+### 三级标题
+...
+</code></pre><a id="more"></a>
+<h4 id="2-列表"><a href="#2-列表" class="headerlink" title="2 列表"></a>2 列表</h4><h5 id="无序列表示例"><a href="#无序列表示例" class="headerlink" title="无序列表示例"></a>无序列表示例</h5><pre><code>&lt;!-- 无序列表,这三种写法效果相同 --&gt;
+* 红
+* 绿
+* 蓝
+
++ 红
++ 绿
++ 蓝
+
+- 红
+- 绿
+- 蓝
+</code></pre><h5 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h5><ul>
+<li>红</li>
+<li>绿</li>
+<li>蓝</li>
+</ul>
+<ul>
+<li>红</li>
+<li>绿</li>
+<li>蓝</li>
+</ul>
+<ul>
+<li>红</li>
+<li>绿</li>
+<li>蓝</li>
+</ul>
+<h5 id="有序列表示例"><a href="#有序列表示例" class="headerlink" title="有序列表示例"></a>有序列表示例</h5><pre><code>&lt;!-- 有序列表 --&gt;
+1. 红
+2. 绿
+3. 蓝
+
+&lt;!-- 列表项目包含段落 --&gt;
+1. This is a list item with two paragraphs. Lorem ipsum dolor
+   sit amet, consectetuer adipiscing elit. Aliquam hendrerit
+   mi posuere lectus.
+2. This is a list item with two paragraphs. Lorem ipsum dolor
+   sit amet, consectetuer adipiscing elit. Aliquam hendrerit
+   mi posuere lectus.
+</code></pre><h5 id="效果-1"><a href="#效果-1" class="headerlink" title="效果"></a>效果</h5><ol>
+<li>红</li>
+<li>绿</li>
+<li>蓝</li>
+</ol>
+<ol>
+<li>This is a list item with two paragraphs. Lorem ipsum dolor<br>sit amet, consectetuer adipiscing elit. Aliquam hendrerit<br>mi posuere lectus.</li>
+<li>This is a list item with two paragraphs. Lorem ipsum dolor<br>sit amet, consectetuer adipiscing elit. Aliquam hendrerit<br>mi posuere lectus.</li>
+</ol>
+<h4 id="3-代码"><a href="#3-代码" class="headerlink" title="3 代码"></a>3 代码</h4><h5 id="3-1-代码行"><a href="#3-1-代码行" class="headerlink" title="3.1 代码行"></a>3.1 代码行</h5><p>在Markdown中建立代码区块非常简单，只需要一个制表符或者四个空格,显示时制表符和空格会自动删除。</p>
+<h6 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h6><pre><code>`    使用四个空格生成代码行`
+</code></pre><h6 id="效果-2"><a href="#效果-2" class="headerlink" title="效果"></a>效果</h6><pre><code>使用四个空格生成代码行
+</code></pre><h5 id="3-2-代码块"><a href="#3-2-代码块" class="headerlink" title="3.2 代码块"></a>3.2 代码块</h5><p>我们可以使用一个`包裹行内代码块，使用三个`包裹多行代码块。</p>
+<h6 id="行内代码块示例"><a href="#行内代码块示例" class="headerlink" title="行内代码块示例"></a>行内代码块示例</h6><pre><code>`使用一个反引号生成行内代码块`
+</code></pre><h6 id="效果-3"><a href="#效果-3" class="headerlink" title="效果"></a>效果</h6><p><code>使用一个反引号生成行内代码块</code></p>
+<h6 id="多行代码块示例"><a href="#多行代码块示例" class="headerlink" title="多行代码块示例"></a>多行代码块示例</h6><p>```<br>function test(){<br>    alert(“test”);<br>}<br>```</p>
+<h6 id="效果-4"><a href="#效果-4" class="headerlink" title="效果"></a>效果</h6><pre><code>function test(){
+    alert(&quot;test&quot;);
+}
+</code></pre><h4 id="4-引用"><a href="#4-引用" class="headerlink" title="4 引用"></a>4 引用</h4><p>如果需要引用别处的句子可以用&gt;符号</p>
+<h5 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h5><pre><code>&gt; 春眠不觉晓
+&gt; 处处闻啼鸟
+&gt;&gt; 夜来风雨声
+&gt;&gt; 花落知多少
+</code></pre><h5 id="效果-5"><a href="#效果-5" class="headerlink" title="效果"></a>效果</h5><blockquote>
+<p>春眠不觉晓<br>处处闻啼鸟</p>
+<blockquote>
+<p>夜来风雨声<br>花落知多少</p>
+</blockquote>
+</blockquote>
+<h4 id="5-链接"><a href="#5-链接" class="headerlink" title="5 链接"></a>5 链接</h4><p>markdow有两种形式的链接：行内式和参考式</p>
+<h5 id="行内式"><a href="#行内式" class="headerlink" title="行内式"></a>行内式</h5><p><code>[要显示的链接名](连接地址 &quot;鼠标移上去显示的title&quot;)</code>;</p>
+<h6 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h6><pre><code>这是一个[百度](http://www.baidu.com &quot;百度&quot;)行内链接
+</code></pre><h6 id="效果-6"><a href="#效果-6" class="headerlink" title="效果"></a>效果</h6><p>这是一个<a href="http://www.baidu.com" title="百度" target="_blank" rel="noopener">百度</a>行内链</p>
+<h5 id="同一主机"><a href="#同一主机" class="headerlink" title="同一主机"></a>同一主机</h5><p>如果要链接到同一主机的资源，你可以使用相对路径</p>
+<h6 id="示例-4"><a href="#示例-4" class="headerlink" title="示例"></a>示例</h6><pre><code>链接到主机[关于我](/aubout/)使用相对路径
+</code></pre><h6 id="效果-7"><a href="#效果-7" class="headerlink" title="效果"></a>效果</h6><p>链接到主机<a href="/aubout/">关于我</a>使用相对路径</p>
+<h5 id="参考式"><a href="#参考式" class="headerlink" title="参考式"></a>参考式</h5><p>使用 Markdown 的参考式链接，可以让文件更像是浏览器最后产生的结果，让你可以把一些标记相关的元数据移到段落文字之外，你就可以增加链接而不让文章的阅读感觉被打断.</p>
+<h6 id="示例-5"><a href="#示例-5" class="headerlink" title="示例"></a>示例</h6><pre><code>&lt;!--这是一个[百度][id]参考式链接--&gt;
+[id]: http://www.baidu.com
+</code></pre><h6 id="效果-8"><a href="#效果-8" class="headerlink" title="效果"></a>效果</h6><p>这是一个[百度][id]参考式链接<br>[id]: <a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a></p>
+<h5 id="自动链接"><a href="#自动链接" class="headerlink" title="自动链接"></a>自动链接</h5><p>用&lt;&gt;括起来，就会自动转换成链接。</p>
+<h6 id="示例-6"><a href="#示例-6" class="headerlink" title="示例"></a>示例</h6><pre><code>&lt;http://www.baidu.com/&gt;
+</code></pre><h6 id="效果-9"><a href="#效果-9" class="headerlink" title="效果"></a>效果</h6><p><a href="http://www.baidu.com/" target="_blank" rel="noopener">http://www.baidu.com/</a></p>
+<h4 id="6-强调"><a href="#6-强调" class="headerlink" title="6 强调"></a>6 强调</h4><p>Markdown 使用星号（<em>）和底线（_）作为标记强调字词的符号,被 </em> 或 _ 包围的字词会被转成用 <em> 标签包围,用两个 *或_包起来的话，则会被转成 <strong>标签。</strong></em></p>
+<h5 id="示例-7"><a href="#示例-7" class="headerlink" title="示例"></a>示例</h5><pre><code>&lt;!-- 斜体 --&gt;
+*我会被转成em标签* 
+_me too_
+
+&lt;!-- 粗体 --&gt;
+**我会被转成strong标签**
+__me to__
+</code></pre><h5 id="效果-10"><a href="#效果-10" class="headerlink" title="效果"></a>效果</h5><p><em>我会被转成em标签</em><br><em>me too</em></p>
+<p><strong>我会被转成strong标签</strong><br><strong>me to</strong></p>
+<p>注：如果要插入普通的星号和下划线可以使用反斜线* 和反斜线 _,Markdown 支持以下这些符号前面加上反斜杠来帮助插入普通的符号：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:center">代码</th>
+<th style="text-align:right">效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">\</td>
+<td style="text-align:center"><code>\\</code></td>
+<td style="text-align:right">\</td>
+</tr>
+<tr>
+<td style="text-align:left">`</td>
+<td style="text-align:center"><code>\</code>`</td>
+<td style="text-align:right">`</td>
+</tr>
+<tr>
+<td style="text-align:left">*</td>
+<td style="text-align:center"><code>\*</code></td>
+<td style="text-align:right">*</td>
+</tr>
+<tr>
+<td style="text-align:left">_</td>
+<td style="text-align:center"><code>\_</code></td>
+<td style="text-align:right">_</td>
+</tr>
+<tr>
+<td style="text-align:left">{</td>
+<td style="text-align:center"><code>\{</code></td>
+<td style="text-align:right">{</td>
+</tr>
+<tr>
+<td style="text-align:left">[</td>
+<td style="text-align:center"><code>\[</code></td>
+<td style="text-align:right">[</td>
+</tr>
+<tr>
+<td style="text-align:left">(</td>
+<td style="text-align:center"><code>\(</code></td>
+<td style="text-align:right">(</td>
+</tr>
+<tr>
+<td style="text-align:left">#</td>
+<td style="text-align:center"><code>\#</code></td>
+<td style="text-align:right">#</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:center"><code>\+</code></td>
+<td style="text-align:right">+</td>
+</tr>
+<tr>
+<td style="text-align:left">-</td>
+<td style="text-align:center"><code>\-</code></td>
+<td style="text-align:right">-</td>
+</tr>
+<tr>
+<td style="text-align:left">.</td>
+<td style="text-align:center"><code>\.</code></td>
+<td style="text-align:right">.</td>
+</tr>
+<tr>
+<td style="text-align:left">!</td>
+<td style="text-align:center"><code>\!</code></td>
+<td style="text-align:right">!</td>
+</tr>
+</tbody>
+</table>
+<h5 id="特殊字符转换"><a href="#特殊字符转换" class="headerlink" title="特殊字符转换"></a>特殊字符转换</h5><pre><code>&lt;!-- 普通星号和反斜线 --&gt; 
+\*
+\_
+</code></pre><h4 id="7-分割线"><a href="#7-分割线" class="headerlink" title="7 分割线"></a>7 分割线</h4><h5 id="示例-8"><a href="#示例-8" class="headerlink" title="示例"></a>示例</h5><pre><code>***
+* * * 
+- - -
+</code></pre><h5 id="效果-11"><a href="#效果-11" class="headerlink" title="效果"></a>效果</h5><hr>
+<hr>
+<hr>
+<h4 id="8-图片"><a href="#8-图片" class="headerlink" title="8 图片"></a>8 图片</h4><p>Markdown 使用和链接很相似的语法来标记图片，同样也允许两种样式：行内式和参考式。</p>
+<h5 id="行内式的图片示例"><a href="#行内式的图片示例" class="headerlink" title="行内式的图片示例"></a>行内式的图片示例</h5><pre><code>![头像](/images/avatar.gif)
+![头像](/images/avatar.gif &quot;Optional title&quot;)
+</code></pre><h5 id="效果-12"><a href="#效果-12" class="headerlink" title="效果"></a>效果</h5><p><img src="/images/avatar.gif" alt="头像"><br><img src="/images/avatar.gif" alt="头像" title="Optional title"><br>详细叙述如下：<br>一个叹号 ! 接着一个方括号[]，里面放上图片的替代文字(alt)<br>接着一个普通括号()，里面放上图片的网址，最后还可以用引号包住并加上选择性的 ‘title’ 文字。</p>
+<!--参考式的图片语法-->
+<pre><code>![name][id]
+「id」是图片参考的名称，图片参考的定义方式则和连结参考一样：
+</code></pre><h5 id="参考式图片示例"><a href="#参考式图片示例" class="headerlink" title="参考式图片示例"></a>参考式图片示例</h5><pre><code>![头像][id]
+[id]: /images/avatar.gif  &quot;Optional title attribute&quot;
+</code></pre><h5 id="效果-13"><a href="#效果-13" class="headerlink" title="效果"></a>效果</h5><p>![头像][id]<br>[id]: /images/avatar.gif  “Optional title attribute”<br>到目前为止， Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <img> 标签。</p>
+<h4 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h4><p>1.标题后面必须加一个空格。<br>2.必须按照标题大小的顺序写才能正确的生成目录，如果大标题用<code>#</code>,小标题直接用<code>###</code>目录会混乱，用<code>#</code>后接下来应该用<code>##</code>才会准确的生成文章目录。<br>3.生成表格前要加一个空行</p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><h5 id="markdown中使用echarts"><a href="#markdown中使用echarts" class="headerlink" title="markdown中使用echarts"></a>markdown中使用echarts</h5><p>在markdown中使用echarts，有已经写好的hexo插件，直接拿来用</p>
+<pre class=" language-javascript"><code class="language-javascript">npm install hexo<span class="token operator">-</span>tag<span class="token operator">-</span>charts3 <span class="token operator">--</span>save
+</code></pre>
+<p>这个插件似乎已经很久不更新了，插件中的echarts版本比较旧，下载到项目之后，可以手动的进行echarts版本更新，进入项目的node_modules/hexo-tag-echarts3/template.html中，将echarts的引用版本替换成新版echarts即可，我用的bootstrap的cdn，<a href="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js" target="_blank" rel="noopener">https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js</a></p>
+<h5 id="markdown中引用变量"><a href="#markdown中引用变量" class="headerlink" title="markdown中引用变量"></a>markdown中引用变量</h5>
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2016/12/31/Markdown语法学习/" data-id="cm8cpkxh2000e7u1z1oolikc5" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2017/01/01/NodeJs入门案例/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            NodeJs入门案例
+          
+        </div>
+      </a>
+    
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

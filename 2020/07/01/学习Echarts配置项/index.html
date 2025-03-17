@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    理解Echarts配置项 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-学习Echarts配置项" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      理解Echarts配置项
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/07/01/学习Echarts配置项/" class="article-date">
+  <time datetime="2020-07-01T02:47:54.000Z" itemprop="datePublished">2020-07-01</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h3 id="color"><a href="#color" class="headerlink" title="color"></a>color</h3><p>color是一个常用的属性，在很多配置项里用来设置填充颜色，color的值有rgb，rgba，16进制的颜色值，还支持渐变和纹理.</p>
+<h4 id="渐变"><a href="#渐变" class="headerlink" title="渐变"></a>渐变</h4><p>纯色很好理解，这里主要说一下渐变，以线性渐变为例<br><a id="more"></a></p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//线性渐变的color配置</span>
+color<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">'linear'</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// x,y 线的起点</span>
+    x<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    y<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// x2,y2 线的终点</span>
+    x2<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    y2<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    colorStops<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+        offset<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'red'</span> <span class="token comment" spellcheck="true">// 0%(线的起点) 处的颜色</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        offset<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'blue'</span> <span class="token comment" spellcheck="true">// 100%(线的终点) 处的颜色</span>
+    <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    global<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token comment" spellcheck="true">// 缺省为 false</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>那最大的问题就是绘制图形时的坐标了，很容易被误导的点在于绘制出来的坐标系跟绘制图形时的坐标系不是一个东西，看下图，绘制好的图形原点(0,0)位于左下角</p>
+<div id="echarts9582" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js"></script>
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('echarts9582'));
+        // 指定图表的配置项和数据
+        var option = {
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [{
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        type: 'line',
+        areaStyle: {}
+    }]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+</script>
+<p>但绘制图形时，原点是在左上角的</p>
+<pre class=" language-javascript"><code class="language-javascript">options <span class="token operator">=</span> <span class="token punctuation">{</span>
+    xAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">'category'</span><span class="token punctuation">,</span>
+        boundaryGap<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'Mon'</span><span class="token punctuation">,</span> <span class="token string">'Tue'</span><span class="token punctuation">,</span> <span class="token string">'Wed'</span><span class="token punctuation">,</span> <span class="token string">'Thu'</span><span class="token punctuation">,</span> <span class="token string">'Fri'</span><span class="token punctuation">,</span> <span class="token string">'Sat'</span><span class="token punctuation">,</span> <span class="token string">'Sun'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    yAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">'value'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    series<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+        data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        type<span class="token punctuation">:</span> <span class="token string">'line'</span><span class="token punctuation">,</span>
+        areaStyle<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+            color<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+                type<span class="token punctuation">:</span> <span class="token string">'linear'</span><span class="token punctuation">,</span>
+                <span class="token comment" spellcheck="true">// x,y 线的起点在左上角</span>
+                x<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                y<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                <span class="token comment" spellcheck="true">// x2,y2 线的终点在左下角</span>
+                x2<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                y2<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+                colorStops<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+                    offset<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'red'</span> <span class="token comment" spellcheck="true">// 0%(线的起点) 处的颜色</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+                    offset<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'blue'</span> <span class="token comment" spellcheck="true">// 100%(线的终点) 处的颜色</span>
+                <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                global<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token comment" spellcheck="true">// 缺省为 false</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+<p>上面的代码，用过ps的人可以想象从左上角到左下角拉渐变线，拉出来就是从红到蓝的垂直渐变了</p>
+<div id="echarts5926" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js"></script>
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('echarts5926'));
+        // 指定图表的配置项和数据
+        var option = {
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [{
+        data: [1320, 1320, 1320, 1320, 1320, 1320, 1320],
+        type: 'line',
+        areaStyle: {
+            color: {
+                type: 'linear',
+                // x,y 线的起点
+                x: 0,
+                y: 0,
+                // x2,y2 线的终点
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                    offset: 0, color: 'red' // 0%(线的起点) 处的颜色
+                }, {
+                    offset: 1, color: 'blue' // 100%(线的终点) 处的颜色
+                }],
+                global: false // 缺省为 false
+            }
+        }
+    }]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+</script>
+<p>水平的线性渐变就是从(0,0) -&gt; (1,0)</p>
+<pre class=" language-javascript"><code class="language-javascript">options <span class="token operator">=</span> <span class="token punctuation">{</span>
+    xAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">'category'</span><span class="token punctuation">,</span>
+        boundaryGap<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'Mon'</span><span class="token punctuation">,</span> <span class="token string">'Tue'</span><span class="token punctuation">,</span> <span class="token string">'Wed'</span><span class="token punctuation">,</span> <span class="token string">'Thu'</span><span class="token punctuation">,</span> <span class="token string">'Fri'</span><span class="token punctuation">,</span> <span class="token string">'Sat'</span><span class="token punctuation">,</span> <span class="token string">'Sun'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    yAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">'value'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    series<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+        data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">,</span> <span class="token number">1320</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        type<span class="token punctuation">:</span> <span class="token string">'line'</span><span class="token punctuation">,</span>
+        areaStyle<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+            color<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+                type<span class="token punctuation">:</span> <span class="token string">'linear'</span><span class="token punctuation">,</span>
+                <span class="token comment" spellcheck="true">// x,y 线的起点在左上角</span>
+                x<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                y<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                <span class="token comment" spellcheck="true">// x2,y2 线的终点在左下角</span>
+                x2<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+                y2<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+                colorStops<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+                    offset<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'red'</span> <span class="token comment" spellcheck="true">// 0%(线的起点) 处的颜色</span>
+                <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+                    offset<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> color<span class="token punctuation">:</span> <span class="token string">'blue'</span> <span class="token comment" spellcheck="true">// 100%(线的终点) 处的颜色</span>
+                <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                global<span class="token punctuation">:</span> <span class="token boolean">false</span> <span class="token comment" spellcheck="true">// 缺省为 false</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+<div id="echarts1334" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js"></script>
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('echarts1334'));
+        // 指定图表的配置项和数据
+        var option = {
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [{
+        data: [1320, 1320, 1320, 1320, 1320, 1320, 1320],
+        type: 'line',
+        areaStyle: {
+            color: {
+                type: 'linear',
+                // x,y 线的起点
+                x: 0,
+                y: 0,
+                // x2,y2 线的终点
+                x2: 1,
+                y2: 0,
+                colorStops: [{
+                    offset: 0, color: 'red' // 0%(线的起点) 处的颜色
+                }, {
+                    offset: 1, color: 'blue' // 100%(线的终点) 处的颜色
+                }],
+                global: false // 缺省为 false
+            }
+        }
+    }]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+</script>
+<p>依次类推，从左上角到右下角的，(0,0) -&gt; (1,1)</p>
+<div id="echarts2112" style="width: 85%;height: 400px;margin: 0 auto"></div>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.8.0/echarts-en.common.js"></script>
+<script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('echarts2112'));
+        // 指定图表的配置项和数据
+        var option = {
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [{
+        data: [1320, 1320, 1320, 1320, 1320, 1320, 1320],
+        type: 'line',
+        areaStyle: {
+            color: {
+                type: 'linear',
+                // x,y 线的起点
+                x: 0,
+                y: 0,
+                // x2,y2 线的终点
+                x2: 1,
+                y2: 1,
+                colorStops: [{
+                    offset: 0, color: 'red' // 0%(线的起点) 处的颜色
+                }, {
+                    offset: 1, color: 'blue' // 100%(线的终点) 处的颜色
+                }],
+                global: false // 缺省为 false
+            }
+        }
+    }]
+};
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+</script>
+<h4 id="纹理"><a href="#纹理" class="headerlink" title="纹理"></a>纹理</h4><pre class=" language-javascript"><code class="language-javascript">color<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    image<span class="token punctuation">:</span> imageDom<span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 支持为 HTMLImageElement, HTMLCanvasElement，不支持路径字符串</span>
+    repeat<span class="token punctuation">:</span> <span class="token string">'repeat'</span> <span class="token comment" spellcheck="true">// 是否平铺，可以是 'repeat-x', 'repeat-y', 'no-repeat'</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2020/07/01/学习Echarts配置项/" data-id="cm8cpkxje002k7u1znokxnvoy" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Echarts/">Echarts</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2020/08/07/superset二次开发/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            从前端角度记录superset二次开发
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/06/20/SVG基础/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">SVG基础</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    NodeJs小问题：express不是内部或外部命令 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-NodeJs小问题：express不是内部或外部命令" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      NodeJs小问题：express不是内部或外部命令
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/01/20/NodeJs小问题：express不是内部或外部命令/" class="article-date">
+  <time datetime="2017-01-20T02:27:10.000Z" itemprop="datePublished">2017-01-20</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>1.nodejs安装之后就需要安装express,使用熟悉的npm install -g express命令安装,但是,安装成功之后居然提示express不是内部或外部命令.<br><a id="more"></a></p>
+<p><img src="http://oj056g1gy.bkt.clouddn.com/024f78f0f736afc3137f86e1b119ebc4b64512c6.jpg" alt><br><img src="http://oj056g1gy.bkt.clouddn.com/express-v.jpg" alt></p>
+<ol start="2">
+<li><p>为什么会这样子呢?当我们找到安装后的express目录发现比之前熟悉的express少了很多东西,原来,最新express4.0版本中将命令工具分家出来了<a href="&quot;https://github.com/expressjs/generator&quot;">项目地址</a>,所以我们还需要安装一个命令工具,命令如下:</p>
+<p> npm install -g express-generator</p>
+</li>
+</ol>
+<p><img src="http://oj056g1gy.bkt.clouddn.com/express-generation.png" alt></p>
+<p>3.既然安装好了我们就要测试一下新安装的express到底可不可以使用<br>于是我使用express创建一个工程:</p>
+<pre><code>express helloworld
+</code></pre><p>新版本中命令发生了一些改变, 创建好project之后还需要用npm进行添加依赖和启动:</p>
+<pre><code>cd helloworld
+
+npm install
+
+npm start
+</code></pre><p>然后新创建的helloworld就已经运行在3000端口上.<br><img src="http://oj056g1gy.bkt.clouddn.com/express%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE.jpg" alt></p>
+<p>4.访问<a href="http://localhost:3000/就看到熟悉的页面了" target="_blank" rel="noopener">http://localhost:3000/就看到熟悉的页面了</a><br><img src="http://oj056g1gy.bkt.clouddn.com/express3000.png" alt></p>
+<p>5.以及创建出来的目录效果<br><img src="http://oj056g1gy.bkt.clouddn.com/express%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E6%95%88%E6%9E%9C.png" alt></p>
+<p>转载：<a href="&quot;http://www.cnblogs.com/wmkf/articles/3913215.html&quot;">http://www.cnblogs.com/wmkf/articles/3913215.html</a></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/01/20/NodeJs小问题：express不是内部或外部命令/" data-id="cm8cpkxhh000k7u1z20n0e3va" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/">Node</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2017/01/20/Sublime3-配置nodejs环境/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            Sublime Text3 手动配置Nodejs环境
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/01/01/NodeJs入门案例/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">NodeJs入门案例</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

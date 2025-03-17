@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    在React-Native项目中引入react-native-sqlite-storage |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-在React Native项目中引入react-native-sqlite-storage" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      在React-Native项目中引入react-native-sqlite-storage
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/03/30/在React Native项目中引入react-native-sqlite-storage/" class="article-date">
+  <time datetime="2017-03-30T13:42:18.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>最近在使用React Native做毕业设计，因为第一次接触踩了不少坑，不过好在都解决了，这篇主要记录一下在React-Native中引入’react-native-sqlite-storage’的方法：<br><a id="more"></a><br>目前在react-native中主要有两种数据存储方案，第一种是官方的AsyncStorage，AsyncStorage是一个简单的、异步的、持久化的Key-Value存储系统，它对于App来说是全局性的<br>它适用于存储些系统设置、全局变量等简单的key-value数据，不适用于过于庞大的数据，也不适用于一些包含数据结构等复杂数据，对于复杂的数据结构，我们需要使用SQLite，轻量的数据库，但RN并没有提供，不过有这种需求的肯定不止我一个，所以现在拿来直接使用，我在这里用的是react-native-sqlite-storage。且由于没有ios设备，这里只说安卓平台。</p>
+<h4 id="1-命令行安装"><a href="#1-命令行安装" class="headerlink" title="1. 命令行安装"></a>1. 命令行安装</h4><pre><code>npm install --save react-native-sqlite-storage
+</code></pre><h4 id="2-全局Gradle的设置"><a href="#2-全局Gradle的设置" class="headerlink" title="2.  全局Gradle的设置"></a>2.  全局Gradle的设置</h4><p>文件目录：android/settings.gradle</p>
+<pre><code>...
+
+include &#39;:react-native-sqlite-storage&#39;
+project(&#39;:react-native-sqlite-storage&#39;).projectDir = new File(rootProject.projectDir, &#39;../node_modules/react-native-sqlite-storage/src/android&#39;)
+</code></pre><h4 id="3-修改android-app-build-gradle"><a href="#3-修改android-app-build-gradle" class="headerlink" title="3. 修改android/app/build.gradle"></a>3. 修改android/app/build.gradle</h4><p>目录：android/app/build.gradle</p>
+<pre><code>...
+dependencies {
+    ...
+    compile project(&#39;:react-native-sqlite-storage&#39;)
+}
+</code></pre><h4 id="4-在MainActivity-java中注册模块"><a href="#4-在MainActivity-java中注册模块" class="headerlink" title="4. 在MainActivity.java中注册模块"></a>4. 在MainActivity.java中注册模块</h4><p>目录：android\app\src\main\java\com\项目名\MainActivity.java</p>
+<pre><code>import android.app.Activity;
+import android.os.Bundle;
+import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.ReactRootView;
+import com.facebook.react.shell.MainReactPackage;
+import com.facebook.react.common.LifecycleState;
+
+import com.facebook.react.ReactActivity;
+import org.pgsqlite.SQLitePluginPackage;
+
+public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
+
+    private ReactInstanceManager mReactInstanceManager;
+    private ReactRootView mReactRootView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mReactRootView = new ReactRootView(this);
+        mReactInstanceManager = ReactInstanceManager.builder()
+                .setApplication(getApplication())
+                .setBundleAssetName(&quot;index.android.bundle&quot;)  // this is dependant on how you name you JS files, example assumes index.android.js
+                .setJSMainModuleName(&quot;index.android&quot;)        // this is dependant on how you name you JS files, example assumes index.android.js
+                .addPackage(new MainReactPackage())
+                .addPackage(new SQLitePluginPackage(this))   // register SQLite Plugin here
+                .setUseDeveloperSupport(BuildConfig.DEBUG)
+                .setInitialLifecycleState(LifecycleState.RESUMED)
+                .build();
+        mReactRootView.startReactApplication(mReactInstanceManager, &quot;AwesomeProject&quot;, null); //这里把AwesomeProject
+        setContentView(mReactRootView);
+    }
+
+     @Override
+     public void invokeDefaultOnBackPressed() {
+          super.onBackPressed();
+     }
+}
+</code></pre><h4 id="5-引入"><a href="#5-引入" class="headerlink" title="5. 引入"></a>5. 引入</h4><p>这样应该就引入成功了，具体的使用还在学习，后续再补充上来。</p>
+<h4 id="6-坑"><a href="#6-坑" class="headerlink" title="6. 坑"></a>6. 坑</h4><p>今天跑起来后发现出事儿了，开发者菜单调不出来了，而且我用来测试的alert语句会发出一个警告，如图：<br><img src="http://oj056g1gy.bkt.clouddn.com/IMG20170331221314.jpg" alt="http://oj056g1gy.bkt.clouddn.com/IMG20170331221314.jpg"><br>在网上没有找到同样的问题，但是sqlite能工作，而且只发出警告有感觉是因为版本的问题，试着将配置方式改了一下，结果就成了。<br>将MainActivity.java中添加和修改的内容都删除了，还原到原来的内容：</p>
+<pre><code>package com.项目名;
+
+import com.facebook.react.ReactActivity;
+
+public class MainActivity extends ReactActivity {
+
+    /**
+     * Returns the name of the main component registered from JavaScript.
+     * This is used to schedule rendering of the component.
+     */
+    @Override
+    protected String getMainComponentName() {
+        return &quot;项目名&quot;;
+    }
+}
+</code></pre><p>MainApplication文件中的内容：</p>
+<pre><code>package com.weidao;
+
+import android.app.Application;
+import android.util.Log;
+
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.shell.MainReactPackage;
+import com.facebook.soloader.SoLoader;
+
+import org.pgsqlite.SQLitePluginPackage;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class MainApplication extends Application implements ReactApplication {
+
+  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+    @Override
+    public boolean getUseDeveloperSupport() {
+      return BuildConfig.DEBUG;
+    }
+
+    @Override
+    protected List&lt;ReactPackage&gt; getPackages() {
+      return Arrays.&lt;ReactPackage&gt;asList(
+          new MainReactPackage(),
+          new SQLitePluginPackage()
+      );
+    }
+  };
+
+  @Override
+  public ReactNativeHost getReactNativeHost() {
+    return mReactNativeHost;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    SoLoader.init(this, /* native exopackage */ false);
+  }
+}
+
+</code></pre><p>其他没变，这样终于可以了&gt;_&lt;_</p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/03/30/在React Native项目中引入react-native-sqlite-storage/" data-id="cm8cpkxj400247u1z8nztp19h" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React-Native/">React Native</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2017/05/17/常用JS代码片段/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            常用JS代码片段
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/03/18/React Native中的ListView和ScrollView控件/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">React Native控件的使用之ListView</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

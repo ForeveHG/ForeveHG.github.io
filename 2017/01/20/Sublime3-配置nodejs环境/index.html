@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    Sublime Text3 手动配置Nodejs环境 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-Sublime3-配置nodejs环境" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      Sublime Text3 手动配置Nodejs环境
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/01/20/Sublime3-配置nodejs环境/" class="article-date">
+  <time datetime="2017-01-20T03:30:15.000Z" itemprop="datePublished">2017-01-20</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>用了几天命令行，感觉挺麻烦的，因为常用sublime3开发，就想能不能在sublime3中配置一个运行nodejs的环境，果然有很多这方面的教程，参考后手动配置了nodejs环境，下面是配置过程：<br><a id="more"></a><br>1.首先在github上下载该包<img src="https://github.com/tanepiper/SublimeText-Nodejs" alt="https://github.com/tanepiper/SublimeText-Nodejs">解压后放到sublimeText3的Packages目录下</p>
+<p>2.接下来修改配置文件，打开刚才复制进去的文件夹中，找到Nodejs.sublime-settings文件，打开后修改两个地方：<br><code>&quot;node_command&quot;</code><br><code>&quot;npm_command&quot;</code><br>修改后文件中的代码：</p>
+<pre><code>{
+  // save before running commands
+  &quot;save_first&quot;: true,
+  // if present, use this command instead of plain &quot;node&quot;
+  // e.g. &quot;/usr/bin/node&quot; or &quot;C:\bin\node.exe&quot;
+  &quot;node_command&quot;: &quot;D:\\Program Files\\nodejs\\node.exe&quot; ,
+  // Same for NPM command
+  &quot;npm_command&quot;: &quot;D:\\Program Files\\nodejs\\npm.cmd&quot;,
+  // as &#39;NODE_PATH&#39; environment variable for node runtime
+  &quot;node_path&quot;: false,
+
+  &quot;expert_mode&quot;: false,
+
+  &quot;ouput_to_new_tab&quot;: false
+}
+</code></pre><p>同样，在这个文件夹中找到Nodejs.sublime-build文件，打开修改两个地方：<br>第一：<code>&quot;encoding&quot;: &quot;utf8&quot;</code><br>第二：”windows”中的<code>&quot;cmd&quot;: [&quot;taskkill&quot;,&quot;/F&quot;, &quot;/IM&quot;, &quot;node.exe&quot;,&quot;&amp;&quot;,&quot;node&quot;, &quot;$file&quot;]</code></p>
+<pre><code>{
+  &quot;cmd&quot;: [&quot;node&quot;, &quot;$file&quot;],
+  &quot;file_regex&quot;: &quot;^[ ]*File \&quot;(...*?)\&quot;, line ([0-9]*)&quot;,
+  &quot;selector&quot;: &quot;source.js&quot;,
+  &quot;shell&quot;:true,
+  &quot;encoding&quot;: &quot;utf8&quot;,
+  &quot;windows&quot;:
+    {
+        &quot;cmd&quot;: [&quot;taskkill&quot;,&quot;/F&quot;, &quot;/IM&quot;, &quot;node.exe&quot;,&quot;&amp;&quot;,&quot;node&quot;, &quot;$file&quot;]
+    },
+  &quot;linux&quot;:
+    {
+        &quot;cmd&quot;: [&quot;killall node; node $file&quot;]
+    },
+    &quot;osx&quot;:
+    {
+        &quot;cmd&quot;: [&quot;killall node; node $file&quot;]
+    }
+}
+</code></pre><p>3.测试<br>新建一个test.js文件，输入<code>console.log(&quot;success!&quot;)</code><br><code>Ctrl+B</code>编译一下，就能看到输出的内容<br><img src="http://oj056g1gy.bkt.clouddn.com/sublimit.png" alt></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/01/20/Sublime3-配置nodejs环境/" data-id="cm8cpkxi200167u1ztowszxvz" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/">Node</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2017/01/20/Node学习笔记/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            Node学习笔记
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/01/20/NodeJs小问题：express不是内部或外部命令/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">NodeJs小问题：express不是内部或外部命令</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

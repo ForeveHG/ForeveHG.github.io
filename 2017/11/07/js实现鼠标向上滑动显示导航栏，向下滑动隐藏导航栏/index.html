@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏.md |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏.md
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/11/07/js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏/" class="article-date">
+  <time datetime="2017-11-07T12:53:23.000Z" itemprop="datePublished">2017-11-07</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a> / <a class="article-category-link" href="/categories/技术/demo/">demo</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h4 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h4><p>这个效果是掘金的导航栏效果，在实现之前先来看一下实现后的样子，打开<a href="https://juejin.im/timeline" title="掘金" target="_blank" rel="noopener">掘金</a>后，上下滚动鼠标滚轮查看导航栏的表现。<br><a id="more"></a></p>
+<h4 id="2-js滚轮事件"><a href="#2-js滚轮事件" class="headerlink" title="2.js滚轮事件"></a>2.js滚轮事件</h4><p>用js实现一个导航栏随着鼠标滚轮的滚动来显示和隐藏的效果，向上滚动时显示导航栏，向下滚动时隐藏导航栏。想实现这个效果首先要了解鼠标的滚轮事件，滚轮事件的在浏览器兼容方面分为火狐和其他，火狐支持DomMouseScroll，包括ie6在内的其他浏览器支持onmousewheel:</p>
+<pre class=" language-javascript"><code class="language-javascript">document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"DOMMouseScroll"</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//火狐</span>
+    console<span class="token punctuation">.</span><span class="token function">dir</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+document<span class="token punctuation">.</span>body<span class="token punctuation">.</span>onmousewheel <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//其他</span>
+    event <span class="token operator">=</span> event <span class="token operator">||</span> window<span class="token punctuation">.</span>event<span class="token punctuation">;</span>
+    console<span class="token punctuation">.</span><span class="token function">dir</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">;</span>    
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="3-判断滚动方向"><a href="#3-判断滚动方向" class="headerlink" title="3.判断滚动方向"></a>3.判断滚动方向</h4><p>在onmousewheel事件中，每次向上滚动event.wheelDelta的值是-120，向下滚动是120；<br>在DOMMouseScroll事件中，每次向上滚动event.detail的值是3，向下滚动是-3，这里要注意区分。<br>用一个例子来测试一下：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> scrollfn <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    e <span class="token operator">=</span> e <span class="token operator">||</span> window<span class="token punctuation">.</span>event<span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>wheelDelta<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>wheelDelta<span class="token operator">></span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'向上滚动：'</span><span class="token punctuation">,</span>e<span class="token punctuation">.</span>wheelDelta<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>wheelDelta<span class="token operator">&lt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'向下滚动：'</span><span class="token punctuation">,</span>e<span class="token punctuation">.</span>wheelDelta<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>detail<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>detail <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'向下滚动'</span><span class="token punctuation">,</span>e<span class="token punctuation">.</span>detail<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>detail <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'向上滚动'</span><span class="token punctuation">,</span>e<span class="token punctuation">.</span>detail<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>addEventListener<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'DOMMouseScroll'</span><span class="token punctuation">,</span>scrollfn<span class="token punctuation">,</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+window<span class="token punctuation">.</span>onmousewheel <span class="token operator">=</span> document<span class="token punctuation">.</span>onmousewheel <span class="token operator">=</span> scrollfn<span class="token punctuation">;</span>
+</code></pre>
+<h4 id="4-实现掘金导航栏的效果"><a href="#4-实现掘金导航栏的效果" class="headerlink" title="4.实现掘金导航栏的效果"></a>4.实现掘金导航栏的效果</h4><p>现在实现起来就很简单了，在上文代码的基础上进行修改，检测到滚轮向下滚动时，隐藏导航栏，检测滚轮向上滚动时，就显示导航栏，为了表现出来的效果不那么生硬，再加入动画效果，下面放上部分代码<br><a href="https://github.com/ForeveHG/Js-Demo/blob/master/juejin-nav/index.html" target="_blank" rel="noopener">完整代码查看</a><br>[具体的效果查看]<br>(<a href="https://ForeveHG.github.io/Js-Demo/juejin-nav/index.html" target="_blank" rel="noopener">https://ForeveHG.github.io/Js-Demo/juejin-nav/index.html</a>)</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector"><span class="token class">.nav</span> </span><span class="token punctuation">{</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">5</span>rem<span class="token punctuation">;</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> <span class="token number">100%</span><span class="token punctuation">;</span>
+    <span class="token property">background</span><span class="token punctuation">:</span> <span class="token hexcode">#fff</span><span class="token punctuation">;</span>
+    <span class="token property">position</span><span class="token punctuation">:</span> fixed<span class="token punctuation">;</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token property">left</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token property">border-bottom</span><span class="token punctuation">:</span> <span class="token number">1</span>px solid <span class="token hexcode">#eee</span><span class="token punctuation">;</span>
+    <span class="token property">transition</span><span class="token punctuation">:</span> all <span class="token number">.2</span>s<span class="token punctuation">;</span>
+    <span class="token property">transform</span><span class="token punctuation">:</span> translate<span class="token number">3</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token number">0</span>, <span class="token number">0</span>, <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token property">z-index</span><span class="token punctuation">:</span> <span class="token number">2</span>
+<span class="token punctuation">}</span>
+<span class="token selector"><span class="token class">.slide_hide</span> </span><span class="token punctuation">{</span>
+    <span class="token property">transition</span><span class="token punctuation">:</span> all <span class="token number">.2</span>s<span class="token punctuation">;</span>
+    <span class="token property">transform</span><span class="token punctuation">:</span> translate<span class="token number">3</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token number">0</span>, -<span class="token number">100%</span>, <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector"><span class="token class">.content_nav</span> </span><span class="token punctuation">{</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> <span class="token number">100%</span><span class="token punctuation">;</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> <span class="token number">3</span>rem<span class="token punctuation">;</span>
+    <span class="token property">background</span><span class="token punctuation">:</span> <span class="token hexcode">#fff</span><span class="token punctuation">;</span>
+    <span class="token property">border-bottom</span><span class="token punctuation">:</span> <span class="token number">1</span>px solid <span class="token hexcode">#eee</span><span class="token punctuation">;</span>
+    <span class="token property">position</span><span class="token punctuation">:</span> fixed<span class="token punctuation">;</span>
+    <span class="token property">top</span><span class="token punctuation">:</span> <span class="token number">5</span>rem<span class="token punctuation">;</span>
+    <span class="token property">left</span><span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token property">transition</span><span class="token punctuation">:</span> all <span class="token number">.2</span>s<span class="token punctuation">;</span>
+    <span class="token property">transform</span><span class="token punctuation">:</span> translate<span class="token number">3</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token number">0</span>, <span class="token number">0</span>, <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token selector"><span class="token class">.content_nav.top</span> </span><span class="token punctuation">{</span>
+    <span class="token property">transition</span><span class="token punctuation">:</span> all <span class="token number">.2</span>s<span class="token punctuation">;</span>
+    <span class="token property">transform</span><span class="token punctuation">:</span> translate<span class="token number">3</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token number">0</span>, -<span class="token number">5</span>rem, <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> showNav <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>nav<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        nav<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">'class'</span><span class="token punctuation">,</span> <span class="token string">'nav'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        contentNav<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">'class'</span><span class="token punctuation">,</span> <span class="token string">'content_nav'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">var</span> hideNav <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>nav<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> classVal <span class="token operator">=</span> navClassName<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">' slide_hide'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">let</span> classContentNav <span class="token operator">=</span> contentNavClassName<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">' top'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        nav<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">'class'</span><span class="token punctuation">,</span> classVal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        contentNav<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">'class'</span><span class="token punctuation">,</span> classContentNav<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">var</span> scrollFunc <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    e <span class="token operator">=</span> e <span class="token operator">||</span> window<span class="token punctuation">.</span>event<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>wheelDelta<span class="token punctuation">)</span> <span class="token punctuation">{</span>  <span class="token comment" spellcheck="true">//判断浏览器IE，谷歌滑轮事件               </span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>wheelDelta <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//当滑轮向上滚动时</span>
+            <span class="token function">showNav</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// console.log("滑轮向上滚动",e.wheelDelta);  </span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>wheelDelta <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//当滑轮向下滚动时 </span>
+            <span class="token function">hideNav</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// console.log("滑轮向下滚动",e.wheelDelta);  </span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>detail<span class="token punctuation">)</span> <span class="token punctuation">{</span>  <span class="token comment" spellcheck="true">//Firefox滑轮事件 在火狐中e.detail为负值时是向上滚动，正值是向下滚动 </span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>detail <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//当滑轮向上滚动时  </span>
+            <span class="token function">showNav</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// console.log("滑轮向上滚动",e.detail);</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e<span class="token punctuation">.</span>detail <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//当滑轮向下滚动时  </span>
+            <span class="token function">hideNav</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// console.log("滑轮向下滚动",e.detail);  </span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//给页面绑定滑轮滚动事件  </span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>document<span class="token punctuation">.</span>addEventListener<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment" spellcheck="true">//firefox  </span>
+    document<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'DOMMouseScroll'</span><span class="token punctuation">,</span> scrollFunc<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//滚动滑轮触发scrollFunc方法  //ie 谷歌  </span>
+window<span class="token punctuation">.</span>onmousewheel <span class="token operator">=</span> document<span class="token punctuation">.</span>onmousewheel <span class="token operator">=</span> scrollFunc<span class="token punctuation">;</span>
+</code></pre>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/11/07/js实现鼠标向上滑动显示导航栏，向下滑动隐藏导航栏/" data-id="cm8cpkxi3001a7u1z5b1jyne0" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2017/11/07/前端常见面试题/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            前端常见面试题
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2017/10/07/分析zepto-js源码/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">分析zepto.js源码</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

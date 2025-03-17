@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    NodeJs入门案例 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-NodeJs入门案例" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      NodeJs入门案例
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2017/01/01/NodeJs入门案例/" class="article-date">
+  <time datetime="2017-01-01T08:00:03.000Z" itemprop="datePublished">2017-01-01</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>刚开始接触nodejs，看了nodejs入门指南，根据上面的例子实现了一个特别简单的图片上传功能.<br>文件目录：<br>nodeTest<br>–index.js<br><a id="more"></a><br>–server.js<br>–route.js<br>–requestHandlers.js</p>
+<p>下面是代码：</p>
+<pre><code>&lt;!--index.js--&gt;
+var server = require(&#39;./server&#39;);
+var route = require(&#39;./route&#39;);
+var requestHandlers = require(&#39;./requestHandlers&#39;);
+var handle = {}
+handle[&quot;/&quot;] = requestHandlers.start;
+handle[&quot;/start&quot;] = requestHandlers.start;
+handle[&quot;/upload&quot;] = requestHandlers.upload;
+handle[&quot;/show&quot;] = requestHandlers.show;
+server.start(route.route,handle);
+</code></pre><pre><code>&lt;!--server.js--&gt;
+var http = require(&quot;http&quot;);
+var url = require(&quot;url&quot;);
+
+function start(route,handle){
+    http.createServer(function(request,response){
+        var pathname = url.parse(request.url).pathname;
+        console.log(&quot;Request for &quot;+pathname+&quot; received.&quot;);
+        route(pathname,handle,response,request);   
+    }).listen(8888);
+    console.log(&quot;Server has started.&quot;);
+}
+
+exports.start=start;
+</code></pre><pre><code>&lt;!--route.js--&gt;
+function route(pathname,handle,response,request){
+    console.log(pathname,handle);
+    if(typeof handle[pathname] === &#39;function&#39;){
+        return handle[pathname](response,request);
+    }else{
+        console.log(&quot;No reuest handle found for &quot;+pathname)
+        response.writeHead(404,{&quot;Content-Type&quot;:&quot;text/plain; charset=&#39;utf-8&#39;&quot;});
+        response.write(&quot;404 Not Found&quot;);
+    }
+}
+exports.route = route;
+</code></pre><pre><code>&lt;!--srequestHandlers--&gt;
+var exec = require(&quot;child_process&quot;).exec;
+var querystring = require(&quot;querystring&quot;);
+var formidable = require(&quot;formidable&quot;);
+var fs = require(&quot;fs&quot;);
+var util = require(&quot;util&quot;);
+
+function start(response,request){
+    console.log(&quot;Request handler &#39;start&#39; was called&quot;);
+    var body = &#39;&lt;html&gt;&#39;+
+    &#39;&lt;head&gt;&#39;+
+    &#39;&lt;meta http-equiv=&quot;Content-Type&quot; &#39;+
+    &#39;content=&quot;text/html; charset=UTF-8&quot; /&gt;&#39;+
+    &#39;&lt;/head&gt;&#39;+
+    &#39;&lt;body&gt;&#39;+
+    &#39;&lt;form action=&quot;/upload&quot; enctype=&quot;multipart/form-data&quot; &#39;+
+    &#39;method=&quot;post&quot;&gt;&#39;+
+    &#39;&lt;input type=&quot;file&quot; name=&quot;upload&quot;&gt;&#39;+
+    &#39;&lt;input type=&quot;submit&quot; value=&quot;Upload file&quot; /&gt;&#39;+
+    &#39;&lt;/form&gt;&#39;+
+    &#39;&lt;/body&gt;&#39;+
+    &#39;&lt;/html&gt;&#39;;
+    response.writeHead(200,{&quot;Content-Type&quot;:&quot;text/html&quot;});
+    response.write(body);
+    response.end();
+
+}
+
+function upload(response,request){
+    console.log(&quot;Request handler &#39;upload&#39; was called&quot;);
+    var form = new formidable.IncomingForm();
+    form.uploadDir = &quot;G:\\tmp&quot;;
+    console.log(&quot;abliut to parse&quot;);
+    form.parse(request,function(error,fields,files){
+        console.log(&quot;parsing done&quot;);
+        fs.renameSync(files.upload.path,&quot;G:\\tmp\\test.png&quot;);
+        response.writeHead(200,{&quot;Content-Type&quot;:&quot;text/html&quot;});
+        response.write(&quot;received image:&lt;br/&gt;&quot;);
+        response.write(&quot;&lt;img src=&#39;/show&#39; /&gt;&quot;);
+        response.end();    
+    });
+}
+
+function show(response){
+    console.log(&quot;Request handler &#39;show&#39; was called&quot;);
+    fs.readFile(&quot;G:\\tmp\\test.png&quot;,&quot;binary&quot;,function(error,file){
+        if(error){
+            response.writeHead(500,{&quot;Content-Type&quot;:&quot;text/plain&quot;});
+            response.write(error+&quot;\n&quot;);
+            response.end();
+        }else{
+            response.writeHead(200,{&quot;Content-Type&quot;:&quot;image/png&quot;});
+            response.write(file,&quot;binary&quot;);
+            response.end();
+        }
+    })
+}
+exports.start = start;
+exports.upload = upload;
+exports.show = show;
+</code></pre><p>踩坑：<br>1.</p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2017/01/01/NodeJs入门案例/" data-id="cm8cpkxh3000g7u1z7z8ftasm" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/">Node</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2017/01/20/NodeJs小问题：express不是内部或外部命令/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            NodeJs小问题：express不是内部或外部命令
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2016/12/31/Markdown语法学习/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">Markdown语法学习</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

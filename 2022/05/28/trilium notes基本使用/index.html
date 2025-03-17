@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    trilium notes基本使用 |
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-trilium notes基本使用" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      trilium notes基本使用
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2022/05/28/trilium notes基本使用/" class="article-date">
+  <time datetime="2022-05-28T13:40:02.000Z" itemprop="datePublished">2022-05-28</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h4 id="汉化"><a href="#汉化" class="headerlink" title="汉化"></a>汉化</h4><p>社区有兄弟做了汉化，点这个 <a href="https://github.com/Nriver/trilium-translation/blob/main/README_CN.md" target="_blank" rel="noopener">汉化地址</a></p>
+<a id="more"></a>
+<h4 id="导入导出markdown"><a href="#导入导出markdown" class="headerlink" title="导入导出markdown"></a>导入导出markdown</h4><p>1. 剪贴板导入</p>
+<p><img src="../imgs/trilium notes基本使用/markdown-inline-import.gif" alt></p>
+<p>2. 文件导入</p>
+<p><img src="../imgs/trilium notes基本使用/markdown-file-import.gif" alt></p>
+<p>3. 导出整个目录</p>
+<p><img src="../imgs/trilium notes基本使用/markdown-export-subtree.gif" alt></p>
+<p>4. 导出单个文件</p>
+<p><img src="../imgs/trilium notes基本使用/markdown-export-note.gif" alt></p>
+<h4 id="更换主题"><a href="#更换主题" class="headerlink" title="更换主题"></a>更换主题</h4><p>可以参考自带的主题<code>Steel Blue</code><br>1. 建一个code 类型为css的文件<br>2. 字体等资源文件可以放在css文件的下面<br>3. 给css文件加上 #appTheme=steel-blue 标签</p>
+<p>这时就可以在<code>选项→外观→主题</code>的下拉框中选中<code>Steel Blue</code>这个主题了。</p>
+<h4 id><a href="#" class="headerlink" title></a><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%884.58.13.png" alt></h4><p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%885.11.15.png" alt></p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%885.12.57.png" alt></p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%885.11.43.png" alt></p>
+<p>trilium notes的github仓库提供了几个写好的主题，可以点这个<a href="https://github.com/zadam/trilium/wiki/Themes" target="_blank" rel="noopener">链接</a>查看和使用。</p>
+<p>很多时候别人预设的主题并不完全符合自己的心意，可以通过自己修改css文件来完善主题样式，trilium给我们提供了开发者工具，在开发者工具中，可以选中某个元素调整它的样式，效果满意后再把代码粘进主题css文件中</p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%885.17.27.png" alt></p>
+<h4 id="新建模板"><a href="#新建模板" class="headerlink" title="新建模板"></a>新建模板</h4><p>示例中给我们添加了一个 <a href="#root/jtZ7mjUTVn36/uN5bmGeXykM8/aVPvhtvgYAZr">Day template</a> 模板</p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%885.35.30.png" alt></p>
+<p>这个模板会自带一个 TODO的标题，和一个checkbox列表，如果想使用这个模板，需要添加<code>~template=Day template</code> 标签</p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%885.37.58.png" alt></p>
+<p>我们可以建立自己的模板库，放入我们习惯的读书笔记模板，工作会议模板等等，只用在写笔记的时候添加对应的模板标签就可以了</p>
+<h4 id="chrome网页保存"><a href="#chrome网页保存" class="headerlink" title="chrome网页保存"></a>chrome网页保存</h4><p>1. chrome添加扩展程序 <strong>Trilium Web Clipper</strong>  </p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8A%E5%8D%8811.52.43.png" alt></p>
+<p>2. 设置保存路径<br>默认从网页上剪辑的内容都保存在今天日期的日记下，如果想保存在自定义目录，只用在自定义目录中添加<code>#clipperinbox</code> 标签</p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8A%E5%8D%8811.49.08.png" alt></p>
+<h4 id="查看文件保存路径"><a href="#查看文件保存路径" class="headerlink" title="查看文件保存路径"></a>查看文件保存路径</h4><p>左侧工具栏的图标 → 关于Trilium Notes</p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%885.23.28.png" alt></p>
+<h4 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h4><p>trilium自身功能有限，但是它提供了插件能力，可以通过插件实现一些它自身没有的功能，比如代码块高亮。</p>
+<p>github有一个实现了trilium 代码块高亮的库，<a href="https://github.com/antoniotejada/Trilium-SyntaxHighlightWidget" target="_blank" rel="noopener">点击地址</a>，根据这个库的描述，我们来使用这个它：</p>
+<ol>
+<li>新建一个code类型为js的文件，名字随便取</li>
+<li>为这个文件添加一个标签 <code>#widget</code></li>
+<li>把<a href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js" target="_blank" rel="noopener">highlight.min.js</a>文件附加到上面建好的文件</li>
+</ol>
+<p>看一下效果：</p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%886.07.27.png" alt></p>
+<p><img src="../imgs/trilium notes基本使用/%E6%88%AA%E5%B1%8F2022-05-29%20%E4%B8%8B%E5%8D%886.07.43.png" alt></p>
+<h4 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h4><p>添加标签 #run=frontendStartup </p>
+<p>隐藏文章标题的示例：</p>
+<pre class=" language-js"><code class="language-js">    api<span class="token punctuation">.</span><span class="token function">addButtonToToolbar</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        title<span class="token punctuation">:</span> <span class="token string">'隐藏文章标题'</span><span class="token punctuation">,</span>
+        icon<span class="token punctuation">:</span> <span class="token string">'low-vision'</span><span class="token punctuation">,</span>
+        action<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+            <span class="token keyword">const</span> title <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'.title-row'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>title<span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">':hidden'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'.title-row'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'.title-row'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">hide</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/2022/05/28/trilium notes基本使用/" data-id="cm8cpkxig001h7u1z8acdmk6e" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue-loader/">vue-loader</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2023/04/07/浏览器合成层/" class="article-nav-link">
+        <strong class="article-nav-caption">前一篇</strong>
+        <div class="article-nav-title">
+          
+            浏览器渲染流程
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/05/28/vue-loader都做了些什么/" class="article-nav-link">
+        <strong class="article-nav-caption">后一篇</strong>
+        <div class="article-nav-title">vue-loader都做了些什么</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="前端,Hexo,技术">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    
+    JL&#39;s Blog</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+
+                
+
+                        
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>添加新图例，引入 echarts</p>
+<p><a href="https://blog.csdn.net/wenqiang1208/article/details/105362561/" target="_blank" rel="noopener">参考</a></p>
+<p>以添加一个简单的折线图为例</p>
+<ul>
+<li>在 superset-frontend/src/visualizations/ 目录下新建文件夹 SimpleLine，在 SimpleLine 文件夹下新建 images 文件夹,images 文件夹中放 SimpleLine 这个新图例的的缩略图，然后继续在 SimpleLine 文件夹下新建 SimpleLine.jsx,SimpleLinePlugin.js,transformProps.js，</li>
+</ul>
+<h5 id="新建-SimpleLinePlugin-js"><a href="#新建-SimpleLinePlugin-js" class="headerlink" title="新建 SimpleLinePlugin.js"></a>新建 SimpleLinePlugin.js</h5><pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> t <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@superset-ui/translation"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> ChartMetadata<span class="token punctuation">,</span> ChartPlugin <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@superset-ui/chart"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> transformProps <span class="token keyword">from</span> <span class="token string">"./transformProps"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> thumbnail <span class="token keyword">from</span> <span class="token string">"./images/thumbnail.png"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> metadata <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ChartMetadata</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token punctuation">:</span> <span class="token function">t</span><span class="token punctuation">(</span><span class="token string">"Simple Line"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  description<span class="token punctuation">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+  thumbnail<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">class</span> <span class="token class-name">SimpleLinePlugin</span> <span class="token keyword">extends</span> <span class="token class-name">ChartPlugin</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      metadata<span class="token punctuation">,</span>
+      transformProps<span class="token punctuation">,</span>
+      loadChart<span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">import</span><span class="token punctuation">(</span><span class="token string">"./SimpleLine.jsx"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h5 id="新建-transformProps-js"><a href="#新建-transformProps-js" class="headerlink" title="新建 transformProps.js"></a>新建 transformProps.js</h5><p>这个文件单纯的用来转换数据，可以在这里把从后端接收到的数据处理成前端展示需要的格式</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">transformProps</span><span class="token punctuation">(</span>chartProps<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span>
+    height<span class="token punctuation">,</span>
+    width<span class="token punctuation">,</span>
+    datasource<span class="token punctuation">,</span>
+    formData<span class="token punctuation">,</span>
+    queryData<span class="token punctuation">,</span>
+    rawFormData<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span> <span class="token operator">=</span> chartProps<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> records<span class="token punctuation">,</span> columns <span class="token punctuation">}</span> <span class="token operator">=</span> queryData<span class="token punctuation">.</span>data<span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    width<span class="token punctuation">,</span>
+    height<span class="token punctuation">,</span>
+    data<span class="token punctuation">:</span> records<span class="token punctuation">,</span>
+    columns<span class="token punctuation">:</span> columns<span class="token punctuation">,</span>
+    columns_x<span class="token punctuation">:</span> rawFormData<span class="token punctuation">.</span>all_columns_x<span class="token punctuation">,</span>
+    columns_y<span class="token punctuation">:</span> rawFormData<span class="token punctuation">.</span>all_columns_y<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h5 id="新建-SimpleLine-jsx"><a href="#新建-SimpleLine-jsx" class="headerlink" title="新建 SimpleLine.jsx"></a>新建 SimpleLine.jsx</h5><p>这部分代码我只放了个大概，主要做的工作就是通过 props 接收参数，然后导入<code>echarts-for-react</code>并使用，关于 echarts 的配置，直接参考 echarts 文档。</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> PropTypes <span class="token keyword">from</span> <span class="token string">"prop-types"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> ReactEcharts <span class="token keyword">from</span> <span class="token string">"echarts-for-react"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> propTypes <span class="token operator">=</span> <span class="token punctuation">{</span>
+  data<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>array<span class="token punctuation">,</span>
+  columns<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>columns<span class="token punctuation">,</span>
+  width<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>number<span class="token punctuation">,</span>
+  height<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>number<span class="token punctuation">,</span>
+  columns_x<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
+  columns_y<span class="token punctuation">:</span> PropTypes<span class="token punctuation">.</span>string<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//检查类型，其中data包含viz.py中返回的数据，width和height为图表宽高</span>
+
+<span class="token keyword">class</span> <span class="token class-name">SimpleLine</span> <span class="token keyword">extends</span> <span class="token class-name">React<span class="token punctuation">.</span>PureComponent</span> <span class="token punctuation">{</span>
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> options <span class="token operator">=</span> <span class="token punctuation">{</span>
+      xAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">"category"</span><span class="token punctuation">,</span>
+        data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      yAxis<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        type<span class="token punctuation">:</span> <span class="token string">"value"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      series<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+          name<span class="token punctuation">:</span> yName<span class="token punctuation">,</span>
+          data<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+          type<span class="token punctuation">:</span> <span class="token string">"line"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token operator">&lt;</span>ReactEcharts
+        option<span class="token operator">=</span><span class="token punctuation">{</span>options<span class="token punctuation">}</span>
+        style<span class="token operator">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> height<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>props<span class="token punctuation">.</span>height <span class="token punctuation">}</span><span class="token punctuation">}</span>
+      <span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>ReactEcharts<span class="token operator">></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+SimpleLine<span class="token punctuation">.</span>displayName <span class="token operator">=</span> <span class="token string">"simple line"</span><span class="token punctuation">;</span>
+SimpleLine<span class="token punctuation">.</span>propTypes <span class="token operator">=</span> propTypes<span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> SimpleLine<span class="token punctuation">;</span>
+</code></pre>
+<h5 id="修改文件-superset-frontend-src-setup-setupPlugins-ts"><a href="#修改文件-superset-frontend-src-setup-setupPlugins-ts" class="headerlink" title="修改文件/superset-frontend/src/setup/setupPlugins.ts"></a>修改文件/superset-frontend/src/setup/setupPlugins.ts</h5><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">// 文件开头导入SimpleLine</span>
+<span class="token keyword">import</span> SimpleLine <span class="token keyword">from</span> <span class="token string">'../explore/controlPanels/SimpleLine'</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//注册SimpleLine,在getChartControlPanelRegistry()方法的链式调用后追加一句</span>
+<span class="token punctuation">.</span><span class="token function">registerValue</span><span class="token punctuation">(</span><span class="token string">'simple_line'</span><span class="token punctuation">,</span> SimpleLine<span class="token punctuation">)</span>
+</code></pre>
+<h5 id="修改文件-superset-frontend-src-visualizations-presets-MainPreset-js"><a href="#修改文件-superset-frontend-src-visualizations-presets-MainPreset-js" class="headerlink" title="修改文件/superset-frontend/src/visualizations/presets/MainPreset.js"></a>修改文件/superset-frontend/src/visualizations/presets/MainPreset.js</h5><pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//导入</span>
+<span class="token keyword">import</span> SimpleLineChartPlugin <span class="token keyword">from</span> <span class="token string">"../SimpleLine/SimpleLinePlugin"</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//在plugins后添加</span>
+<span class="token keyword">new</span> <span class="token class-name">SimpleLineChartPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">configure</span><span class="token punctuation">(</span><span class="token punctuation">{</span> key<span class="token punctuation">:</span> <span class="token string">"simple_line"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h5 id="后端代码添加-class-SimpleLine"><a href="#后端代码添加-class-SimpleLine" class="headerlink" title="后端代码添加 class SimpleLine"></a>后端代码添加 class SimpleLine</h5><p>修改<code>/superset/viz.py</code>文件,在<code>viz_types</code>的定义前添加<code>class SimpleLine</code>,下面这段代码根据你需要的数据自行进行处理，这里只做最简单的演示</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">SimpleLine</span><span class="token punctuation">(</span>BaseViz<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    viz_type <span class="token operator">=</span> <span class="token string">'simple_line'</span>
+    verbose_name <span class="token operator">=</span> <span class="token string">"simple line"</span>
+    sort_series <span class="token operator">=</span> <span class="token boolean">False</span>
+    is_timeseries <span class="token operator">=</span> <span class="token boolean">False</span>
+    <span class="token keyword">def</span> <span class="token function">query_obj</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        d <span class="token operator">=</span> super<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>query_obj<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        fd <span class="token operator">=</span> self<span class="token punctuation">.</span>form_data <span class="token comment" spellcheck="true">#form_data中包含界面左侧组件内容</span>
+        columns <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token keyword">if</span> <span class="token operator">not</span> fd<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'all_columns'</span><span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true">#这个字段对应×××组件，不为空</span>
+            <span class="token keyword">raise</span> Exception<span class="token punctuation">(</span><span class="token string">'Choose Columns'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> fd<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'all_columns'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            d<span class="token punctuation">[</span><span class="token string">'columns'</span><span class="token punctuation">]</span> <span class="token operator">=</span> columns <span class="token comment" spellcheck="true"># all_columns是左侧组件名，后面会提到</span>
+        <span class="token keyword">return</span> d
+
+    <span class="token keyword">def</span> <span class="token function">get_data</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> df<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment" spellcheck="true"># df是pandas的DataFrame类型</span>
+        data <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>df<span class="token punctuation">)</span><span class="token punctuation">.</span>tolist<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#假设数据很简单，不需要做别的处理</span>
+        <span class="token comment" spellcheck="true"># 如果除了绘图用的数据还有别的信息，可以构造一个字典来返回</span>
+        <span class="token comment" spellcheck="true"># data = {'plot_data':plot_data,'other_info':other_info}</span>
+
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>handle_js_int_overflow<span class="token punctuation">(</span>
+            dict<span class="token punctuation">(</span>records<span class="token operator">=</span>df<span class="token punctuation">.</span>to_dict<span class="token punctuation">(</span>orient<span class="token operator">=</span><span class="token string">"records"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> columns<span class="token operator">=</span>list<span class="token punctuation">(</span>df<span class="token punctuation">.</span>columns<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+</code></pre>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://sunjl729.cn/cache/添加图例.html" data-id="cm8cpkxh4000h7u1zoubrns23" class="article-share-link">
+                                            分享
+                                        </a>
+                                        
+                                    </footer>
+
+    </div>
+
+    
+        
+
+            
+
+                
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2025 JL&#39;s Blog</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="JL&#39;s Blog"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
